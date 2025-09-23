@@ -78,7 +78,7 @@ int main()
 	printf("%c\n", 'X' + 'a' - 'A');
 }
 \end{lstlisting}
-Для того, чтобы сдать данную программу вам будем нужно создать текстовый файл \texttt{.txt}, записать туда все ответы и отправить этот файл в ваш репозиторий.
+Для сдачи задачи создайте в текстовом редакторе файл \texttt{01.txt}, запишите в нем все ответы, а затем добавьте файл в ваш github-репозиторий.
 
 \subsection{Печать всех символов}
 Напишите программу, которая будет печатать на экран все символы с кодами от 32 до 126 в формате:
@@ -192,7 +192,7 @@ int main()
     printf("str = %s\n", str);
 }
 \end{lstlisting}
-
+Для сдачи задачи создайте в текстовом редакторе файл \texttt{08.txt}, запишите в нем причину ошибки и способ ее исправления, затем добавьте файл в ваш github-репозиторий.
 
 
 \subsection{Укоротить строку}
@@ -252,38 +252,111 @@ safe_strcpy(a, 10, b); // OK, строка a будет равна "LargeElep\te
 \subsection{Повторитель}
 Напишите программу \texttt{repeater}, которая будет принимать через аргументы командной строки некоторое слово и некоторое число. Эта программа должна печатать это слово столько раз, чему равно переданное число.\\
 Например, если мы вызовем эту программу так:
-\begin{verbatim}
+\begin{lstlisting}
 ./repeater Hello 5
-\end{verbatim}
+\end{lstlisting}
 то программа должна напечатать:
-\begin{verbatim}
+\begin{lstlisting}
 Hello Hello Hello Hello Hello
-\end{verbatim}
+\end{lstlisting}
+Если вы программируете под Windows, то исполняемый файл будет называться \texttt{repeater.exe}, а не \texttt{repeater}.
 
 
-\subsection{Сортировка аргументов}
-Напишите программу \texttt{sort}, которая будет принимать через аргументы командной строки произвольное число строк и сортировать эти строки лексикографически и печатать их.\\
-Например, если мы вызовем эту программу так:
-\begin{verbatim}
-./sort cat elephant mouse axolotl lion
-\end{verbatim}
-то программа должна напечатать:
-\begin{verbatim}
-axolotl cat elephant lion mouse
-\end{verbatim}
+\subsection{Простой калькулятор}
+Напишите программу \texttt{calc}, которая будет выполнять базовые арифметические операции над двумя целыми числами. Программа должна принимать строго 3 аргумента командной строки (при этом \texttt{argc} будет иметь значение 4) в следующем порядке:
+\begin{itemize}
+\item Первый операнд
+\item Знак оператора (\texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} или \texttt{\%})
+\item Второй операнд
+\end{itemize}
+Команда должна поддерживать: сложение, вычитание, умножение, целочисленное деление и нахождение остатка. Программа должна обрабатывать такие ошибки во входных данных, как неверное количество аргументов, неверный оператор, неверный формат операндов и ошибку деления на ноль. \\
+Примеры использования программы:
+\begin{lstlisting}
+$ ./calc 10 + 20
+30
+
+$ ./calc 500 / 9
+55
+
+$ ./calc 11 * 12
+132
+
+$ ./calc 20 % 7
+6
+
+$ ./calc 5
+Error: Wrong number of arguments!
+Usage: ./calc <number> <operator> <number>
+
+$ ./calc 10 & 20
+Error: Invalid operator!
+
+$ ./calc 10.5 + abc
+Error: Operands should be integers!
+
+$ ./calc 10 / 0
+Error: Division by zero!
+\end{lstlisting}
+Если вы программируете под Windows, то исполняемый файл будет называться \texttt{calc.exe}, а не \texttt{calc}.
 
 
 \subsection{Шифрование файла}
 Напишите программу \texttt{encrypt}, которая будет принимать через аргументы командной строки названия входного и выходного файлов, а также число-ключ шифра Цезаря. Программа должна считывать входной файл, зашифровывать его шифром Цезаря и записывать результат в выходной файл.\\
 Например, если мы вызовем эту программу так:
 \begin{verbatim}
-./encrypt three_little_pigs.txt result.txt 7
+./encrypt a.txt b.txt 7
 \end{verbatim}
-то программа должна считывать файл \texttt{three\_little\_pigs.txt}, зашифровывать содержимое шифром Цезаря с ключом 7 и записывать результат в файл \texttt{result.txt}.
+то программа должна считывать файл \texttt{a.txt}, зашифровывать содержимое шифром Цезаря с ключом 7 и записывать результат в файл \texttt{b.txt}. В данной задаче необязательно обрабатывать ошибки во входных данных.\\
+Проверьте работу программы на файлах \texttt{three\_little\_pigs.txt} и \texttt{invisible\_man.txt}.
+
+\noindent Если вы программируете под Windows, то исполняемый файл будет называться \texttt{encrypt.exe}, а не \texttt{encrypt}.
 
 
+\subsection{Извлечение строк}
+Напишите программу \texttt{line\_extractor}, которая будет извлекать строки из файла. Программа должна принимать строго 3 аргумента командной строки:
+\begin{itemize}
+\item Имя входного файла
+\item Имя нового файла, который будет содержать определённые строки
+\item Или одно число -- номер строки, или диапазон строк в формате \texttt{начало:конец}
+\end{itemize}
+
+\noindent Например, если вызвать программу так:
+\begin{lstlisting}
+$ ./line_extractor a.txt b.txt 10
+\end{lstlisting}
+то она должна создать новый файл \texttt{b.txt} и поместить туда 10-ю строку из файла \texttt{a.txt}.\\
+
+\noindent Если же вызвать программу так:
+\begin{lstlisting}
+$ ./line_extractor a.txt b.txt 10:20
+\end{lstlisting}
+то программа должна создать новый файл \texttt{b.txt} и поместить туда строки из 10-й по 20-ю (не включительно) из файла \texttt{a.txt}.\\
+
+\noindent Если аргументы заданы неверно, то программа должна напечатать сообщение о ошибке и завершиться. Программа должна обрабатывать следующие ошибки:
+\begin{itemize}
+\item Неверное количество аргументов
+\item Начальный файл не существует.
+\item Неверный формат задания номера строки или диапазона строк.
+\end{itemize}
+Примеры ошибочных вызовов программы:
+\begin{lstlisting}
+$ ./line_extractor result.txt
+Error: Wrong number of arguments!
+Usage: ./line_extractor <input_file> <output_file> <lines
+
+$ ./line_extractor qwertyuiop.txt b.txt 10
+Error: File qwertyuiop.txt does not exist!
+
+$ ./line_extractor a.txt b.txt 10:20abc
+Error: Wrong lines format!
+
+$ ./line_extractor a.txt b.txt 10:
+Error: Wrong lines format!
+\end{lstlisting}
+Проверьте работу программы на файлах \texttt{three\_little\_pigs.txt} и \texttt{invisible\_man.txt}.
 
 
+\noindent Если вы программируете под Windows, то исполняемый файл будет называться \texttt{line\_extractor.exe}, а не \texttt{line\_extractor}.
 
 
 
@@ -403,6 +476,16 @@ axolotl cat elephant lion mouse
 Протестируйте программу на файле \texttt{invisible\_man.txt}.
 
 
+\subsection{Сортировка аргументов}
+Напишите программу \texttt{sort}, которая будет принимать через аргументы командной строки произвольное число строк и сортировать эти строки лексикографически и печатать их.\\
+Например, если мы вызовем эту программу так:
+\begin{verbatim}
+./sort cat elephant mouse axolotl lion
+\end{verbatim}
+то программа должна напечатать:
+\begin{verbatim}
+axolotl cat elephant lion mouse
+\end{verbatim}
 
 
 
