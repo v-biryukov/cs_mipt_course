@@ -33,7 +33,7 @@
   emph={size_t, NULL},
   emphstyle={\color{blue}\bfseries},
 }
-\lstdefinestyle{longCodeStyle}{
+\lstdefinestyle{boxStyle}{
   style=CStyle,
   framexleftmargin=5mm, 
   frame=shadowbox, 
@@ -41,17 +41,16 @@
 }
 \lstset{style=CStyle}
 
-
-
 \renewcommand{\thesubsection}{\arabic{subsection}}
 \makeatletter
 \def\@seccntformat#1{\@ifundefined{#1@cntformat}%
    {\csname the#1\endcsname\quad}
    {\csname #1@cntformat\endcsname}}
-\newcommand\section@cntformat{}     
-\newcommand\subsection@cntformat{Задача \thesubsection.\space} 
+\newcommand\section@cntformat{}
+\newcommand\subsection@cntformat{Задача \thesubsection.\space}
 \newcommand\subsubsection@cntformat{\thesubsubsection.\space}
 \makeatother
+
 
 \begin{document}
 \title{Семинар \#1: Основы. Домашнее задание.\vspace{-5ex}}\date{}\maketitle

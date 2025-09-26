@@ -33,14 +33,13 @@
   emph={size_t, NULL},
   emphstyle={\color{blue}\bfseries},
 }
-\lstdefinestyle{longCodeStyle}{
+\lstdefinestyle{boxStyle}{
   style=CStyle,
   framexleftmargin=5mm, 
   frame=shadowbox, 
   rulesepcolor=\color{gray}
 }
 \lstset{style=CStyle}
-
 
 \renewcommand{\thesubsection}{\arabic{subsection}}
 \makeatletter
@@ -243,7 +242,7 @@ safe_strcpy(a, 10, b); // OK, строка a будет равна "LargeElep\te
 \end{lstlisting}
 
 
-
+\newpage
 \subsection{Повторитель}
 Напишите программу \texttt{repeater}, которая будет принимать через аргументы командной строки некоторое слово и некоторое число. Эта программа должна печатать это слово столько раз, чему равно переданное число.\\
 Например, если мы вызовем эту программу так:

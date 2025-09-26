@@ -1,77 +1,58 @@
-\documentclass{article}
-\usepackage[utf8x]{inputenc}
-\usepackage{ucs}
-\usepackage{amsmath} 
-\usepackage{amsfonts}
-\usepackage{upgreek}
+\documentclass[10pt]{article}
 \usepackage[english,russian]{babel}
-\usepackage{graphicx}
-\usepackage{float}
 \usepackage{textcomp}
-\usepackage{hyperref}
-\usepackage{geometry}
-  \geometry{left=2cm}
-  \geometry{right=1.5cm}
-  \geometry{top=1cm}
-  \geometry{bottom=2cm}
+\usepackage[left=2cm, right=2cm, top=1.5cm, bottom=1.5cm]{geometry}
 \usepackage{tikz}
-\usepackage{ccaption}
 \usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{amsmath}
 \usepackage{listings}
-
-
-\begin{document}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}
 \pagenumbering{gobble}
 
-\lstset{
-  language=C,                % choose the language of the code
+\lstdefinestyle{CStyle}{
+  language=C,
   basicstyle=\linespread{1.1}\ttfamily,
-  columns=fixed,
-  fontadjust=true,
   basewidth=0.5em,
+  texcl=true,
   keywordstyle=\color{blue}\bfseries,
   commentstyle=\color{gray},
   stringstyle=\ttfamily\color{orange!50!black},
   showstringspaces=false,
-  %numbers=false,                   % where to put the line-numbers
-  numbersep=5pt,
-  numberstyle=\tiny\color{black},
-  numberfirstline=true,
-  stepnumber=1,                   % the step between two line-numbers.        
-  numbersep=10pt,                  % how far the line-numbers are from the code
-  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
-  showstringspaces=false,         % underline spaces within strings
-  captionpos=b,                   % sets the caption-position to bottom
-  breaklines=true,                % sets automatic line breaking
-  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
-  xleftmargin=.2in,
-  extendedchars=\true,
+  backgroundcolor=\color{white},
+  breaklines=true,
+  breakatwhitespace=true,
+  xleftmargin=5mm,
   keepspaces = true,
+  extendedchars=\true,
+  tabsize=4,
+  upquote=true,
+  emph={size_t, NULL},
+  emphstyle={\color{blue}\bfseries},
 }
-\lstset{literate=%
-   *{0}{{{\color{red!20!violet}0}}}1
-    {1}{{{\color{red!20!violet}1}}}1
-    {2}{{{\color{red!20!violet}2}}}1
-    {3}{{{\color{red!20!violet}3}}}1
-    {4}{{{\color{red!20!violet}4}}}1
-    {5}{{{\color{red!20!violet}5}}}1
-    {6}{{{\color{red!20!violet}6}}}1
-    {7}{{{\color{red!20!violet}7}}}1
-    {8}{{{\color{red!20!violet}8}}}1
-    {9}{{{\color{red!20!violet}9}}}1
+\lstdefinestyle{boxStyle}{
+  style=CStyle,
+  framexleftmargin=5mm, 
+  frame=shadowbox, 
+  rulesepcolor=\color{gray}
 }
+\lstset{style=CStyle}
 
 \renewcommand{\thesubsection}{\arabic{subsection}}
 \makeatletter
 \def\@seccntformat#1{\@ifundefined{#1@cntformat}%
-   {\csname the#1\endcsname\quad}%    default
-   {\csname #1@cntformat\endcsname}}% enable individual control
-\newcommand\section@cntformat{}     % section level 
-\newcommand\subsection@cntformat{Задача \thesubsection.\space} % subsection level
-\newcommand\subsubsection@cntformat{\thesubsubsection.\space} % subsubsection level
+   {\csname the#1\endcsname\quad}
+   {\csname #1@cntformat\endcsname}}
+\newcommand\section@cntformat{}
+\newcommand\subsection@cntformat{Задача \thesubsection.\space}
+\newcommand\subsubsection@cntformat{\thesubsubsection.\space}
 \makeatother
 
 
+\begin{document}
 \title{Семинар \#2: Часть 2: Типы данных. Домашнее задание. \vspace{-5ex}}\date{}\maketitle
 \subsection*{Основные типы и их стандартные размеры на 64-х битных системах}
 \begin{center}
