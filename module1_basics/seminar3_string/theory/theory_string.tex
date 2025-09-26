@@ -1,11 +1,7 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 \usepackage[english,russian]{babel}
 \usepackage{textcomp}
-\usepackage{geometry}
-  \geometry{left=2cm}
-  \geometry{right=1.5cm}
-  \geometry{top=1.5cm}
-  \geometry{bottom=2cm}
+\usepackage[left=2cm, right=2cm, top=1.5cm, bottom=1.5cm]{geometry}
 \usepackage{tikz}
 \usepackage{multicol}
 \usepackage{hyperref}
@@ -13,6 +9,8 @@
 \usepackage{listings}
 \usepackage{colortbl}
 \usepackage{graphicx}
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}
 \pagenumbering{gobble}
 
 \lstdefinestyle{CStyle}{
@@ -34,20 +32,20 @@
   upquote=true,
   emph={size_t, NULL},
   emphstyle={\color{blue}\bfseries},
+  literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1},
 }
-
-\lstdefinestyle{longCodeStyle}{
+\lstdefinestyle{boxStyle}{
   style=CStyle,
   framexleftmargin=5mm, 
   frame=shadowbox, 
   rulesepcolor=\color{gray}
 }
-
 \lstset{style=CStyle}
 
 
+
 \begin{document}
-\title{Семинар \#3: Строки и файлы. Классные задачи.\vspace{-5ex}}\date{}\maketitle
+\title{Семинар \#3: Символы, строки и файлы.\vspace{-5ex}}\date{}\maketitle
 \section*{\centering{Таблица ASCII}}
 \begin{center}
 \scalebox{1}{ 
@@ -224,7 +222,6 @@ tolower - переводит буквы верхнего регистра в н�
 Функции \texttt{putchar} и \texttt{getchar} используются для печати одного символа и считывания одного символа соответственно. Можете использовать эти функции или можете использовать функции \texttt{printf}/\texttt{scanf} со спецификатором \texttt{\%c} для печати/считывания одного символа.
 
 
-\newpage
 \section*{Строки}
 В отличие от многих языков высокого уровня, в языке C не существует встроенного типа строки. Вместо этого строки реализованы как массивы элементов типа \texttt{char}, хранящими коды символов в определённой кодировке. Ключевая особенность, которая отличает обычный массив символов от строки, -- это обязательное наличие \textit{нуль-терминатора} (символа с кодом 0, который записывается как \texttt{'\textbackslash 0'}). Этот специальный байт, размещённый в конце последовательности символов, служит маркером конца строки.
 \begin{center}
@@ -418,7 +415,7 @@ int main()
 \end{lstlisting}
 
 
-\newpage
+\clearpage
 \section*{Аргументы командной строки}
 Программы могут принимать аргументы. Простейший пример -- утилита \texttt{ls}. Если запустить \texttt{ls} без аргументов:
 \begin{verbatim}
@@ -482,7 +479,6 @@ int main(int argc, char** argv)
 \includegraphics[scale=1]{../images/argv.png}
 \end{center}
 
-\newpage
 
 \section*{Работа с текстовыми файлами}
 Текстовые файлы -- это такие файлы, которые содержат только текст.
@@ -568,7 +564,6 @@ int main()
 
 
 \iffalse
-\newpage
 \subsection*{Чтение слов из файла}
 Пример программу, которая подсчитывает количество слов в файле.
 \begin{lstlisting}

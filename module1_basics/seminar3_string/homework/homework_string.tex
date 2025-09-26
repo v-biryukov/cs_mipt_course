@@ -1,11 +1,7 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 \usepackage[english,russian]{babel}
 \usepackage{textcomp}
-\usepackage{geometry}
-  \geometry{left=2cm}
-  \geometry{right=1.5cm}
-  \geometry{top=1.5cm}
-  \geometry{bottom=2cm}
+\usepackage[left=2cm, right=2cm, top=1.5cm, bottom=1.5cm]{geometry}
 \usepackage{tikz}
 \usepackage{multicol}
 \usepackage{hyperref}
@@ -14,6 +10,7 @@
 \usepackage{colortbl}
 \usepackage{graphicx}
 \usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}
 \pagenumbering{gobble}
 
 \lstdefinestyle{CStyle}{
@@ -36,14 +33,12 @@
   emph={size_t, NULL},
   emphstyle={\color{blue}\bfseries},
 }
-
 \lstdefinestyle{longCodeStyle}{
   style=CStyle,
   framexleftmargin=5mm, 
   frame=shadowbox, 
   rulesepcolor=\color{gray}
 }
-
 \lstset{style=CStyle}
 
 

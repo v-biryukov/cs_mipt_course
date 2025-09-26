@@ -1,58 +1,48 @@
-\documentclass{article}
-\usepackage[utf8x]{inputenc}
+\documentclass[10pt]{article}
 \usepackage[english,russian]{babel}
-\usepackage{geometry}
-  \geometry{left=2cm}
-  \geometry{right=1.5cm}
-  \geometry{top=1cm}
-  \geometry{bottom=2cm}
+\usepackage{textcomp}
+\usepackage[left=2cm, right=2cm, top=1.5cm, bottom=1.5cm]{geometry}
 \usepackage{tikz}
 \usepackage{multicol}
-\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{amsmath}
 \usepackage{listings}
-\lstset{escapeinside={<@}{@>}}
-
-
-\begin{document}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}
 \pagenumbering{gobble}
 
-\lstset{
+\lstdefinestyle{CStyle}{
   language=C,
   basicstyle=\linespread{1.1}\ttfamily,
-  columns=fixed,
-  fontadjust=true,
   basewidth=0.5em,
+  texcl=true,
   keywordstyle=\color{blue}\bfseries,
   commentstyle=\color{gray},
   stringstyle=\ttfamily\color{orange!50!black},
   showstringspaces=false,
-  numbersep=5pt,
-  numberstyle=\tiny\color{black},
-  numberfirstline=true,
-  stepnumber=1,
-  numbersep=10pt,
   backgroundcolor=\color{white},
-  showstringspaces=false,
-  captionpos=b,
   breaklines=true,
   breakatwhitespace=true,
-  xleftmargin=.2in,
-  extendedchars=\true,
+  xleftmargin=5mm,
   keepspaces = true,
+  extendedchars=\true,
+  tabsize=4,
+  upquote=true,
+  emph={size_t, NULL},
+  emphstyle={\color{blue}\bfseries},
+  literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1},
 }
-\lstset{literate=%
-   *{0}{{{\color{red!20!violet}0}}}1
-    {1}{{{\color{red!20!violet}1}}}1
-    {2}{{{\color{red!20!violet}2}}}1
-    {3}{{{\color{red!20!violet}3}}}1
-    {4}{{{\color{red!20!violet}4}}}1
-    {5}{{{\color{red!20!violet}5}}}1
-    {6}{{{\color{red!20!violet}6}}}1
-    {7}{{{\color{red!20!violet}7}}}1
-    {8}{{{\color{red!20!violet}8}}}1
-    {9}{{{\color{red!20!violet}9}}}1
+\lstdefinestyle{boxStyle}{
+  style=CStyle,
+  framexleftmargin=5mm, 
+  frame=shadowbox, 
+  rulesepcolor=\color{gray}
 }
+\lstset{style=CStyle}
 
+\begin{document}
 \title{Семинар \#4: Часть 1: Указатели. \vspace{-5ex}}\date{}\maketitle
 \section*{Память и адреса}
 

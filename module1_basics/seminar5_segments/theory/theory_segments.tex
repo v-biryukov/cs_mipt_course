@@ -1,97 +1,48 @@
-\documentclass{article}
-\usepackage[utf8x]{inputenc}
-\usepackage{ucs}
-\usepackage{amsmath} 
-\usepackage{amsfonts}
-\usepackage{marvosym}
-\usepackage{wasysym}
-\usepackage{upgreek}
+\documentclass[10pt]{article}
 \usepackage[english,russian]{babel}
-\usepackage{graphicx}
-\usepackage{float}
 \usepackage{textcomp}
-\usepackage{hyperref}
-\usepackage{geometry}
-  \geometry{left=2cm}
-  \geometry{right=1.5cm}
-  \geometry{top=1cm}
-  \geometry{bottom=2cm}
+\usepackage[left=2cm, right=2cm, top=1.5cm, bottom=1.5cm]{geometry}
 \usepackage{tikz}
-\usepackage{ccaption}
 \usepackage{multicol}
-\usepackage{subfigure}
-
-\hypersetup{
-   colorlinks=true,
-   citecolor=blue,
-   linkcolor=black,
-   urlcolor=blue
-}
-
+\usepackage{hyperref}
+\usepackage{amsmath}
 \usepackage{listings}
-\usepackage{textcomp}
-%\setlength{\columnsep}{1.5cm}
-%\setlength{\columnseprule}{0.2pt}
-
-\usepackage[absolute]{textpos}
-
-\usepackage{colortbl,graphicx,tikz}
-\definecolor{X}{rgb}{.5,.5,.5}
-
-
-\begin{document}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}
 \pagenumbering{gobble}
 
-\lstdefinestyle{myCustomCStyle}{
+\lstdefinestyle{CStyle}{
   language=C,
   basicstyle=\linespread{1.1}\ttfamily,
-  columns=fixed,
-  fontadjust=true,
   basewidth=0.5em,
+  texcl=true,
   keywordstyle=\color{blue}\bfseries,
   commentstyle=\color{gray},
   stringstyle=\ttfamily\color{orange!50!black},
   showstringspaces=false,
-  numbersep=5pt,
-  numberstyle=\tiny\color{black},
-  numberfirstline=true,
-  stepnumber=1,   
-  numbersep=10pt,
   backgroundcolor=\color{white},
-  showstringspaces=false,
-  captionpos=b,
   breaklines=true,
   breakatwhitespace=true,
-  xleftmargin=.2in,
-  extendedchars=\true,
+  xleftmargin=5mm,
   keepspaces = true,
-  upquote = true,
-  emph = {size_t},
+  extendedchars=\true,
+  tabsize=4,
+  upquote=true,
+  emph={size_t, NULL},
   emphstyle={\color{blue}\bfseries},
+  literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1},
 }
-
-
-\lstdefinestyle{heapExamplesStyle}{
-  style=myCustomCStyle,
+\lstdefinestyle{boxStyle}{
+  style=CStyle,
   framexleftmargin=5mm, 
   frame=shadowbox, 
   rulesepcolor=\color{gray}
 }
+\lstset{style=CStyle}
 
-\lstset{style=myCustomCStyle}
-\lstset{literate=%
-   *{0}{{{\color{red!20!violet}0}}}1
-    {1}{{{\color{red!20!violet}1}}}1
-    {2}{{{\color{red!20!violet}2}}}1
-    {3}{{{\color{red!20!violet}3}}}1
-    {4}{{{\color{red!20!violet}4}}}1
-    {5}{{{\color{red!20!violet}5}}}1
-    {6}{{{\color{red!20!violet}6}}}1
-    {7}{{{\color{red!20!violet}7}}}1
-    {8}{{{\color{red!20!violet}8}}}1
-    {9}{{{\color{red!20!violet}9}}}1
-}
-\newpage
+\begin{document}
 
 \title{Семинар \#5: Сегменты памяти.\vspace{-5ex}}\date{}\maketitle
 \section*{Обзор основных сегментов памяти}
@@ -154,9 +105,9 @@ free(p);
 \section*{Сегмент памяти Куча}
 Основные функции для динамического выделения памяти в куче содержатся в библиотеке \texttt{stdlib.h}:
 \begin{itemize}
-\item \texttt{void* malloc(\textbf{size\_t} n)} -- выделяет \texttt{n} байт в сегменте памяти Куча и возвращает указатель типа \texttt{void*} на начало этой памяти. Если память выделить не получилось (например памяти не хватает), то функция вернёт значение \texttt{NULL}. \\
-\item \texttt{void free(\textbf{void*} p)} -- освобождает выделенную память. Если ненужную память вовремя не освободить, то она останется помеченной, как занятая до момента завершения программы. Произойдёт так называемая утечка памяти. Правило при работе с \texttt{free}: число вызовов \texttt{free} должно быть равно числу вызовов \texttt{malloc}.\\
-\item \texttt{void* realloc(\textbf{void*} p, \textbf{size\_t} new\_n)} -- перевыделяет выделенную память. Указатель \texttt{p} должен указывать на ранее выделенную память. Память, на которую ранее указывал \texttt{p}, освободится. \\
+\item \texttt{void* malloc(\textbf{size\_t} n)} -- выделяет \texttt{n} байт в сегменте памяти Куча и возвращает указатель типа \texttt{void*} на начало этой памяти. Если память выделить не получилось (например памяти не хватает), то функция вернёт значение \texttt{NULL}.
+\item \texttt{void free(\textbf{void*} p)} -- освобождает выделенную память. Если ненужную память вовремя не освободить, то она останется помеченной, как занятая до момента завершения программы. Произойдёт так называемая утечка памяти. Правило при работе с \texttt{free}: число вызовов \texttt{free} должно быть равно числу вызовов \texttt{malloc}.
+\item \texttt{void* realloc(\textbf{void*} p, \textbf{size\_t} new\_n)} -- перевыделяет выделенную память. Указатель \texttt{p} должен указывать на ранее выделенную память. Память, на которую ранее указывал \texttt{p}, освободится.
 Если память перевыделить не получилось (например памяти не хватает), то функция вернёт значение \texttt{NULL}. При этом указатель \texttt{p} будет продолжать указывать на старую память, она не освободится.\\
 \end{itemize}
 
@@ -275,7 +226,7 @@ free(p); // Функция free ничего не будет делать, ес�
 
 \item Один символ:\\
 \noindent\begin{minipage}{.50\textwidth}
-\begin{lstlisting}[style=heapExamplesStyle]
+\begin{lstlisting}[style=boxStyle]
 char* p = (char*)malloc(sizeof(char));
 *p = 'A';
 
@@ -292,7 +243,7 @@ free(p);
 
 \item Массив из трёх элементов типа \texttt{float}:\\
 \noindent\begin{minipage}{.50\textwidth}
-\begin{lstlisting}[style=heapExamplesStyle]
+\begin{lstlisting}[style=boxStyle]
 float* p = (float*)malloc(sizeof(float) * 3);
 p[0] = 1.1;
 p[1] = 2.2;
@@ -313,7 +264,7 @@ free(p);
 
 \item Строку (массив \texttt{char}) \texttt{"Cats and Dogs"}:\\
 \noindent\begin{minipage}{.50\textwidth}
-\begin{lstlisting}[style=heapExamplesStyle]
+\begin{lstlisting}[style=boxStyle]
 char* p = (char*)malloc(sizeof(char) * 14);
 strcpy(p, "Cats and Dogs");
 
@@ -330,7 +281,7 @@ free(p);
 
 \item Структуру \texttt{Book} из семинара на структуры:\\
 \noindent\begin{minipage}{.50\textwidth}
-\begin{lstlisting}[style=heapExamplesStyle]
+\begin{lstlisting}[style=boxStyle]
 Book* p = (Book*)malloc(sizeof(Book));
 strcpy(p->title, "War and Peace");
 p->pages = 1225;
@@ -347,11 +298,9 @@ free(p);
 \quad\\
 \quad\\
 
-
-\newpage
 \item Указатель, который указывает на число \texttt{int}:\\
 \noindent\begin{minipage}{.50\textwidth}
-\begin{lstlisting}[style=heapExamplesStyle]
+\begin{lstlisting}[style=boxStyle]
 int** p = (int**)malloc(sizeof(int*));
 
 *p = (int*)malloc(sizeof(int));
@@ -371,7 +320,7 @@ free(p);
 
 \item Указатель, который указывает на число \texttt{int}, которое находится в стеке:\\
 \noindent\begin{minipage}{.50\textwidth}
-\begin{lstlisting}[style=heapExamplesStyle]
+\begin{lstlisting}[style=boxStyle]
 int a = 123;
 
 int** p = (int**)malloc(sizeof(int*));
@@ -390,7 +339,7 @@ free(p);
 
 \item Массив из указателей на \texttt{int}:\\
 \noindent\begin{minipage}{.50\textwidth}
-\begin{lstlisting}[style=heapExamplesStyle]
+\begin{lstlisting}[style=boxStyle]
 int** p = (int**)malloc(3 * sizeof(int*));
 
 for (size_t i = 0; i < 3; ++i)
@@ -430,7 +379,7 @@ typedef struct data Data;
 \begin{center}
 \includegraphics[scale=0.83]{../images/malloc_class_tasks/heap_struct_with_pointers.png}
 \end{center}
-\begin{lstlisting}[style=heapExamplesStyle]
+\begin{lstlisting}[style=boxStyle]
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -497,7 +446,7 @@ int* other_function()
 int main() 
 {
     int* p = get_primes();
-    // other_function();
+    // other\_function();
     printf("%i\n", p[4]);
 }
 \end{lstlisting}

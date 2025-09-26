@@ -1,23 +1,23 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 \usepackage[english,russian]{babel}
 \usepackage{textcomp}
-\usepackage{geometry}
-  \geometry{left=2cm}
-  \geometry{right=1.5cm}
-  \geometry{top=1.5cm}
-  \geometry{bottom=2cm}
+\usepackage[left=2cm, right=2cm, top=1.5cm, bottom=1.5cm]{geometry}
 \usepackage{tikz}
 \usepackage{multicol}
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{listings}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}
 \pagenumbering{gobble}
 
-\lstset{
+\lstdefinestyle{CStyle}{
   language=C,
   basicstyle=\linespread{1.1}\ttfamily,
-  columns=fixed,
   basewidth=0.5em,
+  texcl=true,
   keywordstyle=\color{blue}\bfseries,
   commentstyle=\color{gray},
   stringstyle=\ttfamily\color{orange!50!black},
@@ -30,7 +30,16 @@
   extendedchars=\true,
   tabsize=4,
   upquote=true,
+  emph={size_t, NULL},
+  emphstyle={\color{blue}\bfseries},
 }
+\lstdefinestyle{longCodeStyle}{
+  style=CStyle,
+  framexleftmargin=5mm, 
+  frame=shadowbox, 
+  rulesepcolor=\color{gray}
+}
+\lstset{style=CStyle}
 
 
 

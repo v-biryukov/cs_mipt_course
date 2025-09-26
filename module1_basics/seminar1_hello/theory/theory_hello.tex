@@ -1,16 +1,16 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 \usepackage[english,russian]{babel}
 \usepackage{textcomp}
-\usepackage{geometry}
-  \geometry{left=2cm}
-  \geometry{right=1.5cm}
-  \geometry{top=1.5cm}
-  \geometry{bottom=2cm}
+\usepackage[left=2cm, right=2cm, top=1.5cm, bottom=1.5cm]{geometry}
 \usepackage{tikz}
 \usepackage{multicol}
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{listings}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}
 \pagenumbering{gobble}
 
 \lstdefinestyle{CStyle}{
@@ -32,21 +32,17 @@
   upquote=true,
   emph={size_t, NULL},
   emphstyle={\color{blue}\bfseries},
+  literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1},
 }
-
-\lstdefinestyle{longCodeStyle}{
+\lstdefinestyle{boxStyle}{
   style=CStyle,
   framexleftmargin=5mm, 
   frame=shadowbox, 
   rulesepcolor=\color{gray}
 }
-
 \lstset{style=CStyle}
 
-
 \begin{document}
-
-
 \title{Семинар \#1: Основы C. Ввод/вывод. Операторы. Циклы. Массивы. \vspace{-5ex}}\date{}\maketitle
 \section*{Почему C?}
 \begin{itemize}
