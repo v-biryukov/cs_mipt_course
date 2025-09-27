@@ -323,25 +323,6 @@ int solve_quadratic(double a, double b, double c, double* px1, double* px2)
 \end{itemize}
 Все сравнения делать с точностью \texttt{eps = 1e-10}.
 
-\subsection{Изменить символы}
-Напишите функцию
-\begin{lstlisting}
-void set_characters(char* begin, char* end, char c)
-\end{lstlisting}
-которая будет задавать символы в строке символом \texttt{c}. Начиная с символа, на который указывает \texttt{begin} и заканчивая символом на который указывает \texttt{end} (но не включая его). Гарантируется, что \texttt{end} указывает на символ, находящийся в этой же строке и не левее символа, на который указывает \texttt{begin}.
-\begin{lstlisting}
-#include <stdio.h>
-// Тут нужно написать функцию set\_characters
-
-int main() 
-{
-    char s[] = "Sapere Aude";
-    set_characters(&s[2], &s[8], 'b');
-    printf("%s\n", s);  // Напечатает Sabbbbbbude
-    set_characters(s, &s[4], 'a');
-    printf("%s\n", s);  // Напечатает aaaabbbbude
-}
-\end{lstlisting}
 
 
 \subsection{Обмен}
@@ -383,7 +364,53 @@ int main()
 }
 \end{lstlisting} 
 
+\subsection{Изменить символы}
+Напишите функцию
+\begin{lstlisting}
+void set_characters(char* begin, char* end, char c)
+\end{lstlisting}
+которая будет задавать символы в строке символом \texttt{c}. Начиная с символа, на который указывает \texttt{begin} и заканчивая символом на который указывает \texttt{end} (но не включая его). Гарантируется, что \texttt{end} указывает на символ, находящийся в этой же строке и не левее символа, на который указывает \texttt{begin}.
+\begin{lstlisting}
+#include <stdio.h>
+// Тут нужно написать функцию set\_characters
 
+int main() 
+{
+    char s[] = "Sapere Aude";
+    set_characters(&s[2], &s[8], 'b');
+    printf("%s\n", s);  // Напечатает Sabbbbbbude
+    set_characters(s, &s[4], 'a');
+    printf("%s\n", s);  // Напечатает aaaabbbbude
+}
+\end{lstlisting}
+
+\subsection{Используемые символы}
+Напишите функцию
+\begin{lstlisting}
+void used_chars(const char* str, char* used)
+\end{lstlisting}
+Которая бы принимала указатель на первый символ строки \texttt{str} и указатель на первый символ другой строки \texttt{used}. Функция должна находить все буквы в строке \texttt{str} и записывать их в \texttt{used} в алфавитном порядке. Символы, не являющиеся буквами, игнорируются. Если буква встречается в \texttt{str} (заглавная или строчная), в \texttt{used} добавляется соответствующая строчная буква. Считайте, что в строке \texttt{used} достаточно места.
+\begin{lstlisting}
+#include <stdio.h>
+#include <string.h>
+// Тут нужно написать функцию used\_chars
+
+int main() 
+{
+    char s[50] = "Sapere Aude";
+    char u[30];
+    used_chars(s, u);
+    printf("%s\n", u);  // Напечатает "adeprsu"
+    
+    strcpy(s, "123!$@");
+    used_chars(s, u);
+    printf("%s\n", u);  // Ничего не напечатает (только перенос строки)
+    
+    strcpy(s, "The Quick Brown Fox Jumps Over The Lazy Dog!");
+    used_chars(s, u);
+    printf("%s\n", u);  // Напечатает "abcdefghijklmnopqrstuvwxyz"    
+}
+\end{lstlisting}
  
 \subsection{Максимальная строка}
 Напишите функцию
