@@ -124,11 +124,12 @@ typedef struct book Book;
 \includegraphics[scale=\mallocImagesScale]{../images/malloc_homework/07heap_struct_book_title_heap.png}
 \end{center}
 
+\iffalse
 \item Массив таких структур в куче.
 \begin{center}
 \includegraphics[scale=\mallocImagesScale]{../images/malloc_homework/08heap_array_struct_book_title_heap.png}
 \end{center}
-
+\fi
 
 \item Создадим структуру \texttt{Library}, которая сможет хранить информацию о произвольном количестве книг.
 \begin{lstlisting}
@@ -205,10 +206,24 @@ library_destroy(&a);
 \fi
 \end{enumerate}
 
+
+
+
+\subsection{Геометрическая прогрессия}
+Напишите функцию \texttt{float* get\_geometric\_progression(float a, float r, int n)}, которая возвращает указатель на массив в куче, содержащий геометрическую прогрессию из $n$ чисел: 
+$a, ar, ar^2, ...$ 
+Память должна выделяться динамически. Вызовите эту функцию из \texttt{main} и напечатайте первые 10 степеней тройки.
+
+\subsection{Конкатенация с выделением памяти}
+Напишите функцию \texttt{char* concat(const char* a, const char* b)}, которая принимает на вход две строки и возвращает новую строку, являющуюся конкатенацией первых двух. Память под новую строку функция должна выделять в куче.
+
+
+
+
 \newpage
-\subsection{Динамический массив строк}
+\subsection{Сортировщик строк}
 Динамический массив строк -- это двумерный динамический массив элементов типа \texttt{char}. 
-Но с одной особеностью: размер строки задаётся не числом в отдельной переменной, а специальным нулевым символом на конце строки. Поэтому мы можем не хранить размер каждой строки. \\
+Но с одной особенностью: размер строки задаётся не числом в отдельной переменной, а специальным нулевым символом на конце строки. Поэтому мы можем не хранить размер каждой строки. \\
 Мы можем хранить количество строк в таком массиве в отдельной переменной, а можем просто выделить в массиве указателей на один элемент больше и хранить в этом элементе значение \texttt{NULL}. Таким образом мы можем найти количество строк в массиве.\\
 
 
@@ -219,7 +234,9 @@ library_destroy(&a);
 \begin{enumerate}
 \item Написать функцию \texttt{char** get\_test\_strings()} который будет создавать массив строк, представленный на рисунке выше, и возвращать его.
 
-\item Написать функцию \texttt{void print\_strings(FILE* stream, char** string\_array)} который будет печатать переданный массив строк \texttt{string\_array} в поток \texttt{stream}. С помощью этой функции напечатайте массив строк, представленный на рисунке, на экран.
+\item Написать функцию \texttt{void print\_strings(const char** string\_array)} который будет печатать переданный массив строк \texttt{string\_array}.
+
+\item Написать функцию \texttt{size\_t* get\_sizes(const char** string\_array)} которая будет возвращать массив, содержащий размеры всех строк. Память под этот массив должна выделяться в куче.
 
 \item Написать функцию \texttt{char** load\_lines(const char* filename)},
 которая будет создавать динамический массив строк, считывать из файла все строки в этот массив строк, и возвращать его. Один из способов как это можно сделать:
@@ -227,13 +244,13 @@ library_destroy(&a);
 \item Пройдите по файлу с помощью \texttt{fgetc} и посчитайте количество строк в файле (количество \texttt{\textbackslash n} + 1).
 \item Выделите необходимую память в куче под массив указателей (учтите нулевой указатель в конце).
 \item Вернитесь в начало файла с помощью \texttt{fseek}.
-\item Пройдите файл заново и считайте количество символов в каждой строке. Эту информацию нужно где-то хранить, поэтому выделите в куче временный массив в котором будет храниться длина каждой строки.
+\item Пройдите файл заново, подсчитайте количество символов в каждой строке и сохраните эти данные во временном массиве в куче.
 \item Выделите необходимую память для каждой строки (учтите нулевой символ в конце строк).
 \item Вернитесь в начало файла с помощью \texttt{fseek}.
-\item Пройдите файл заново и считайте каждую строку из файла в соответствующее место в массиве строк.
-\item Освободите память под временный массив, закройте файл и верните из функции динамический массив строк.
+\item Пройдите файл заново, считайте и запишите каждую строку в свой элемент массива.
+\item Освободите память под временный массив, закройте файл и верните результат.
 \end{itemize}
-
+Это не совсем оптимальный способ, так как приходится 3 раза проходить по файлу. Если есть желание, можно написать более оптимальный алгоритм с использованием \texttt{realloc} и \texttt{fgets}.
 \item Написать функцию \texttt{void destroy\_strings(char*** p\_string\_array)}, которая будет уничтожать динамический массив строк. Эта функция должна освобождать всю память (память под каждую строку и память под массив указателей). Также эта функция должна присваивать указателю \texttt{p} значение \texttt{NULL}.
 \begin{lstlisting}
 char** p = load_lines("three_little_pigs.txt");
@@ -241,22 +258,13 @@ destroy_strings(&p);
 \end{lstlisting}
 
 \item Написать функцию \texttt{void sort\_strings(char** words)}, которая будет сортировать все строки по алфавиту. Используйте функцию \texttt{strcmp}.
-\end{enumerate}
 
-\subsection{Сортировщик строк}
-Напишите программу \texttt{line\_sorter}, которая будет считывать текстовый файл, сортировать строки этого файла по алфавиту и записывать результат в другой файл. Названия файлов функция должна принимать через аргументы командной строки.
+\item Напишите программу \texttt{line\_sorter}, которая будет считывать текстовый файл, сортировать строки этого файла по алфавиту и записывать результат в другой файл. Названия файлов функция должна принимать через аргументы командной строки.
 Пример использования такой программы:
-
-\begin{verbatim}
-./line_sorter invisible_man.txt result.txt
-\end{verbatim}
-
-
-\subsection{Геометрическая прогрессия}
-Напишите функцию \texttt{float* get\_geometric\_progression(float a, float r, int n)}, которая возвращает указатель на динамический массив, содержащий геометрическую прогрессию из $n$ чисел: 
-$a, ar, ar^2, ...$ 
-Память должна выделяться динамически. Вызовите эту функцию из \texttt{main} и напечатайте первые 10 степеней тройки.
-
+\begin{lstlisting}
+$ ./line_sorter invisible_man.txt result.txt
+\end{lstlisting}
+\end{enumerate}
 
 
 \subsection{Разные сегменты}
@@ -266,14 +274,16 @@ $a, ar, ar^2, ...$
 #include <stdlib.h>
 
 int a;
+int b = 10;
+const int c = 20;
 void f() 
 {
     printf("hello f\n");
 }
 int main()
 {
-    int b;
-    static int c; 
+    int d;
+    static int e; 
        
     int* pi = (int*)malloc(sizeof(int) * 10);
     
@@ -283,6 +293,8 @@ int main()
     printf("&a   = %p\n", &a);
     printf("&b   = %p\n", &b);
     printf("&c   = %p\n", &c);
+    printf("&d   = %p\n", &d);
+    printf("&e   = %p\n", &e);
     printf("&pi  = %p\n", &pi);
     printf("pi   = %p\n", pi);
     printf("pi+5 = %p\n", pi + 5);
@@ -298,15 +310,16 @@ int main()
     free(pi);
 }
 \end{lstlisting}
-Нужно определить к какому сегменту принадлежит каждый из печатаемых адресов.
-Для того, чтобы сдать эту задачу нужно создать файл в формате \texttt{.txt} и, используя любой текстовый редактор, записать в него ответы в следующем формате (ответы ниже неверны):
-\begin{verbatim}
+Нужно определить к какому сегменту соответствует каждый из печатаемых адресов. Варианты следующие: \texttt{stack}, \texttt{heap}, \texttt{text}, \texttt{data}, \texttt{rodata} и \texttt{bss}. Чтобы сдать эту задачу нужно создать файл в формате \texttt{.txt} и, используя любой текстовый редактор, записать в него ответы в следующем формате (ответы ниже неверны):
+\begin{lstlisting}
 &a - stack
-&b - data
-&c - heap
-&pi - text
+&b - heap
+&c - text
+&d - data
+&pi - rodata
+pi - bss
 ...
-\end{verbatim} 
+\end{lstlisting}
 После этого, файл нужно поместить в ваш репозиторий на github.
 
 
@@ -391,6 +404,69 @@ int main()
 
 \end{lstlisting}
 
+
+\iffalse
+\subsection{Сортировка функций}
+Пусть есть следующая программа:
+\begin{lstlisting}
+#include <stdio.h>
+#include <stdlib.h>
+
+int sum(int x, int y)
+{
+    printf("I am sum\n");
+    return x + y;
+}
+
+int diff(int x, int y)
+{
+    printf("I am diff\n");
+    return x - y;
+}
+
+int mult(int x, int y)
+{
+    printf("I am mult\n");
+    return x * y;
+}
+
+int sqdiff(int x, int y)
+{
+    printf("I am sqdiff\n");
+    return x * x - y * y;
+}
+
+int lin(int x, int y)
+{
+    printf("I am lin\n");
+    return 5 * x - y;
+}
+
+typedef int (*Func)(int, int);
+
+Func array[4] = {sum, diff, mult, lin};
+
+
+void call_functions(Func* array, size_t n);
+void sort_functions(Func* array, size_t n, int x, int y);
+
+int main()
+{    
+    call_functions(array, 4);
+    sort_functions(array, 4, 2, 2);
+    call_functions(array, 4);
+    sort_functions(array, 4, 8, 1);
+    call_functions(array, 4);
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item Напишите функцию \texttt{call\_functions}, которая будет вызывать функции с аргументами \texttt{x = 0} и \texttt{y = 0}.
+\item Напишите функцию \texttt{sort\_functions}, которая будет сортировать функции в массиве \texttt{array} по возрастанию возвращаемого значения при аргументах \texttt{x} и \texttt{y}.
+\end{itemize}
+\fi
+
+
 \subsection{Сумматор}
 Создайте функцию \texttt{adder}, которая будет принимать на вход число и возвращать сумму всех чисел, которые приходили на вход этой функции за время выполнения программы.
 \begin{lstlisting}
@@ -404,5 +480,51 @@ int main()
     printf("%i\n", adder(70));  // Должен напечатать 95
 }
 \end{lstlisting}
+
+\subsection{Когда выделяется память}
+В следующей программе выделяется $10^9$ байт в сегменте памяти BSS. Программа "видит"{} весь массив как доступный с начала выполнения. Но операционная система может сэкономить ресурсы и не выделять память сразу. Рассмотрим следующую программу:
+\begin{lstlisting}
+#include <stdio.h>
+
+#define SIZE 1'000'000'000
+char data[SIZE];
+
+int main()
+{
+    getchar();
+    printf("1. Setting first char to 'A'\n");
+    data[0] = 'A';
+    
+    getchar();
+    printf("Setting last char to 'B'\n");
+    data[SIZE - 1] = 'B';
+    
+    getchar();
+    printf("Printing first char = %c\n", data[0]);
+    
+    getchar();
+    printf("Printing last char = %c\n", data[SIZE - 1]);
+    
+    getchar();
+    printf("Setting many chars to X\n");
+    for (size_t i = 0; i < SIZE; i += 1000)
+        data[i] = 'X';
+        
+    getchar();
+    printf("Printing all set chars\n");
+    for (size_t i = 0; i < SIZE; i += 1000)
+        printf("%c ", data[i]);
+        
+    getchar();
+}
+\end{lstlisting}
+
+\begin{enumerate}[a.]
+\item Определить на каком шаге операционная система действительно выделяет ресурсы. Для того, чтобы сдать эту подзадачу, создайте файл \texttt{09a.txt} и опишите в нём на каком шаге происходит выделение памяти.
+\item Перепишите программу так, чтобы память выделялась в куче и проверьте когда память будет выделяться в этом случае.Для того, чтобы сдать эту подзадачу, создайте файлы \texttt{09b.c}, в котором будет переписанная программа и файл \texttt{09b.txt} в котором будет описана на каком этапе будет на самом деле выделяться память в этом случае.
+\item Перепишите программу так, чтобы память выделялась на стеке и проверьте что будет происходить в этом случае. Объясните поведение программы в файле \texttt{09c.txt}.
+\end{enumerate}
+После этого, файлы нужно поместить в ваш репозиторий на github.
+
 
 \end{document}

@@ -661,7 +661,6 @@ int main()
 \begin{lstlisting}
 int* const p = &a;
 \end{lstlisting}
-
 Указатель, который можно менять, но, используя его, нельзя изменить то, на что он указывает, будем называть \textit{константным указателем}. Такой указатель можно объявить следующим образом:
 \begin{lstlisting}
 const int* p = &a;
@@ -687,8 +686,8 @@ p = &b;   // OK
 \end{lstlisting}
 \end{multicols}
 
-Как запомнить какой указатель что делает неизменяемым:
-\begin{lstlisting}
+\noindent Как запомнить какой указатель что делает неизменяемым:
+\begin{lstlisting}[escapeinside={<@}{@>}]
 int* <@\textcolor{red}{const p}@> = &a;  // p нельзя изменить
 <@\textcolor{red}{const int}*@> p = &a;  // int нельзя изменить
 \end{lstlisting}
@@ -709,7 +708,7 @@ int* p = &a;
 
 Если же у нас есть указатель типа \texttt{char*}, указывающий на объект типа \texttt{char} (размер \texttt{char} равен 1 байт), то в памяти это будет выглядеть примерно так:
 \begin{lstlisting}
-char a = 'A'; // Код символа 'A' равени 0x41 
+char a = 'A'; // Код символа 'A' равен 0x41 
 char* p = &a;
 \end{lstlisting}
 
