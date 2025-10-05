@@ -59,7 +59,7 @@
 \subsection{Создание объектов в куче}
 
 Напишите код, который будет создавать в куче объекты, соответствующие следующим рисункам. В каждой задаче напечатайте созданные в куче объекты. В каждой задаче освободите всю память, которую вы выделили.
-\begin{enumerate}
+\begin{enumerate}[a.]
 \item Одно число типа \texttt{size\_t}.
 \begin{center}
 \includegraphics[scale=\mallocImagesScale]{../images/malloc_homework/00heap_size_t.png}
@@ -404,68 +404,60 @@ int main()
 
 \end{lstlisting}
 
-
-\iffalse
 \subsection{Сортировка функций}
-Пусть есть следующая программа:
+Следующая программа содержит пять функций типа \texttt{int(int, int)}, а также массив \texttt{array}, который содержит адреса этих функций. \texttt{print\_func\_name} печатает название одной из данных функций по её адресу. Для удобства введёно новое имя типа \texttt{FuncPtr} для указателя типа \texttt{int(*)(int, int)}. Напишите функцию: 
+\begin{lstlisting}
+void sort_funcs(FuncPtr* a, size_t n, int x, int y)
+\end{lstlisting}
+которая будет сортировать массив \texttt{array} по возрастанию возвращаемого значения при аргументах \texttt{x} и \texttt{y}.
 \begin{lstlisting}
 #include <stdio.h>
 #include <stdlib.h>
 
-int sum(int x, int y)
+int sum(int x, int y) 	 {return x + y;}
+int diff(int x, int y) 	 {return x - y;}
+int mult(int x, int y) 	 {return x * y;}
+int sqdiff(int x, int y) {return x * x - y * y;}
+int lin(int x, int y) 	 {return 5 * x - y;}
+typedef int (*FuncPtr)(int, int);
+
+void print_func_name(FuncPtr p)
 {
-    printf("I am sum\n");
-    return x + y;
+    if (p == sum)
+        printf("sum\n");
+    else if (p == diff)
+        printf("diff\n");
+    else if (p == mult)
+        printf("mult\n");
+    else if (p == sqdiff)
+        printf("sqdiff\n");
+    else if (p == lin)
+        printf("lin\n");
+    else
+        printf("other\n");
 }
 
-int diff(int x, int y)
+
+FuncPtr array[5] = {sum, diff, mult, sqdiff, lin};
+
+void print_array_names(FuncPtr* array, size_t n)
 {
-    printf("I am diff\n");
-    return x - y;
+    for (size_t i = 0; i < n; ++i)
+        print_func_name(array[i]);
 }
 
-int mult(int x, int y)
-{
-    printf("I am mult\n");
-    return x * y;
-}
-
-int sqdiff(int x, int y)
-{
-    printf("I am sqdiff\n");
-    return x * x - y * y;
-}
-
-int lin(int x, int y)
-{
-    printf("I am lin\n");
-    return 5 * x - y;
-}
-
-typedef int (*Func)(int, int);
-
-Func array[4] = {sum, diff, mult, lin};
-
-
-void call_functions(Func* array, size_t n);
-void sort_functions(Func* array, size_t n, int x, int y);
+// Тут вам нужно написать функцию sort\_funcs
 
 int main()
-{    
-    call_functions(array, 4);
-    sort_functions(array, 4, 2, 2);
-    call_functions(array, 4);
-    sort_functions(array, 4, 8, 1);
-    call_functions(array, 4);
+{
+    print_array_names(array, 5);
+    sort_funcs(array, 5, 2, 2);
+    print_array_names(array, 5);
+    sort_funcs(array, 5, 8, 1);
+    print_array_names(array, 5);
 }
 \end{lstlisting}
-
-\begin{itemize}
-\item Напишите функцию \texttt{call\_functions}, которая будет вызывать функции с аргументами \texttt{x = 0} и \texttt{y = 0}.
-\item Напишите функцию \texttt{sort\_functions}, которая будет сортировать функции в массиве \texttt{array} по возрастанию возвращаемого значения при аргументах \texttt{x} и \texttt{y}.
-\end{itemize}
-\fi
-
+Можете использовать любой алгоритм сортировки: выбором, пузырьком, \texttt{qsort} или другой.
 
 \subsection{Сумматор}
 Создайте функцию \texttt{adder}, которая будет принимать на вход число и возвращать сумму всех чисел, которые приходили на вход этой функции за время выполнения программы.
@@ -495,6 +487,7 @@ int main()
     printf("1. Setting first char to 'A'\n");
     data[0] = 'A';
     
+    
     getchar();
     printf("Setting last char to 'B'\n");
     data[SIZE - 1] = 'B';
@@ -518,10 +511,12 @@ int main()
     getchar();
 }
 \end{lstlisting}
+Функция \texttt{getchar} считывает один символ с экрана. В данной программе она используется для временной остановки программы, чтобы можно было проверить занятую память с помощью команды \texttt{top} на Linux или с помощью диспетчера задач на Windows.
+
 
 \begin{enumerate}[a.]
 \item Определить на каком шаге операционная система действительно выделяет ресурсы. Для того, чтобы сдать эту подзадачу, создайте файл \texttt{09a.txt} и опишите в нём на каком шаге происходит выделение памяти.
-\item Перепишите программу так, чтобы память выделялась в куче и проверьте когда память будет выделяться в этом случае.Для того, чтобы сдать эту подзадачу, создайте файлы \texttt{09b.c}, в котором будет переписанная программа и файл \texttt{09b.txt} в котором будет описана на каком этапе будет на самом деле выделяться память в этом случае.
+\item Перепишите программу так, чтобы память выделялась в куче и проверьте когда память будет выделяться в этом случае. Для того, чтобы сдать эту подзадачу, создайте файлы \texttt{09b.c}, в котором будет переписанная программа и файл \texttt{09b.txt} в котором будет описана на каком этапе будет на самом деле выделяться память в этом случае.
 \item Перепишите программу так, чтобы память выделялась на стеке и проверьте что будет происходить в этом случае. Объясните поведение программы в файле \texttt{09c.txt}.
 \end{enumerate}
 После этого, файлы нужно поместить в ваш репозиторий на github.
