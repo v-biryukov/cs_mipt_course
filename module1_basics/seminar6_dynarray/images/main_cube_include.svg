@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="02main_cube_include.svg"
+   inkscape:export-filename="C:\Users\vova\workspace\latex\cs_mipt_faki\module4_utils\seminar1_libs\images\02main_cube_include.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="370.23809"
+     inkscape:cy="890.20695"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="2560"
+     inkscape:window-height="1358"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2">
+    <marker
+       inkscape:stockid="TriangleOutL"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="TriangleOutL"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path1437"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         transform="scale(0.8)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="DotM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="DotM">
+      <path
+         transform="scale(0.4) translate(7.4, 1)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:1"
+         d="M -2.5,-1.0 C -2.5,1.7600000 -4.7400000,4.0 -7.5,4.0 C -10.260000,4.0 -12.5,1.7600000 -12.5,-1.0 C -12.5,-3.7600000 -10.260000,-6.0 -7.5,-6.0 C -4.7400000,-6.0 -2.5,-3.7600000 -2.5,-1.0 z "
+         id="path1253" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="TriangleInM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleInM">
+      <path
+         transform="scale(-0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:1"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1132" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="marker1420"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:1"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1141" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;;opacity:1"
+       id="marker1333"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Send">
+      <path
+         transform="scale(0.2) rotate(180) translate(6,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:1"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path1011" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="Arrow2Mstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mstart">
+      <path
+         transform="scale(0.6) translate(0,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:1"
+         id="path1020" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="marker1237"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:1"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1119" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="TriangleOutM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:1"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1254" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="TriangleOutS"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleOutS">
+      <path
+         transform="scale(0.2)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:1"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1257" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;;opacity:1"
+       id="Arrow1Send"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Send">
+      <path
+         transform="scale(0.2) rotate(180) translate(6,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:1"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path1124" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;;opacity:1"
+       id="Arrow2Lend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Lend">
+      <path
+         transform="scale(1.1) rotate(180) translate(1,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1;opacity:1"
+         id="path1130" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="TriangleOutM-4"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1;opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1254-0"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="TriangleOutM-4-2"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1;opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1254-0-9"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="TriangleOutM-4-2-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1;opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1254-0-9-4"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="marker1237-6"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1;opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1119-1"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="DotM-2"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="DotM">
+      <path
+         transform="matrix(0.4,0,0,0.4,2.96,0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1;opacity:1"
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         id="path1253-5"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="TriangleOutM-0"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1;opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1254-00"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="DotM-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="DotM">
+      <path
+         transform="matrix(0.4,0,0,0.4,2.96,0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1;opacity:1"
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         id="path1253-2"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible;opacity:1"
+       id="TriangleOutM-00"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1;opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1254-7"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1067">
+      <rect
+         ry="0.015282094"
+         y="42.713757"
+         x="31.625332"
+         height="57.95607"
+         width="59.399189"
+         id="rect1069"
+         style="display:inline;opacity:1;fill:#d5f6ff;fill-opacity:0.17753625;stroke:#000006;stroke-width:0.3274188" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1071">
+      <rect
+         ry="0.015282094"
+         y="42.713757"
+         x="31.625332"
+         height="57.95607"
+         width="59.399189"
+         id="rect1073"
+         style="display:inline;opacity:1;fill:#d5f6ff;fill-opacity:0.17753625;stroke:#000006;stroke-width:0.3274188" />
+    </clipPath>
+  </defs>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     style="display:inline;opacity:1"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <rect
+       style="fill:#80e5ff;fill-opacity:0.04705882;stroke:#000600;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect1075"
+       width="71.264221"
+       height="46.381023"
+       x="18.682938"
+       y="32.037666"
+       ry="0.012289598" />
+    <circle
+       r="0"
+       style="opacity:1;fill:#ff5c9c;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="circle1430"
+       cx="161.52617"
+       cy="105.25397"
+       clip-path="url(#clipPath1071)" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.45835066px;line-height:0;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';letter-spacing:0px;word-spacing:0px;stroke-width:0.19546862"
+       x="19.343916"
+       y="30.572529"
+       id="text1079"
+       transform="scale(1.0000292,0.99997078)"><tspan
+         sodipodi:role="line"
+         id="tspan1077"
+         x="19.343916"
+         y="30.572529"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862">main.c</tspan><tspan
+         sodipodi:role="line"
+         x="19.343916"
+         y="30.572529"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1081" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.45835066px;line-height:1;font-family:Consolas;-inkscape-font-specification:'Consolas, Normal';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;stroke-width:0.19546862"
+       x="22.231089"
+       y="38.228733"
+       id="text1076"
+       transform="scale(1.0000292,0.99997078)"><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="38.228733"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1104"><tspan
+   style="fill:#2ca089;stroke-width:0.19546862"
+   id="tspan1148">#include</tspan> <tspan
+   style="fill:#c8a000;stroke-width:0.19546862"
+   id="tspan1091">&lt;stdio.h&gt;</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="41.687084"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1120" /><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="45.284256"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1122"><tspan
+   style="fill:#0044aa;stroke-width:0.19546862"
+   id="tspan1156">int</tspan> cube(<tspan
+   style="fill:#0044aa;stroke-width:0.19546862"
+   id="tspan1164">int</tspan> x)</tspan><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="48.881424"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1124">{</tspan><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="52.478596"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1126">    <tspan
+   style="fill:#0044aa;stroke-width:0.19546862"
+   id="tspan1166">return</tspan> x * x * x;</tspan><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="56.075764"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1128">}</tspan><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="59.534115"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1130" /><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="63.131287"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1132"><tspan
+   style="fill:#0044aa;stroke-width:0.19546862"
+   id="tspan1162">int</tspan> main()</tspan><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="66.728455"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1134">{</tspan><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="70.32563"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1136">    printf(<tspan
+   style="fill:#c8a000;fill-opacity:1;stroke-width:0.19546862"
+   id="tspan1140">&quot;%i\n&quot;</tspan>, cube(5));</tspan><tspan
+         sodipodi:role="line"
+         x="22.231089"
+         y="73.922798"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546862"
+         id="tspan1138">}</tspan></text>
+    <rect
+       style="display:inline;opacity:1;fill:#80e5ff;fill-opacity:0.04705882;stroke:#000600;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect1075-5"
+       width="71.264221"
+       height="31.562061"
+       x="122.53236"
+       y="20.964771"
+       ry="0.0083630094" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.45835066px;line-height:0;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;stroke-width:0.19546863"
+       x="123.19029"
+       y="18.67601"
+       id="text1079-6"
+       transform="scale(1.0000292,0.99997078)"><tspan
+         sodipodi:role="line"
+         id="tspan1077-9"
+         x="123.19029"
+         y="18.67601"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546863">main.c</tspan><tspan
+         sodipodi:role="line"
+         x="123.19029"
+         y="18.67601"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546863"
+         id="tspan1081-8" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.45835066px;line-height:1;font-family:Consolas;-inkscape-font-specification:'Consolas, Normal';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;stroke-width:0.19546863"
+       x="126.07748"
+       y="27.408834"
+       id="text1076-8"
+       transform="scale(1.0000292,0.99997078)"><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="27.408834"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546863"
+         id="tspan1104-6"><tspan
+   style="fill:#2ca089;stroke-width:0.19546863"
+   id="tspan1148-9">#include</tspan> <tspan
+   style="fill:#c8a000;stroke-width:0.19546863"
+   id="tspan1091-4">&lt;stdio.h&gt;</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="31.006004"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546863"
+         id="tspan1128-9"><tspan
+   style="fill:#2ca089;stroke-width:0.19546863"
+   id="tspan1268">#include</tspan> <tspan
+   style="fill:#c8a000;stroke-width:0.19546863"
+   id="tspan1270">&quot;cube.h&quot;</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="34.464355"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546863"
+         id="tspan1130-7" /><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="38.061527"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546863"
+         id="tspan1132-0"><tspan
+   style="fill:#0044aa;stroke-width:0.19546863"
+   id="tspan1162-3">int</tspan> main()</tspan><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="41.658695"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546863"
+         id="tspan1134-5">{</tspan><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="45.255867"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546863"
+         id="tspan1136-5">    printf(<tspan
+   style="fill:#c8a000;fill-opacity:1;stroke-width:0.19546863"
+   id="tspan1140-3">&quot;%i\n&quot;</tspan>, cube(5));</tspan><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="48.853039"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546863"
+         id="tspan1138-2">}</tspan></text>
+    <rect
+       style="display:inline;opacity:1;fill:#80e5ff;fill-opacity:0.04705882;stroke:#000600;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect1075-5-4"
+       width="71.264221"
+       height="28.142302"
+       x="122.53236"
+       y="61.392887"
+       ry="0.0074568749" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.45835066px;line-height:0;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;stroke-width:0.19546865"
+       x="123.19029"
+       y="59.61195"
+       id="text1079-6-0"
+       transform="scale(1.0000292,0.99997078)"><tspan
+         sodipodi:role="line"
+         x="123.19029"
+         y="59.61195"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546865"
+         id="tspan1272">cube.h</tspan><tspan
+         sodipodi:role="line"
+         x="123.19029"
+         y="59.61195"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546865"
+         id="tspan1081-8-8" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.45835066px;line-height:1;font-family:Consolas;-inkscape-font-specification:'Consolas, Normal';letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;stroke-width:0.19546865"
+       x="126.07748"
+       y="67.584808"
+       id="text1076-8-6"
+       transform="scale(1.0000292,0.99997078)"><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="67.584808"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546865"
+         id="tspan1104-6-2"><tspan
+   style="fill:#2ca089;stroke-width:0.19546865"
+   id="tspan1148-9-7">#pragma</tspan> once<tspan
+   style="fill:#c8a000;stroke-width:0.19546865"
+   id="tspan1091-4-3" /></tspan><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="71.043159"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546865"
+         id="tspan1120-9-9" /><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="74.640327"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546865"
+         id="tspan1122-7-9"><tspan
+   style="fill:#0044aa;stroke-width:0.19546865"
+   id="tspan1156-9-6">int</tspan> cube(<tspan
+   style="fill:#0044aa;stroke-width:0.19546865"
+   id="tspan1164-4-4">int</tspan> x)</tspan><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="78.237503"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546865"
+         id="tspan1124-1-2">{</tspan><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="81.834671"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546865"
+         id="tspan1126-3-6">    <tspan
+   style="fill:#0044aa;stroke-width:0.19546865"
+   id="tspan1166-8-1">return</tspan> x * x * x;</tspan><tspan
+         sodipodi:role="line"
+         x="126.07748"
+         y="85.431839"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:1;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro';stroke-width:0.19546865"
+         id="tspan1138-2-4">}</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutL)"
+       d="M 94.380958,54.359088 H 113.38074"
+       id="path1293"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
