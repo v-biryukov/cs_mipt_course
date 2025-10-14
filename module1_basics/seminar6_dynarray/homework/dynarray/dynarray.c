@@ -15,7 +15,7 @@ void* ecmalloc(size_t n)
     return p;
 }
 
-void clear(Dynarray* pd)
+void clean(Dynarray* pd)
 {
     for (size_t i = 0; i < pd->size; ++i)
         pd->data[i] = 0;
@@ -29,7 +29,7 @@ void init(Dynarray* pd, size_t initial_size)
         pd->data = NULL;
     else
         pd->data = (int*)ecmalloc(pd->capacity * sizeof(int));
-    clear(pd);
+    clean(pd);
 }
 
 void reserve(Dynarray* pd, size_t new_capacity)
@@ -69,14 +69,14 @@ void push_back(Dynarray* pd, int x)
 
 int get(const Dynarray* pd, size_t index) 
 {
-    assert(index >= 0 && index < pd->size);
+    assert(index < pd->size);
     return pd->data[index];
 }
 
 
 void set(Dynarray* pd, size_t index, int value) 
 {
-    assert(index >= 0 && index < pd->size);
+    assert(index < pd->size);
     pd->data[index] = value;
 }
 

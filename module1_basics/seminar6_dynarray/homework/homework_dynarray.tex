@@ -61,7 +61,7 @@
 
 
 \subsubsection{\texttt{\textcolor{blue}{int} pop\_back(Dynarray* pd)}}
-Функция должна будет удалять последний элемент массива и возвращать его. Вместимость массива в этой функции меняться не должна. В случае если массив пуст и удалять нечего функция должна напечатать сообщение об ошибке и выйти из программы.
+Функция должна будет удалять последний элемент массива и возвращать его. Вместимость массива в этой функции меняться не должна. В случае если массив пуст и удалять нечего, функция должна напечатать сообщение об ошибке и выйти из программы.
 
 
 \subsubsection{\texttt{\textcolor{blue}{void} resize(Dynarray* pd, \textcolor{blue}{size\_t} new\_size)}}
@@ -200,35 +200,84 @@ int main()
     print(&a);                          // Напечатает 400 300 200 1000 2000 3000 10 20 30 40
     print(&b);                          // Ничего не напечатает
 }
-
 \end{lstlisting}
 
 
+
+\subsection{Dog}
+Напишите программу, которая будет вести себя по-разному в зависимости от того какая опция была передана при компиляции. Программа должна печатать \texttt{"Dog!"} если она была скомпилирована с опцией \texttt{-D DOG}:
+\begin{lstlisting}
+$ gcc -DDOG main.c
+\end{lstlisting}
+Если же программа была скомпилирована без этой опции, то при запуске она должна печатать \texttt{"No dog!"}.
+
 \subsection{Счет}
-Напишите программу, которая будет вести себя по-разному в зависимости от того какая опция была передана при компиляции. Программа должна печатать числа от \texttt{1} до значения передаваемого на этапе компиляции макроса \texttt{COUNT}.
-То есть, если скомпилировать программу так:
-\begin{verbatim}
-    gcc -DCOUNT=5 main.c
-\end{verbatim}
-то программа при запуске должна напечатать числа от \texttt{1} до \texttt{5}:
-\begin{verbatim}
-    1 2 3 4 5
-\end{verbatim}
-В случае же если опции \texttt{-DCOUNT} при компиляции программы передано не было, например при такой компиляции:
-\begin{verbatim}
-    gcc main.c
-\end{verbatim}
-программа при запуске должна напечатать:
-\begin{verbatim}
-    No Count!
-\end{verbatim}
+Напишите программу, которая будет вести себя по-разному в зависимости от того какие опции были переданы при компиляции. Программа должна печатать числа от \texttt{1} до значения передаваемого на этапе компиляции макроса \texttt{COUNT}. То есть, если скомпилировать программу с опцией \texttt{-DCOUNT=5}, то он должна напечатать числа от 1 до 5:
+\begin{lstlisting}
+$ gcc -DCOUNT=5 main.c
+$ ./a.out
+1 2 3 4 5
+\end{lstlisting}
+Если при компиляции в дополнении к \texttt{COUNT} был передан макрос \texttt{REVERSE}, то программа при запуске должна напечатать числа в обратном порядке:
+\begin{lstlisting}
+$ gcc -DCOUNT=5 -DREVERSE main.c
+$ ./a.out
+5 4 3 2 1
+\end{lstlisting}
+Если значение \texttt{COUNT} оказалось больше чем 100, то программа должна напечатать \texttt{"Count is too large!"}.
+\begin{lstlisting}
+$ gcc -DCOUNT=500 main.c
+$ ./a.out
+Count is too large!
+\end{lstlisting}
+В случае же если опции \texttt{-DCOUNT} при компиляции программы передано не было, то
+программа при запуске должна напечатать \texttt{"No count!"}.
+\begin{lstlisting}
+$ gcc main.c
+$ ./a.out
+No count!
+\end{lstlisting}
+
+\noindent Если вы использует Windows, то для запуска программы вместо \texttt{./a.out} используйте \texttt{.\textbackslash a.exe} или \texttt{./a.exe} если вы используете MSYS2.
+
+
+\subsection{Макрос для логирования}
+Напишите программу с функциональным макросом \texttt{LOG(message)}. Функциональный макрос \texttt{LOG} должен выводить на \texttt{stderr} сообщение в формате:
+\begin{lstlisting}
+[DEBUG] файл: строка: сообщение
+\end{lstlisting} 
+Логирование должно включаться только если определён макрос \texttt{DEBUG}. Реализовать макрос нужно в заголовочном файле \texttt{log.h}. Например, если создать файл исходного кода \texttt{test.c} содержащий следующую программу:
+\begin{lstlisting}
+#include <stdio.h>
+#include "log.h"
+
+int main()
+{
+	LOG("Start");
+	printf("Hello\n");
+	LOG("Finish");
+}
+\end{lstlisting} 
+\newpage
+\noindent А потом эту программу скомпилировать с опцией \texttt{-DDEBUG}, при запустить, то она должна напечатать:
+\begin{lstlisting}
+$ gcc -DDEBUG test.c
+$ ./a.out
+[DEBUG] test.c: 6: Start
+Hello
+[DEBUG] test.c: 8: Finish
+\end{lstlisting}
+
+\subsection{Двусвязный список для любого типа}
+Используйте макросы и сделайте так, чтобы ваша реализация двусвязного списка из задачи 2 работала с любым типом, а не только с типом \texttt{int}. Сделайте это по аналогии с реализацией для динамического массива, которую можно найти тут: \texttt{module1\_basics/seminar6\_dynarray/theory/code/3dynarray\_macro}.
+
 
 \newpage
-
-
+~
+\newpage
 \section*{Необязательные задачи (не входят в ДЗ, никак не учитываются)}
 \setcounter{subsection}{0}
-\subsection{Очередь}
+\subsection{Очередь на основе кольцевого буфера}
 \begin{multicols}{2}
 \begin{lstlisting}
 #define CAPACITY 7

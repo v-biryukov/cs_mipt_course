@@ -13,7 +13,7 @@ struct dynarray
 typedef struct dynarray Dynarray;
 
 
-void clear(Dynarray* pd);
+void clean(Dynarray* pd);
 void init(Dynarray* pd, size_t initial_size);
 void reserve(Dynarray* pd, size_t new_capacity);
 void push_back(Dynarray* pd, int x);
