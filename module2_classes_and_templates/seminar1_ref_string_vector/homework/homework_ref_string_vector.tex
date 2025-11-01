@@ -287,14 +287,6 @@ cow(a.c_str());
 \end{verbatim} 
 После этого, файл нужно поместить в ваш репозиторий на github.
 
-\subsection{Подсчёт символов}
-Напишите функцию:
-\begin{lstlisting}
-void countLetters(const std::string& str, int& numLetters, int& numDigits)
-\end{lstlisting}
-которая будет принимать на вход строку \texttt{str} и подсчитывать число букв и цифр в этой строке. Количество букв нужно записать по ссылке \texttt{numLetters}, а количество цифр --  по ссылке \texttt{numDigits}. Используйте библиотеку \texttt{cctype}. Вызвать эту функцию из функции \texttt{main}.
-
-
 \subsection{Добавление скобок}
 Напишите функцию \texttt{addBrackets}, которая будет добавлять к строке квадратные скобки. Протестируйте эту функцию на следующем коде:
 \begin{lstlisting}
@@ -311,6 +303,14 @@ int main()
 }
 \end{lstlisting}
 
+\subsection{Подсчёт символов}
+Напишите функцию:
+\begin{lstlisting}
+void countLetters(const std::string& str, int& numLetters, int& numDigits)
+\end{lstlisting}
+которая будет принимать на вход строку \texttt{str} и подсчитывать число букв и цифр в этой строке. Количество букв нужно записать по ссылке \texttt{numLetters}, а количество цифр --  по ссылке \texttt{numDigits}. Используйте библиотеку \texttt{cctype}. Вызвать эту функцию из функции \texttt{main}.
+
+
 \subsection{Повтор числа в строке}
 Напишите функцию \texttt{repeat}, которое будет принимать на вход некоторое целое число \texttt{n} и возвращать строку, содержащую это число в десятичной записи, повторённое \texttt{n} раз. Протестируйте функцию на следующем коде:
 \begin{lstlisting}
@@ -324,7 +324,7 @@ int main()
 \end{lstlisting}
 
 \subsection{Доменное имя}
-Напишите функцию \texttt{isDomainName}, которая принимает на вход строку и если строка начинается на \texttt{www.} и заканчивается на \texttt{.com}, то эта функция должна вернуть \texttt{true}, иначе \texttt{false}. Используйте методы класса \texttt{std::string}.
+Напишите функцию \texttt{isDomainName}, которая принимает на вход строку и если строка начинается на \texttt{www.} и заканчивается на \texttt{.com}, то эта функция должна вернуть \texttt{true}, иначе \texttt{false}. Используйте методы строки \texttt{starts\_with} и \texttt{ends\_with}.
 \begin{lstlisting}
 #include <iostream>
 #include <string>
@@ -480,6 +480,53 @@ int main()
 \end{lstlisting} 
 
 
+\newpage
+\subsection{Парсинг по разделителю}
+Напишите функцию \texttt{split}, которая принимает строку и символ-разделитель и возвращает \texttt{std::vector<std::string>}, содержащий все подстроки, разделенные этим символом. Используйте методы строки \texttt{find} и \texttt{substr}.
+\begin{lstlisting}
+#include <iostream>
+#include <string>
+#include <vector>
+void print(const std::vector<int>& v)
+{
+    for (std::size_t i = 0; i < v.size(); ++i)
+        std::cout << v[i] << " ";
+    std::cout << std::endl;
+}
+// Тут нужно написать функцию split
+
+
+int main()
+{
+    std::string data = "apple,banana,cherry,durian";
+    char delimiter = ',';
+    
+    std::vector<std::string> parts = split(data, delimiter);
+    for (std::size_t i = 0; i < parts.size(); ++i)
+        std::cout << parts.at(i) << std::endl;
+}
+\end{lstlisting} 
+
+
+\subsection{Длина слов в файле}
+Напишите функцию:
+\begin{lstlisting}
+std::vector<std::vector<std::size_t>> calculate_word_lengths(const std::string& filename)
+\end{lstlisting}
+которая будет считывать файл и считать количество символов в каждом слове файла. Под "словом"{} считается любая последовательность непробельных символов, ограниченная пробельными символами или началом/концом файла. Функция должна возвращать вектор, содержащий вектора количества символов слов для каждой строки. Например, если файл содержит:
+\begin{lstlisting}
+one two three
+hello
+axolotl bison cat dog eagle
+\end{lstlisting} 
+то функция должна вернуть вектор, содержащий:
+\begin{lstlisting}
+{{3, 3, 5}, {5}, {7, 5, 3, 3, 5}}
+\end{lstlisting} 
+
+
+\newpage
+~
 \newpage
 \section*{Необязательные задачи (не входят в ДЗ, никак не учитываются)}
 \setcounter{subsection}{0}
