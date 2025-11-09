@@ -1,14 +1,14 @@
 #pragma once
-
 #include <iostream>
 #include <cmath>
 
 class Point
 {
-public:
+private:
     float x;
     float y;
-    
+
+public:  
     Point()
     {
         x = 0;
@@ -46,6 +46,6 @@ public:
 
 std::ostream& operator<<(std::ostream& left, Point right) 
 {
-    left << "(" << right.x << ", " << right.y << ")";
+    left << "(" << right.getX() << ", " << right.getY() << ")";
     return left;
 }
