@@ -54,7 +54,7 @@
 
 \begin{document}
 
-\title{Семинар \#3: Инициализация.\vspace{-5ex}}\date{}\maketitle
+\title{Семинар \#3: Инициализация. Обработка ошибок.\vspace{-5ex}}\date{}\maketitle
 
 \section*{Инициализация}
 
@@ -372,7 +372,7 @@ int main()
 \end{lstlisting}
 
 \newpage
-Удалённые функции можно использовать, чтобы запретить компилятору создавать те или иные особые методы.
+\noindent Удалённые функции можно использовать, чтобы запретить компилятору создавать те или иные особые методы.
 Например, можно удалить конструктор копирования, что предотвратит автоматическую генерацию этого конструктора компилятором. В результате получится класс, объекты которого нельзя будет копировать. Может показаться, что такая возможность никогда не пригодиться, но это не так. На самом деле, в стандартной библиотеке C++ и в других библиотеках есть множество классов, объекты которых нельзя копировать.
 
 \begin{lstlisting}
@@ -404,7 +404,7 @@ int main()
 \end{lstlisting}
 
 \subsection*{\texttt{default}-методы}
-В противоположность удаления особых методов, можно указать компиляторы, что мы хотим генерировать те или иные особые методы автоматически. Для этого используется ключевое слово \texttt{default}.
+В противоположность удаления особых методов, можно указать компилятору, что мы хотим генерировать те или иные особые методы автоматически. Для этого используется ключевое слово \texttt{default}.
 \begin{lstlisting}
 class Cat
 {
@@ -421,7 +421,7 @@ public:
 	                              // Хотя он и так бы сгенерировал его.
 };
 \end{lstlisting}
-В примере выше строка \texttt{Cat(\textcolor{blue}{const} Cat\& c) = \textcolor{blue}{default};} не изменяет поведение программы, так как конструктор копирования всё-равно бы сгенерировался автоматически, даже без этой строки. Но всё-равно прописывать такие \texttt{default} особые методы полезно, так как это делает код более ясным. 
+В примере выше строка \texttt{Cat(\textcolor{blue}{const} Cat\& c) = \textcolor{blue}{default};} не изменяет поведение программы, так как конструктор копирования всё равно бы был сгенерирован автоматически, даже без этой строки. Но всё-равно прописывать такие \texttt{default} особые методы полезно, так как это делает код более ясным. 
 
 \section*{Создание объектов в куче}
 \subsection*{Операторы \texttt{new}/\texttt{delete}}
@@ -437,7 +437,6 @@ int main()
 	std::free(p);
 }
 \end{lstlisting}
-
 Вместо использования функций \texttt{malloc}/\texttt{free} для создания объектов в куче следует использовать операторы \texttt{new}/\texttt{delete}. С помощью оператора \texttt{new} можно создать объект в куче и корректно его инициализировать. Тогда как с помощью оператора \texttt{delete} можно корректно удалить объект в куче.
 \begin{itemize}
 \item Оператор \texttt{new} делает следующее:
@@ -454,7 +453,6 @@ int main()
 Пример выше с использованием \texttt{new}/\texttt{delete} перепишется так:
 \begin{lstlisting}
 #include <string>
-
 int main()
 {
 	std::string* p = new std::string;  // Выделит память и вызовет конструктор по умолчанию
@@ -522,12 +520,17 @@ int main()
 }
 \end{lstlisting}
 
+
+\subsection*{Оператор \texttt{placement new}}
+
+
+
+
 \newpage
 \section*{Статические поля и методы}
 \textbf{Статическое поле} -- это поле класса, которое принадлежит самому классу, а не конкретному объекту этого класса. Такие поля не хранятся в объектах класса. Вместо этого хранится единственная копия этого поля в сегменте памяти данные. Получить доступ к этому полю можно либо через имя класса с использованием оператора \texttt{::} либо через объект с использованием оператора точка.
 \begin{lstlisting}
 #include <iostream>
-
 struct Cat
 {
 	static int x;
@@ -550,11 +553,9 @@ int main()
 	std::cout << a.x << std::endl;     // Напечатает 13
 }
 \end{lstlisting}
-
 Инициализация статических полей класса должна проводиться вне самого класса. Почему статические поля нельзя инициализировать внутри класса? Это более сложный вопрос который мы оставим на следующие семинары. Пока только можно отметить, что если нужно константное статическое поле, то такое поле можно инициализировать внутри класса если добавить ключевое слово \texttt{constexpr}.
 \begin{lstlisting}
 #include <iostream>
-
 struct Cat
 {
 	static constexpr int x = 10;  // Сразу инициализируем
@@ -574,7 +575,6 @@ int main()
 
 \begin{lstlisting}
 #include <iostream>
-
 struct Cat
 {
 	static void say()
@@ -582,7 +582,6 @@ struct Cat
 		std::cout << "Hello" << std::endl;
 	}
 };
-
 int main()
 {
 	Cat a;
@@ -594,113 +593,297 @@ int main()
 
 
 
+\section*{Copy elision}
+
+
 \newpage
-\section*{Ключевое слово \texttt{auto} и прочее}
-
-\subsection*{Ключевое слово \texttt{auto}}
-Ключевое слово \texttt{auto} используется для автоматического вывода типа.
-\begin{lstlisting}
-#include <string>
-int main() 
-{
-    auto a = 123;   // a будет иметь тип int
-    auto b = 4.1;   // b будет иметь тип double
-    auto c = 4.1f;  // c будет иметь тип float
-    
-    auto s1 = "Hello";               // s1 будет иметь тип const char*
-    auto s2 = std::string("Hello");  // s2 будет иметь тип std::string
-}
-
-\end{lstlisting}
-
-
-\subsection*{Задачи:}
+\section*{Обработка ошибок}
+Есть множество различных классификаций ошибок, здесь представлена одна из них, которая может отличаться от классификаций в других источниках. Ошибки делятся на:
 \begin{itemize}
-\item Протестируйте, можно ли использовать \texttt{auto} вместо возвращаемого типа функции. Напишите функцию, которая принимает на вход вектор строк и возвращает строку, которая является результатом конкатенации всех строк. Вместо возвращаемого типа используйте \texttt{auto}.
-\item Протестируйте, можно ли создать функцию, которая будет принимать целое число и, в зависимости от этого числа, возвращать значения разных типов. (Если вместо возвращаемого типа используется \texttt{auto}).
-
-\item Протестируйте, можно ли использовать о указатель с помощью \texttt{auto}. Пусть есть такой участок кода:
-\begin{lstlisting}
-int a = 123;
-auto p = &a;
-auto* q = &a;
-\end{lstlisting}
-Какой тип будет у \texttt{p} и \texttt{q}?
-\item Функция вычисления факториала, написанная ниже с использованием \texttt{auto} не работает. 
-\begin{lstlisting}
-auto factorial(int n) 
-{
-    if (n > 0)
-        return n * factorial(n - 1);
-    return 1;
-}
-\end{lstlisting}
-Почему? Исправьте эту функцию, не убирая \texttt{auto}.
+\item Ошибки времени компиляции
+\item Ошибки линковки
+\item Ошибки времени выполнения
+\item Логические ошибки (ошибки в логике работы программы; могут привести или не привести к ошибке времени выполнения)
+\end{itemize}
+Под обработкой ошибок обычно понимается обработка ошибок времени выполнения. Их, в свою очередь, можно тоже разделить на два типа: внутренние и внешние.
+\begin{center}
+\includegraphics[scale=0.9]{../images/error_types.png}
+\end{center}
+Эти два типа ошибок времени выполнения сильно различаются друг от друга и могут обрабатываться различными способами.
+\begin{itemize}
+\item От внутренних ошибок, как правило, нельзя восстановиться. Лучшее решение в этом случае -- это завершить выполнение программы и вывести сообщение об ошибке.
+\item Внешние ошибки часто можно предусмотреть и продумать действия программы при возникновении такой ошибки. Иногда можно даже восстановить работу программы.
 \end{itemize}
 
-
-
 \newpage
-\subsection*{Range-based циклы}
-Циклы, основанные на диапазоне, предоставляют более простой способ обхода контейнера:
+\section*{Методы обработки ошибок}
+\subsection*{\texttt{assert}}
+\texttt{assert} обычно используется для отладки в Debug режиме, но иногда его применяют и для примитивной отладки ошибок. В случае, если условие в \texttt{assert} не выполняется, вызывает функцию \texttt{std::abort} и завершает программу. Нет возможности как-то обработать ошибку и продолжить выполнение программы.
 \begin{lstlisting}
 #include <iostream>
-#include <vector>
+#include <cmath>
+#include <cassert>
+float geometricMean(float a, float b)
+{
+    assert(a >= 0 && b >= 0);
+    return std::sqrt(a * b);
+}
 
 int main()
 {
-    std::vector<int> v {6, 1, 7, 4};
-    for (int num : v)
-    	std::cout << num << std::endl;    
+    std::cout << geometricMean(-2, 2) << std::endl;
+    std::cout << "After" << std::endl;
 }
 \end{lstlisting}
-Для изменения элементов контейнера при обходе нужно использовать ссылки:
+Выполнение данной программы напечатает на экран:
 \begin{lstlisting}
-for (int& num : v)
-    num += 1;    
+Assertion failed: a >= 0 && b >= 0, file test2.cpp, line 7
 \end{lstlisting}
 
-\subsection*{Задачи:}
-\begin{itemize}
-\item Проверьте, можно ли использовать ключевое слово \texttt{auto} внутри таких циклов.
-\item Пусть у нас есть вектор строк:
-\begin{lstlisting}
-vector<string> v {"Cat", "Axolotl", "Bear", "Elephant"};
-\end{lstlisting}
-\begin{itemize}
-\item Напишите range-based цикл, который будет печатать все элементы вектора
-\item Напишите range-based цикл, который будет добавлять в конец каждой строки символ \texttt{s}.
-\end{itemize}
 
-\item Для печати массива целых чисел была написана следующая функция:
-\begin{lstlisting}
-void print(int array[]) 
-{
-    for (int num : array)
-        std::cout << num << std::endl;
-}
-\end{lstlisting}
-Оказывается, что она не работает. В чём заключается ошибка?
-\end{itemize}
-
-\subsection*{Structure binding (структурное связывание)}
-Для объявления и инициализации нескольких переменных через агрегатный объект можно использовать так называемое структурное связывания. В коде ниже мы объявляем переменные \texttt{a} и \texttt{b} одной строкой с помощью структурного связывания.
+\subsection*{Использование глобальной переменной}
+Обработка ошибок через глобальную переменную \texttt{errno} — простой метод, широко применявшийся в языке C. При возникновении ошибки ей присваивается код (например, \texttt{EDOM}, \texttt{EPERM} и другие), который затем проверяется после вызова функции. Сегодня такой подход считается устаревшим.
 \begin{lstlisting}
 #include <iostream>
-struct Point
+#include <cmath>
+#include <cerrno>
+float geometricMean(float a, float b)
 {
-	int x;
-	int y;
+    if (a < 0 || b < 0)
+    {    
+    	errno = EDOM;
+    	return 0;
+    }
+    return std::sqrt(a * b);
+}
+
+int main()
+{
+    errno = 0;
+    float result = geometricMean(-2, 2);
+    if (errno == EDOM)
+    {
+        std::cout << "Error. Domain error!" << std::endl;
+        std::exit(1);
+    }
+    std::cout << "Result = " << result << std::endl;
+}
+
+\end{lstlisting}
+
+\subsection*{Коды возврата}
+Простой и широко используемый способ обработки ошибок -- возврат заранее оговоренного значения из функции при возникновении ошибки. После вызова функцию, которая использует коды возврата, необходимо проверить на возвращаемое значение. Сложность может возникнуть, если функция уже возвращает значение. Тогда придётся передавать значение или код возврата каким-то другим способом, например через аргументы по ссылке.
+\begin{lstlisting}
+#include <iostream>
+#include <cmath>
+
+int geometricMean(float a, float b, float& result)
+{
+	if (a < 0 || b < 0)
+		return -1;
+	result = std::sqrt(a * b);
+    return 0;
+}
+
+int main()
+{
+    float result;
+    int code = geometricMean(-2, 2, result);
+    if (code == -1)
+    	std::cout << "Error!" << std::endl;
+    else
+    	std::cout << "Result = " << result << std::endl;
+}
+\end{lstlisting}
+Другой способ, это использование специального объекта для хранения и результата и кода ошибки:
+\begin{lstlisting}
+#include <iostream>
+#include <cmath>
+
+struct Result
+{
+	float value;
+	int code;
 };
-int main() 
+
+Result geometricMean(float a, float b)
 {
-    Point p {5, 1};
-    auto [a, b] = p;
-    
-    std::cout << a << " " << b << std::endl;
+	if (a < 0 || b < 0)
+		return {0.0, -1};
+    return {std::sqrt(a * b), 0};
+}
+
+int main()
+{
+    Result res = geometricMean(-2, 2);
+    if (res.code == -1)
+    	std::cout << "Error!" << std::endl;
+    else
+    	std::cout << "Result = " << res.value << std::endl;
 }
 \end{lstlisting}
 
+\noindent Коды возврата часто применяются как в языке C (можно вспомнить, например, функцию \texttt{malloc}), так и в языке C++. Но в C++ для работы с кодами возврата часто используются вспомогательные классы, такие как \texttt{std::optional} и \texttt{std::expected}.
+
+\subsubsection*{Недостатки кодов возврата}
+В целом, коды возврата это хороший способ обработки ошибок, но у него есть несколько недостатков:
+\begin{itemize}
+\item Самый главный недостаток кодов возврата заключается в том, что для корректной обработки ошибок необходимо делать проверку кода возврата \textit{после каждого вызова функции}. В результате весь код превращается в "лапшу"{} и проверок. Такой код сложно писать и поддерживать.
+\item Если ошибка возникает глубоко в коде, а обрабатываться должна выше, её приходится "прокидывать"{} через все вложенные функции. Что также усложняет написание и поддержку кода.
+\item Нельзя обработать ошибки в некоторых функциях, таких как конструкторы, деструкторы или перегруженные операторы.
+\end{itemize}
+
+\subsection*{Исключения}
+Исключения -- это основной механизм обработки ошибок в C++. Использование исключений позволяет отделить код обнаружения ошибки от её обработки.
+\begin{lstlisting}
+#include <iostream>
+#include <cmath>
+#include <stdexcept>
+
+float geometricMean(float a, float b)
+{
+    if (a < 0 || b < 0)
+        throw std::runtime_error{"Domain error"};
+    return std::sqrt(a * b);
+}
+
+int main()
+{
+    try
+    {
+        std::cout << geometricMean(-2, 2) << std::endl;
+    }
+    catch (std::runtime_error& e)
+    {
+        std::cout << "Error. " << e.what() << std::endl;
+    }
+}
+\end{lstlisting}
+\begin{itemize}
+\item При обнаружении исключения "бросаем"{} объект, используя ключевое слово \texttt{throw}. В качестве бросаемого объекта может быть объект практически любого типа, но обычно используются специальные типы из библиотеки \texttt{stdexcept}, такие как, например, \texttt{std::runtime\_error}.
+
+\item Код, в котором могут возникнуть ошибки помещаем в блок \texttt{try}.
+
+\item Если внутри \texttt{try} (включая вызванные из него функции) будет выброшено исключение, и существует блок \texttt{catch} с совместимым типом, управление передаётся в этот \texttt{catch}. При переходе объекты, созданные в \texttt{try}, корректно уничтожаются.
+
+\item Одному блоку \texttt{try} могут соответствовать несколько блоков \texttt{catch}, для обработки нескольких типов ошибок.
+
+\item Метод \texttt{what} класса \texttt{std::runtime\_error} просто возвращает C-строку (\texttt{const char*}), содержащую описание ошибки, заданное при создании объекта. В данном случае это строка \texttt{"Domain error"}. 
+\end{itemize}
+
+
+\newpage
 \section*{Основы обработки ошибок с помощью исключений}
+\subsection*{Несколько \texttt{catch}-блоков}
+Бросать можно объект практически любого типа. При этом тип объекта в блоке \texttt{catch} должен быть совместимым с типом бросаемого объекта, а именно:
+\begin{itemize}
+\item Тип в \texttt{catch} должен полностью совпадать с типом бросаемого объекта.
+\item Тип в \texttt{catch} должен быть ссылкой/константной ссылкой на тип бросаемого объекта.
+\item Тип в \texttt{catch} должен быть ссылкой на базовый класс для типа бросаемого объекта. (более подробно этот случай будет разобран в теме "Наследование")
+\end{itemize}
+Одному блоку \texttt{try} могут соответствовать несколько блоков \texttt{catch}. Для обработки ошибки будет выбран блок \texttt{catch} с совместимым типом. Если подходят несколько блоков, то будет выбран первый \texttt{catch} с совместимым типом.
+\begin{lstlisting}
+#include <iostream>
+int main()
+{
+    try
+    {
+        throw 123;
+    }
+    catch (float x)
+    {
+        std::cout << "Float: " << x << std::endl;
+    }
+    catch (long long x)
+    {
+        std::cout << "Long Long: " << x << std::endl;
+    }
+    catch (const int& x)
+    {
+        std::cout << "Const Int Ref: " << x << std::endl;
+    }
+    catch (int x)
+    {
+        std::cout << "Int: " << x << std::endl;
+    }
+}
+\end{lstlisting}
+В данной программе мы бросаем объект типа \texttt{int} со значением \texttt{123}. Блоки \texttt{catch} с типами \texttt{float} и \texttt{long long} не подойдут. Блоки с типами \texttt{const int\&} и \texttt{int} подходят, но среди них будет выбран первый. В результате программа напечатает:
+\begin{lstlisting}
+Const Int Ref: 123
+\end{lstlisting}
+
+\subsection*{Обработчик \texttt{catch} для любого типа}
+Есть специальный обработчик исключений \texttt{catch(...)}, который может перехватывать абсолютно любые типы исключений. Перехватывает исключения любого типа, но с его помощью нельзя получить сам бросаемый объект. 
+\begin{lstlisting}
+catch (...)
+{
+	std::cout << "Any Type" << std::endl;
+}
+\end{lstlisting}
+
+
+
+\subsection*{Что происходит при бросании объекта}
+Класс \texttt{Verbose} просто печатает сообщение при вызове особого метода. Его можно найти в\\ \texttt{seminar3\_initialization/theory/code/verbose.hpp}.
+\begin{lstlisting}
+#include <iostream>
+#include "verbose.hpp"
+int main()
+{
+    try
+    {
+        Verbose a{"Alice"};
+        throw a;
+    }
+    catch (Verbose x)
+    {
+        std::cout << x.getName() << std::endl;
+    }
+}
+\end{lstlisting}
+Что напечатает данная программа? А если ловить не по значению, а по ссылке?
+
+
+\subsection*{Раскрутка стека}
+
+
+\subsection*{Исключения в деструкторах}
+
+
+\subsection*{Библиотечные классы для исключений}
+\texttt{std::exception}, \texttt{std::runtime\_error} и другие.
+
+
+\subsection*{Исключения в языке C++. Оператор \texttt{new}.}
+Далеко не для всех типов ошибок в C++ используются исключения. Деление на 0. Выход за границы массива, вектора.
+Но используется для \texttt{new}. \texttt{std::bad\_alloc}. \texttt{std::nothrow}.
+
+
+\subsection*{Исключения в стандартной библиотеке C++}
+Исключения в \texttt{std::string} и \texttt{std::vector}.
+\begin{itemize}
+\item \texttt{std::bad\_alloc}
+\item \texttt{std::out\_of\_range}
+\item \texttt{std::invalid\_argument}
+\item \texttt{std::domain\_error}
+\end{itemize}
+
+
+
+\subsection*{Недостатки исключений}
+
+\begin{itemize}
+\item Производительность
+\item Усложнение программы
+\item Возможность утечки памяти/ресурсов
+\end{itemize}
+
+
+\subsection*{Кратко об использовании исключений при написании своих классов}
+Гарантии безопасности. Copy and swap.
+
+
+
 
 \end{document}

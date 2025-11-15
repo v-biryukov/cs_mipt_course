@@ -53,8 +53,6 @@
 \begin{document}
 \title{Семинар \#4: Шаблоны. \vspace{-5ex}}\date{}\maketitle
 
-\textit{Forward declaration, вложенные классы, placement new}
-
 \textbf{Шаблоны} (англ. \textit{templates}) -- это механизм языка C++, который позволяет писать обобщённый код, то есть код, который может работать с различными типами данных.
 
 \section*{Шаблоны функций}
@@ -514,6 +512,117 @@ int main()
 \subsection*{Класс \texttt{std::pair}}
 \subsection*{Класс \texttt{std::optional}}
 \subsection*{Класс \texttt{std::basic\_string}}
+
+
+
+
+\newpage
+\section*{Ключевое слово \texttt{auto} и прочее}
+
+\subsection*{Ключевое слово \texttt{auto}}
+Ключевое слово \texttt{auto} используется для автоматического вывода типа.
+\begin{lstlisting}
+#include <string>
+int main() 
+{
+    auto a = 123;   // a будет иметь тип int
+    auto b = 4.1;   // b будет иметь тип double
+    auto c = 4.1f;  // c будет иметь тип float
+    
+    auto s1 = "Hello";               // s1 будет иметь тип const char*
+    auto s2 = std::string("Hello");  // s2 будет иметь тип std::string
+}
+
+\end{lstlisting}
+
+
+\subsection*{Задачи:}
+\begin{itemize}
+\item Протестируйте, можно ли использовать \texttt{auto} вместо возвращаемого типа функции. Напишите функцию, которая принимает на вход вектор строк и возвращает строку, которая является результатом конкатенации всех строк. Вместо возвращаемого типа используйте \texttt{auto}.
+\item Протестируйте, можно ли создать функцию, которая будет принимать целое число и, в зависимости от этого числа, возвращать значения разных типов. (Если вместо возвращаемого типа используется \texttt{auto}).
+
+\item Протестируйте, можно ли использовать о указатель с помощью \texttt{auto}. Пусть есть такой участок кода:
+\begin{lstlisting}
+int a = 123;
+auto p = &a;
+auto* q = &a;
+\end{lstlisting}
+Какой тип будет у \texttt{p} и \texttt{q}?
+\item Функция вычисления факториала, написанная ниже с использованием \texttt{auto} не работает. 
+\begin{lstlisting}
+auto factorial(int n) 
+{
+    if (n > 0)
+        return n * factorial(n - 1);
+    return 1;
+}
+\end{lstlisting}
+Почему? Исправьте эту функцию, не убирая \texttt{auto}.
+\end{itemize}
+
+
+
+\newpage
+\subsection*{Range-based циклы}
+Циклы, основанные на диапазоне, предоставляют более простой способ обхода контейнера:
+\begin{lstlisting}
+#include <iostream>
+#include <vector>
+
+int main()
+{
+    std::vector<int> v {6, 1, 7, 4};
+    for (int num : v)
+    	std::cout << num << std::endl;    
+}
+\end{lstlisting}
+Для изменения элементов контейнера при обходе нужно использовать ссылки:
+\begin{lstlisting}
+for (int& num : v)
+    num += 1;    
+\end{lstlisting}
+
+\subsection*{Задачи:}
+\begin{itemize}
+\item Проверьте, можно ли использовать ключевое слово \texttt{auto} внутри таких циклов.
+\item Пусть у нас есть вектор строк:
+\begin{lstlisting}
+vector<string> v {"Cat", "Axolotl", "Bear", "Elephant"};
+\end{lstlisting}
+\begin{itemize}
+\item Напишите range-based цикл, который будет печатать все элементы вектора
+\item Напишите range-based цикл, который будет добавлять в конец каждой строки символ \texttt{s}.
+\end{itemize}
+
+\item Для печати массива целых чисел была написана следующая функция:
+\begin{lstlisting}
+void print(int array[]) 
+{
+    for (int num : array)
+        std::cout << num << std::endl;
+}
+\end{lstlisting}
+Оказывается, что она не работает. В чём заключается ошибка?
+\end{itemize}
+
+\subsection*{Structure binding (структурное связывание)}
+Для объявления и инициализации нескольких переменных через агрегатный объект можно использовать так называемое структурное связывания. В коде ниже мы объявляем переменные \texttt{a} и \texttt{b} одной строкой с помощью структурного связывания.
+\begin{lstlisting}
+#include <iostream>
+struct Point
+{
+	int x;
+	int y;
+};
+int main() 
+{
+    Point p {5, 1};
+    auto [a, b] = p;
+    
+    std::cout << a << " " << b << std::endl;
+}
+\end{lstlisting}
+
 
 
 \section*{Вариативные шаблоны}

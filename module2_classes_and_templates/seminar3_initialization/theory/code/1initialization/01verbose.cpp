@@ -15,55 +15,16 @@
 
     Также печатает сообщение при входе в конструктор, который принимает аргумент типа std::string.
 
-
+    Найти этот класс можно в файле verbose.hpp.
+    
     Задача:
-
         Что напечатает данная программа?
         Попытайтесь догадаться до этого без запуска программы.
 */
 
 
 #include <iostream>
-
-class Verbose
-{
-private:
-    std::string mName {};
-
-public:
-    Verbose()   
-    {
-        std::cout << "Default Constructor (" << mName << ")" << std::endl;
-    }
-
-    ~Verbose()  
-    {
-        std::cout << "Destructor (" << mName << ")" << std::endl;
-    }
-
-    Verbose(const std::string& name) : mName(name)
-    {
-        std::cout << "Constructor from std::string (" << mName << ")" << std::endl;
-    }
-
-    Verbose(const Verbose& v) : mName(v.mName) 
-    {
-        std::cout << "Copy Constructor (" << mName << ")" << std::endl;
-    }
-
-    Verbose& operator=(const Verbose& v)
-    {
-        mName = v.mName;
-        std::cout << "Copy Assignment Operator (" << mName << ")" << std::endl;
-        return *this;
-    }
-
-    std::string getName() const 
-    {
-        return mName;
-    }
-};
-
+#include "verbose.hpp"
 
 void take(Verbose v)
 {
