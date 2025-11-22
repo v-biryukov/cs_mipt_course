@@ -316,20 +316,20 @@ Cat func(Dog x)
 
 int main()
 {
-	auto a = func<double, int>(10);  // a будет числом типа double со значениеи 20.0
-	auto b = func<std::string, const char*>("Hello"); // b будет строкой std::string
-													  // со значением HelloHello
+	double a = func<double, int>(10);  // func вернёт число типа double со значениеи 20.0
+	std::string b = func<std::string, const char*>("Hello"); // b будет строкой std::string
+													         // со значением HelloHello
 }
 \end{lstlisting}
 Если у шаблона есть несколько параметров, то можно задать только первые несколько параметров, а остальные компилятор попытается вывести. Но не во всех ситуациях вывести тип параметра возможно. Например, нельзя вывести тип, если он используется для только для возвращаемого значения.
 \begin{lstlisting}
-auto a1 = func<double, int>(10);  // Задаём значения для Cat и для Dog
+double a1 = func<double, int>(10);  // Задаём значения для Cat и для Dog
 
-auto a2 = func<double>(10);       // Задаём значения для Cat. 
-                                  // Компилятор догадается, что Dog должен быть int                  
+double a2 = func<double>(10);       // Задаём значения для Cat. 
+                                    // Компилятор догадается, что Dog должен быть int                  
                                   
-auto a3 = func(10);               // Компилятор не может знать, чему должно быть равно Cat
-                                  // Будет ошибка компиляции.
+double a3 = func(10);               // Компилятор не может знать, чему должно быть равно Cat
+                                    // Будет ошибка компиляции.
 \end{lstlisting}
 
 \subsection*{Шаблонные аргументы по умолчанию}
@@ -352,11 +352,11 @@ int main()
 \end{lstlisting}
 
 \newpage
-Значение по умолчанию берётся только тогда, когда тип не был указан при вызове и вывести тип по передаваемому аргументу функции нельзя.
+\noindent Значение по умолчанию берётся только тогда, когда тип не был указан при вызове и вывести тип по передаваемому аргументу функции нельзя.
 \begin{lstlisting}
 #include <iostream>
 
-template<typename Cat, typename Dog = char>
+template<typename Cat, typename Dog = short>
 void func(Cat c, Dog d)
 {
     std::cout << sizeof(c) << " " << sizeof(d) << std::endl;
@@ -364,11 +364,12 @@ void func(Cat c, Dog d)
 
 int main()
 {
-    float a = 1.5f;
-    double b = 1.5;
-    func<float, double>(a, b);  // Напечатает 4 8
-    func<float>(a, b);          // Напечатает 4 8
-    func(a, b);                 // Напечатает 4 8
+	// В предположении, что размеры char, short, int равны 1, 2, 4 байт соответственно
+    int a = 1;
+    int b = 1;
+    func<char, char>(a, b);  // Напечатает 1 1
+    func<char>(a, b);        // Напечатает 1 4
+    func(a, b);              // Напечатает 4 4
 }
 \end{lstlisting}
 \subsection*{Шаблоны и перегрузка}
@@ -444,8 +445,184 @@ int func()
 int main() {}
 \end{lstlisting}
 
-Функция \texttt{func} создаёт объект типа \texttt{T} и вызывает у этого объекта метод \texttt{abracadabra}. При этом ни одного класса с методом \texttt{abracadabra} у нас нет.
-Скомпилируется ли эта программа?
+Функция \texttt{func} создаёт объект типа \texttt{T} и вызывает у этого объекта метод \texttt{abracadabra}. При этом ни одного класса с методом \texttt{abracadabra} у нас нет. Скомпилируется ли эта программа?
+
+
+
+\subsection*{Вывод типа в шаблонных функциях по аргументу}
+В \texttt{seminar4\_templates/theory/code/template\_type\_deduction/get\_type\_name.hpp} лежит функция \texttt{getTypeName}, которая принимает на вход (через шаблонный параметр) тип и возвращает строковое представление данного типа. Эта функция будет очень полезна при анализировании того, какие типы выводятся в шаблонах. Помимо этой функции будет использоваться оператор \texttt{decltype}, который просто возвращает тип выражения.
+
+Использовать функцию \texttt{getTypeName} можно следующим образом:
+\begin{lstlisting}
+#include <iostream>
+#include "get_type_name.hpp"
+int main()
+{
+    int a = 10;
+
+    std::cout << getTypeName<int>() << std::endl;
+    std::cout << getTypeName<decltype(a)>() << std::endl;
+}
+\end{lstlisting}
+
+\subsubsection*{Шаблонная функция принимает по значению}
+Рассмотрим случаи автоматического вывода шаблонного типа, при котором получаемый тип будет не соответствовать типу аргумента функции. Для начала, случай когда шаблонная функция принимает по значению. В этом случае, итоговый тип будет являться decay-версией типа аргумента. Всего есть три правила для распада типа:
+\begin{enumerate}
+\item Ссылки и \texttt{const}-квалификаторы отбрасываются.
+\item Массивы в стиле C преобразуются в указатели (array to pointer decay).
+\item Функции преобразуются в указатели на функции.
+\end{enumerate}
+Рассмотрим пример, иллюстрирующий такое поведение:
+\begin{lstlisting}
+#include <iostream>
+#include "get_type_name.hpp"
+template<typename T>
+void func(T x)
+{
+    std::cout << getTypeName<T>() << std::endl;
+}
+
+int main()
+{
+    int a = 10;
+    func(a);              	// int, так как тип выведется как int
+    func<int&>(a);			// int\&, если мы указываем тип, то он не выводится
+    func<const int&>(a);    // const int\&, если мы указываем тип, то он не выводится
+
+    int& b = a;
+    func(b);				// int, так как амперсанд отбрасывается
+    const int& c = a;    
+    func(c);				// int, так как const и амперсанд отбрасывается
+
+    int d[3] = {10, 20, 30};
+    func(d);				// int*, так как массив разлагается в указатель
+    func("Hello");
+}
+\end{lstlisting}
+
+
+\subsubsection*{Шаблонная функция принимает по ссылке или \texttt{const} ссылке}
+Если же шаблонная функция принимает по ссылке (обычной или константной), то никакого разложения происходить не будет. Тип \texttt{T} будет подбираться таким образом, чтобы функция смогла принять передаваемый аргумент.
+
+\begin{lstlisting}
+#include <iostream>
+#include "get_type_name.hpp"
+
+template<typename T>
+void func(T& x)
+{
+    std::cout << getTypeName<decltype(x)>() << std::endl;
+}
+
+int main()
+{
+    int a = 10;
+    func(a);				// int\&
+    func<int&>(a);			// int\&
+    func<const int&>(a);	// int\&
+
+    const int& b = a;		// const int\&
+    func(b);
+
+    int arr[3] = {10, 20, 30};	
+    func(arr);				// int(\&)[3]  (ссылка на массив)
+}
+\end{lstlisting}
+
+
+
+\newpage
+\section*{Ключевое слово \texttt{auto}}
+Ключевое слово \texttt{auto} используется для автоматического вывода типа.
+\begin{lstlisting}
+#include <string>
+int main() 
+{
+    auto a = 123;   // a будет иметь тип int
+    auto b = 4.1;   // b будет иметь тип double
+    auto c = 4.1f;  // c будет иметь тип float
+    
+    auto s1 = "Hello";               // s1 будет иметь тип const char*
+    auto s2 = std::string("Hello");  // s2 будет иметь тип std::string
+}
+\end{lstlisting}
+
+
+\subsection*{Вывод типа при использовании \texttt{auto}}
+Правила вывода типа при использовании ключевого слова \texttt{auto} такие же, что и при выводе типов шаблонных параметров.
+\begin{lstlisting}
+#include <iostream>
+#include "get_type_name.hpp"
+
+void f(int x) {}
+
+int main()
+{
+    auto a = 10;
+    std::cout << getTypeName<decltype(a)>() << std::endl;
+
+    int& r = a;
+    auto b = r;
+    std::cout << getTypeName<decltype(b)>() << std::endl;
+
+    const int& cr = a;
+    auto c = cr;
+    std::cout << getTypeName<decltype(c)>() << std::endl;
+
+
+    int arr[3] = {10, 20, 30};
+    auto d = arr;
+    std::cout << getTypeName<decltype(d)>() << std::endl;
+
+
+    std::cout << "---\n";
+    std::cout << getTypeName<decltype(f)>() << std::endl;
+    auto e = f;
+    std::cout << getTypeName<decltype(e)>() << std::endl;
+}
+\end{lstlisting}
+
+
+
+
+
+\subsection*{\texttt{auto} и возвращаемое значение функции}
+trailing return type. хвостовой тип возвращаемого значения.
+\begin{lstlisting}
+auto factorial(int n) 
+{
+    if (n > 0)
+        return n * factorial(n - 1);
+    return 1;
+}
+\end{lstlisting}
+
+\iffalse
+\subsection*{Задачи:}
+\begin{itemize}
+\item Протестируйте, можно ли использовать \texttt{auto} вместо возвращаемого типа функции. Напишите функцию, которая принимает на вход вектор строк и возвращает строку, которая является результатом конкатенации всех строк. Вместо возвращаемого типа используйте \texttt{auto}.
+\item Протестируйте, можно ли создать функцию, которая будет принимать целое число и, в зависимости от этого числа, возвращать значения разных типов. (Если вместо возвращаемого типа используется \texttt{auto}).
+
+\item Протестируйте, можно ли использовать о указатель с помощью \texttt{auto}. Пусть есть такой участок кода:
+\begin{lstlisting}
+int a = 123;
+auto p = &a;
+auto* q = &a;
+\end{lstlisting}
+Какой тип будет у \texttt{p} и \texttt{q}?
+\item Функция вычисления факториала, написанная ниже с использованием \texttt{auto} не работает. 
+\begin{lstlisting}
+auto factorial(int n) 
+{
+    if (n > 0)
+        return n * factorial(n - 1);
+    return 1;
+}
+\end{lstlisting}
+Почему? Исправьте эту функцию, не убирая \texttt{auto}.
+\end{itemize}
+\fi
+
 
 \subsection*{\texttt{auto} и шаблоны}
 Ключевое слово \texttt{auto} можно использовать не только при объявлении новых переменных, но и для параметров функций. То есть можно писать вот так:
@@ -499,70 +676,7 @@ int main()
 }
 \end{lstlisting}
 \end{itemize}
-\section*{Шаблоны классов}
 
-\subsection*{Зависимые имена}
-
-\section*{Шаблоны новых имён типов}
-
-
-\section*{Примеры шаблонов в стандартной библиотеке C++}
-\subsection*{Класс \texttt{std::vector}}
-\subsection*{Класс \texttt{std::array}}
-\subsection*{Класс \texttt{std::pair}}
-\subsection*{Класс \texttt{std::optional}}
-\subsection*{Класс \texttt{std::basic\_string}}
-
-
-
-
-\newpage
-\section*{Ключевое слово \texttt{auto} и прочее}
-
-\subsection*{Ключевое слово \texttt{auto}}
-Ключевое слово \texttt{auto} используется для автоматического вывода типа.
-\begin{lstlisting}
-#include <string>
-int main() 
-{
-    auto a = 123;   // a будет иметь тип int
-    auto b = 4.1;   // b будет иметь тип double
-    auto c = 4.1f;  // c будет иметь тип float
-    
-    auto s1 = "Hello";               // s1 будет иметь тип const char*
-    auto s2 = std::string("Hello");  // s2 будет иметь тип std::string
-}
-
-\end{lstlisting}
-
-
-\subsection*{Задачи:}
-\begin{itemize}
-\item Протестируйте, можно ли использовать \texttt{auto} вместо возвращаемого типа функции. Напишите функцию, которая принимает на вход вектор строк и возвращает строку, которая является результатом конкатенации всех строк. Вместо возвращаемого типа используйте \texttt{auto}.
-\item Протестируйте, можно ли создать функцию, которая будет принимать целое число и, в зависимости от этого числа, возвращать значения разных типов. (Если вместо возвращаемого типа используется \texttt{auto}).
-
-\item Протестируйте, можно ли использовать о указатель с помощью \texttt{auto}. Пусть есть такой участок кода:
-\begin{lstlisting}
-int a = 123;
-auto p = &a;
-auto* q = &a;
-\end{lstlisting}
-Какой тип будет у \texttt{p} и \texttt{q}?
-\item Функция вычисления факториала, написанная ниже с использованием \texttt{auto} не работает. 
-\begin{lstlisting}
-auto factorial(int n) 
-{
-    if (n > 0)
-        return n * factorial(n - 1);
-    return 1;
-}
-\end{lstlisting}
-Почему? Исправьте эту функцию, не убирая \texttt{auto}.
-\end{itemize}
-
-
-
-\newpage
 \subsection*{Range-based циклы}
 Циклы, основанные на диапазоне, предоставляют более простой способ обхода контейнера:
 \begin{lstlisting}
@@ -582,28 +696,7 @@ for (int& num : v)
     num += 1;    
 \end{lstlisting}
 
-\subsection*{Задачи:}
-\begin{itemize}
-\item Проверьте, можно ли использовать ключевое слово \texttt{auto} внутри таких циклов.
-\item Пусть у нас есть вектор строк:
-\begin{lstlisting}
-vector<string> v {"Cat", "Axolotl", "Bear", "Elephant"};
-\end{lstlisting}
-\begin{itemize}
-\item Напишите range-based цикл, который будет печатать все элементы вектора
-\item Напишите range-based цикл, который будет добавлять в конец каждой строки символ \texttt{s}.
-\end{itemize}
 
-\item Для печати массива целых чисел была написана следующая функция:
-\begin{lstlisting}
-void print(int array[]) 
-{
-    for (int num : array)
-        std::cout << num << std::endl;
-}
-\end{lstlisting}
-Оказывается, что она не работает. В чём заключается ошибка?
-\end{itemize}
 
 \subsection*{Structure binding (структурное связывание)}
 Для объявления и инициализации нескольких переменных через агрегатный объект можно использовать так называемое структурное связывания. В коде ниже мы объявляем переменные \texttt{a} и \texttt{b} одной строкой с помощью структурного связывания.
@@ -625,6 +718,221 @@ int main()
 
 
 
+\newpage
+\section*{Шаблоны классов}
+\begin{lstlisting}
+#include <iostream>
+#include <string>
+#include <cstdlib>
+using std::cout, std::endl, std::size_t;
+
+template <typename T, size_t Size>
+class Array 
+{
+private:
+    T data[Size];
+
+public:
+    T& operator[](size_t id) 
+    {
+        return data[id];
+    }
+};
+
+template <typename T, size_t Size>
+std::ostream& operator<<(std::ostream& out, Array<T, Size> array) 
+{
+    out << "[";
+    for (size_t i = 0; i < Size - 1; ++i)
+        out << array[i] << ", ";
+    
+    if (Size != 0)
+        out << array[Size - 1];
+
+    out << "]"; 
+    return out;
+}
+
+int main() 
+{
+    Array<int, 10> a;
+    for (int i = 0; i < 10; ++i)
+    {
+        a[i] = rand() % 100;
+    }
+    cout << a << endl;
+
+    Array<std::string, 5> b;
+    b[0] = "Cat";
+    b[1] = "Dog";
+    b[2] = "Zebra";
+    b[3] = "Elephant";
+    b[4] = "Whale";
+    cout << b << endl;
+}
+\end{lstlisting}
+
+
+
+
+\subsection*{Зависимые имена}
+Можно создавать новые имена в классах:
+\begin{lstlisting}
+#include <iostream>
+struct Alice 
+{
+	typedef int cat;
+	using dog = int;
+};
+
+int main()
+{
+	std::cout << sizeof(Alice::cat) << std::endl;
+	std::cout << sizeof(Alice::dog) << std::endl;
+}
+\end{lstlisting}
+Но есть неоднозначность между новым именем и статической переменной.
+\begin{lstlisting}
+#include <iostream>
+
+struct Alice 
+{
+	using cat = int;
+};
+
+template<typename T>
+struct Bob 
+{
+	void func()
+	{
+		T::cat* x;
+	}
+};
+
+int main()
+{
+	Bob<Alice> b;
+	b.func();
+}
+\end{lstlisting}
+
+
+\subsection*{Зависимый шаблон}
+
+\subsection*{Специализация}
+\begin{lstlisting}
+template<typename T>
+struct Cat {
+    static void f() { std::cout << "primary\n"; }
+};
+
+template<>
+struct Cat<int> {
+    static void f() { std::cout << "specialized for int\n"; }
+};
+\end{lstlisting}
+
+
+\section*{Шаблоны новых имён типов}
+\begin{lstlisting}
+#include <vector>
+
+template<typename T>
+using MyType = std::vector<T>;
+
+int main()
+{
+	MyType a = {10, 20, 30, 40, 50};
+}
+\end{lstlisting}
+
+
+
+\section*{Примеры шаблонов в стандартной библиотеке C++}
+\subsection*{Класс \texttt{std::vector}}
+\subsection*{Класс \texttt{std::array}}
+\subsection*{Класс \texttt{std::pair}}
+\subsection*{Класс \texttt{std::optional}}
+\subsection*{Класс \texttt{std::basic\_string}}
+\texttt{std::basic\_string} — это базовый шаблон, на котором построены все обычные строки в C++:
+
+\begin{itemize}
+\item \texttt{std::string = std::basic\_string<char>}
+\item \texttt{std::wstring = std::basic\_string<wchar\_t>}
+\item и т. д.
+\end{itemize}
+
+
+
 \section*{Вариативные шаблоны}
+Вариативные шаблоны (variadic templates) -- это механизм, позволяющий шаблонам принимать произвольное число параметров.
+
+\begin{lstlisting}
+template<typename... Types>
+void func(Types... args) {}
+\end{lstlisting}
+
+Использование пака типов и пака параметров:
+\begin{lstlisting}
+template<typename... Types>
+void func(Types... args) 
+{
+	// Types -- особая сущность, пак типов
+	// args  -- особая сущность, пак аргументов
+	
+	// Что можно сделать с паками:
+	
+	f<Types...>() - развернуть пак типов
+	f(args...)    - развернуть тип аргументов
+	
+	sizeof...(args)	 - количество аргументов в паке
+	sizeof...(Types) - количество аргументов в паке
+	
+	// fold expressions
+}
+\end{lstlisting}
+
+\subsection*{Рекурсивное раскрытие параметров}
+
+\begin{lstlisting}
+void print() {}
+
+template<typename T, typename... Ts>
+void print(T first, Ts... rest) 
+{
+    std::cout << first << "\n";
+    print(rest...);
+}
+\end{lstlisting}
+
+
+\subsection*{Fold expressions}
+
+\begin{lstlisting}
+template<typename... Ts>
+auto sum(Ts... ts) 
+{
+    return (ts + ...);
+}
+
+
+template<typename... Ts>
+auto sumsq(Ts... ts) 
+{
+    return ((ts * ts) + ...);
+}
+
+
+template<typename T>
+void print_one(const T& t) {
+    std::cout << t << "\n";
+}
+
+template<typename... Ts>
+void print_all(const Ts&... ts) {
+    (print_one(ts), ...);
+}
+\end{lstlisting}
+
 
 \end{document}

@@ -283,6 +283,110 @@ Cat Dog::y\{\};
 Удалите все созданные объекты с помощью операторов \texttt{delete} и \texttt{delete[]}.
 
 
+
+\subsection{Обёртка}
+Напишите класс \texttt{RestrictWrapper}, который бы оборачивал переменную типа \texttt{int}. Этот класс должен иметь как минимум следующие поля:
+\begin{enumerate}
+\item Ссылку на переменную типа \texttt{int}.
+\item Константу \texttt{minValue}.
+\item Константу \texttt{maxValue}.
+\end{enumerate}
+и методы:
+\begin{enumerate}
+\item Конструктор, который задаёт поля.
+\item Метод \texttt{get}, который возвращает значение оборачиваемой переменной.
+\item Метод \texttt{set}, который задаёт значение оборачиваемой переменной, если значение находится в диапазоне от \texttt{minValue} до \texttt{maxValue}. Если же в \texttt{set} передаётся значение меньше чем \texttt{minValue}, то переменная должна установиться в значение \texttt{minValue}. Если в \texttt{set} передаётся значение больше чем \texttt{maxValue}, то переменная должна установиться в значение \texttt{maxValue}.
+\item Метод \texttt{getCount} которая возвращает количество вызовов метода \texttt{get} этого объекта.
+\item Метод \texttt{setCount} которая возвращает количество вызовов метода \texttt{set} этого объекта.
+\end{enumerate}
+
+
+\begin{lstlisting}
+#include <iostream>
+// Тут нужно написать класс RestrictWrapper
+
+int main()
+{
+	int x = 100;
+	RestrictWrapper w(x, 0, 300);
+	std::cout << w.get() << std::endl;			// Напечатает 100
+	w.set(-200);
+	std::cout << w.get() << std::endl;			// Напечатает 0
+	w.set(300);
+	w.set(400);
+	w.set(500);
+	std::cout << w.get() << std::endl;			// Напечатает 300
+	
+	std::cout << w.getCount() << std::endl;	// Напечатает 3
+	std::cout << w.setCount() << std::endl;	// Напечатает 4
+}
+\end{lstlisting}
+
+
+
+\subsection{Создание \texttt{mipt::String}}
+В файле \texttt{miptstring.hpp} содержится класс \texttt{mipt::String}. Создайте объекты этого класса в следующим образом:
+\begin{itemize}
+\item Создайте объект класса \texttt{mipt::String} на стеке обычным образом и инициализируйте его строкой \texttt{Cat}.
+\item Создайте объект класса \texttt{mipt::String} в куче, используя оператор \texttt{new}, и инициализируйте его строкой \texttt{"Dog"}. Напечатайте этот объект на экран. Удалите этот объект, с помощью оператора \texttt{delete}.
+\item Пусть у нас есть массив:
+\begin{lstlisting}
+char x[sizeof(mipt::String)];
+\end{lstlisting}
+Создайте объект класса \texttt{mipt::String} в этом массиве с помощью оператора \texttt{placement new} и инициализируйте объект строкой \texttt{"Elephant"}. Напечатайте этот объект на экран. Удалите этот объект.
+\end{itemize}
+
+
+\subsection{Сумма из строки}
+Напишите функцию, которая принимает на вход строку в следующем формате: \texttt{"[num1, num2, ... numN]"}.
+Функция должна возвращать целое число типа \texttt{int} -- сумму всех чисел в квадратных скобках. В случае, если на вход приходит некорректная строка, то функция должна бросать исключение \texttt{std::invalid\_argument}. Протестируйте эту функцию в \texttt{main}, обработав бросаемое исключение.
+\begin{center}
+\begin{tabular}{ l | l }
+ аргумент & возвращаемое значение \\ \hline
+ \texttt{"[10, 20, 30, 40, 50]"} & \texttt{150} \\
+ \texttt{"[4, 8, 15, 16, 23, 42]"} & \texttt{108}  \\ 
+ \texttt{"[20]"} & \texttt{20} \\
+ \texttt{"[]"} & \texttt{0} \\
+\end{tabular}
+\end{center}
+
+
+
+
+
+
+
+
+\newpage
+\section{Необязательные задачи}
+
+
+
+
+\subsection{\texttt{StringView}}
+Создайте свой класс \texttt{mipt::StringView}, аналог класса \texttt{std::string\_view} для класса \texttt{mipt::String}.
+Этот класс должен содержать 2 поля указатель \texttt{mpData} (тип \texttt{const char*}) и размер \texttt{mSize} (тип \texttt{size\_t}). Класс \texttt{mipt::String} можно найти в файле \texttt{miptstring.hpp}.\\
+
+Методы, которые нужно реализовать:
+\begin{itemize}
+\item Конструктор по умолчанию. Должен устанавливать указатель в \texttt{nullptr}, а размер в 0.
+\item Конструктор копирования.
+\item Конструктор от \texttt{mipt::String}.
+\item Конструктор от \texttt{const char*}
+\item Перегруженный \texttt{operator[]}
+\item Метод \texttt{at}, аналог \texttt{operator[]}, но если индекс выходит за границы, то данный метод должен бросать исключение \texttt{std::out\_of\_range}
+\item Перегруженный \texttt{operator<}
+\item Перегруженный \texttt{operator<{}<} с объектом \texttt{std::ostream}.
+\item Метод \texttt{size}.
+\item Метод \texttt{substr}, должен возвращать объект типа \texttt{std::string\_view}.
+\item Методы \texttt{remove\_prefix} и \texttt{remove\_suffix}.
+\end{itemize}
+
+Также придётся изменить класс \texttt{mipt::String}. Нужно будет добавить конструктор от \texttt{mipt::StringView}.
+Протестируйте этот класс.
+
+
+
 \subsection{Ссылка как поле}
 Есть некоторое количество групп кошек, которые соревнуются в том, кто поймает больше мышек. Соревнование командное, побеждает та группа, которая суммарно поймала больше мышек.
 
@@ -316,64 +420,5 @@ cout << miceCaughtA << endl; // Должно напечатать 10
 cout << miceCaughtB << endl; // Должно напечатать 12
 \end{lstlisting}
 
-
-\subsection{Сумма из строки}
-Напишите функцию, которая принимает на вход строку в следующем формате: \texttt{"[num1, num2, ... numN]"}.
-Функция должна возвращать целое число типа \texttt{int} -- сумму всех чисел в квадратных скобках. В случае, если на вход приходит некорректная строка, то функция должна бросать исключение \texttt{std::invalid\_argument}. Протестируйте эту функцию в \texttt{main}, обработав бросаемое исключение.
-\begin{center}
-\begin{tabular}{ l | l }
- аргумент & возвращаемое значение \\ \hline
- \texttt{"[10, 20, 30, 40, 50]"} & \texttt{150} \\
- \texttt{"[4, 8, 15, 16, 23, 42]"} & \texttt{108}  \\ 
- \texttt{"[20]"} & \texttt{20} \\
- \texttt{"[]"} & \texttt{0} \\
-\end{tabular}
-\end{center}
-
-
-
-
-
-
-
-
-\newpage
-\section{Необязательные задачи}
-
-
-\subsection{Создание \texttt{mipt::String}}
-В файле \texttt{miptstring.hpp} содержится класс \texttt{mipt::String}. Создайте объекты этого класса в следующим образом:
-\begin{itemize}
-\item Создайте объект класса \texttt{mipt::String} на стеке обычным образом и инициализируйте его строкой \texttt{Cat}.
-\item Создайте объект класса \texttt{mipt::String} в куче, используя оператор \texttt{new}, и инициализируйте его строкой \texttt{Dog}. Напечатайте этот объект на экран. Удалите этот объект, с помощью оператора \texttt{delete}.
-\item Пусть у нас есть массив:
-\begin{lstlisting}
-char x[sizeof(mipt::String)];
-\end{lstlisting}
-Создайте объект класса \texttt{mipt::String} в этом массиве с помощью оператора \texttt{placement new} и инициализируйте объект строкой \texttt{Elephant}. Напечатайте этот объект на экран. Удалите этот объект.
-\end{itemize}
-
-
-\subsection{\texttt{StringView}}
-Создайте свой класс \texttt{mipt::StringView}, аналог класса \texttt{std::string\_view} для класса \texttt{mipt::String}.
-Этот класс должен содержать 2 поля указатель \texttt{mpData} (тип \texttt{const char*}) и размер \texttt{mSize} (тип \texttt{size\_t}). Класс \texttt{mipt::String} можно найти в файле \texttt{miptstring.hpp}.\\
-
-Методы, которые нужно реализовать:
-\begin{itemize}
-\item Конструктор по умолчанию. Должен устанавливать указатель в \texttt{nullptr}, а размер в 0.
-\item Конструктор копирования.
-\item Конструктор от \texttt{mipt::String}.
-\item Конструктор от \texttt{const char*}
-\item Перегруженный \texttt{operator[]}
-\item Метод \texttt{at}, аналог \texttt{operator[]}, но если индекс выходит за границы, то данный метод должен бросать исключение \texttt{std::out\_of\_range}
-\item Перегруженный \texttt{operator<}
-\item Перегруженный \texttt{operator<{}<} с объектом \texttt{std::ostream}.
-\item Метод \texttt{size}.
-\item Метод \texttt{substr}, должен возвращать объект типа \texttt{std::string\_view}.
-\item Методы \texttt{remove\_prefix} и \texttt{remove\_suffix}.
-\end{itemize}
-
-Также придётся изменить класс \texttt{mipt::String}. Нужно будет добавить конструктор от \texttt{mipt::StringView}.
-Протестируйте этот класс.
 
 \end{document}
