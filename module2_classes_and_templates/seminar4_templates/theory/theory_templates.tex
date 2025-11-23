@@ -819,6 +819,38 @@ int main()
 
 \subsection*{Зависимый шаблон}
 
+\begin{lstlisting}
+#include <iostream>
+struct Alice
+{
+    template<int A>
+    void get() 
+    {
+        std::cout << "get method" << std::endl;
+    }
+};
+
+struct Bob
+{
+    int get {10};
+};
+
+template <typename T>
+void func(T x) 
+{
+    //x.get<0>();        // Неправильно, так как get будет считаться полем
+    x.template get<0>(); // Правильно, теперь get это шаблонный метод
+}
+
+int main()
+{
+    Alice a;
+    func(a);
+    // Bob b;
+    // func(b);
+}
+\end{lstlisting}
+
 \subsection*{Специализация}
 \begin{lstlisting}
 template<typename T>
