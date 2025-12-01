@@ -3,13 +3,16 @@
 \usepackage{textcomp}
 \usepackage{geometry}
   \geometry{left=2cm}
-  \geometry{right=1.5cm}
-  \geometry{top=1.5cm}
+  \geometry{right=2cm}
+  \geometry{top=2cm}
   \geometry{bottom=2cm}
 \usepackage{tikz}
 \usepackage{listings}
-\usepackage{fancyvrb}
-\usepackage{xcolor}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[shortlabels]{enumitem}
+\usepackage{upquote}
 \pagenumbering{gobble}
 
 \lstset{
@@ -61,7 +64,7 @@
 
 
 \subsection{Шаблонный куб}
-Напишите шаблонную функцию \texttt{cube} которая будет принимать число любого типа и возвращать куб этого числа того же типа. Пример работы с такой функцией:
+Напишите шаблонную функцию \texttt{cube}, которая будет принимать число любого типа и возвращать куб этого числа того же типа. Пример работы с такой функцией:
 \begin{lstlisting}
 auto a = cube(5);
 std::cout << a << " " << sizeof(a) << std::endl;  // Должен напечатать  125 4
@@ -76,7 +79,7 @@ std::cout << c << " " << sizeof(c) << std::endl;  // Должен напечат
 
 
 \subsection{Утроение}
-Пусть была написана шаблонная функция \texttt{triple}, которая может принять на вход число любого типа и вернуть это число, умноженное на 3. Функция работает с числами, но нам бы хотелось чтобы эта же шаблонная функция работала и со строками типа \texttt{std::string}. Измените код программы, так чтобы можно было использовать функцию \texttt{triple} для объектов типа \texttt{std::string}.
+Пусть была написана шаблонная функция \texttt{triple}, которая может принять на вход число любого типа и вернуть это число, умноженное на 3. Функция работает с числами, но нам бы хотелось, чтобы эта же шаблонная функция работала и со строками типа \texttt{std::string}. Измените код программы так, чтобы можно было использовать функцию \texttt{triple} для объектов типа \texttt{std::string}.
 \begin{lstlisting}
 #include <iostream>
 
@@ -96,12 +99,12 @@ int main()
 	                                      // Нужно чтобы напечаталось CatCatCat
 }
 \end{lstlisting}
-Решите эту задачу тремя способами:
-\begin{enumerate}
-\item Измените шаблонную функцию \texttt{triple}, так чтобы она работала со строками тоже (вместо умножения используйте сложение).
-\item Используйте перегрузку операторов и напишите \lstinline|std::string operator*(int n, std::string s)|. После этого строки \texttt{std::string} могут быть использованы в шаблонной функции \texttt{triple}.
+Решите эту задачу четырьмя способами:
+\begin{enumerate}[(a)]
+\item Измените шаблонную функцию \texttt{triple} так, чтобы она работала со строками тоже (вместо умножения используйте сложение).
+\item Используя перегрузку операторов, напишите \lstinline|std::string operator*(int n, const std::string& s)|. После этого строки \texttt{std::string} могут быть использованы в шаблонной функции \texttt{triple}.
 \item Используйте перегрузку функций и напишите отдельную перегрузку для функции \texttt{triple}, принимающую объект типа \texttt{std::string}.
- 
+\item Используйте полную специализацию и напишите специализацию шаблона для типа \texttt{std::string}. Если в коде будет одновременно реализована и перегрузка, и специализация, то какая версия выберется?
 \end{enumerate}
 
 
@@ -113,6 +116,11 @@ std::pair<T,T> minmax(const std::vector<T>& v)
 \end{lstlisting}
 Протестируйте данную функцию на векторах, содержащих объекты следующих типов: \texttt{int}, \texttt{std::string} и \texttt{std::pair<int, int>}:
 \begin{lstlisting}
+#include <iostream>
+#include <vector>
+#include <utility>
+// Тут нужно реализовать шаблонную функцию minmax
+
 int main()
 {
 	std::vector<int> a {60, 10, 40, 80, 30};
@@ -133,15 +141,19 @@ int main()
 
 
 \subsection{Сравнение количества элементов в контейнере}
-Напишите шаблонную функцию \texttt{hasMoreElements}, которая бы принимала на вход два контейнера и возвращала бы \texttt{true}, если количество элементов в первом контейнере болеше чем во втором и \texttt{false} иначе. Под контейнером тут понимается \texttt{std::vector}, \texttt{std::array}, \texttt{std::string} или любой другой класс, хранящий набор элементов и имеющий метод \texttt{size}.
+Напишите шаблонную функцию \texttt{hasMoreElements}, которая бы принимала на вход два контейнера и возвращала бы \texttt{true}, если количество элементов в первом контейнере больше, чем во втором и \texttt{false} иначе. Под контейнером тут понимается \texttt{std::vector}, \texttt{std::array}, \texttt{std::string} или любой другой класс, хранящий набор элементов и имеющий метод \texttt{size}.
 \begin{lstlisting}
+#include <iostream>
+#include <vector>
+#include <string>
+#include <array>
+// Тут нужно реализовать шаблонную функцию hasMoreElements
 int main()
 {
 	std::vector<int> a {10, 20, 30, 40, 50};
 	std::string b = "Cat";
 	std::string c = "Elephant";
 	std::array<int, 3> d {10, 20, 30};
-	
 	std::cout << hasMoreElements(a, b) << std::endl;  // Должно напечатать 1
 	std::cout << hasMoreElements(a, c) << std::endl;  // Должно напечатать 0
 	std::cout << hasMoreElements(a, d) << std::endl;  // Должно напечатать 1
@@ -153,6 +165,9 @@ int main()
 \subsection{Изменение порядка байт}
 Напишите шаблонную функцию \texttt{swapEndianness}, которая бы меняла порядок байт объекта скалярного типа с Little Endian на Big Endian или наоборот.
 \begin{lstlisting}
+#include <iostream>
+// Тут нужно реализовать шаблонную функцию swapEndianness
+
 int main()
 {
     std::cout << std::hex;
@@ -173,11 +188,11 @@ int main()
 
 
 \subsection{Целые числа для вычисления по модулю}
-Напишите шаблонный класс \texttt{Modular}, который будет представлять собой целые числа с модульной арифметикой. У класса должно быть 2 шаблонных параметра: тип целого числа, который будет использоваться для хранения модульного числа и сам модуль. Напишите следующие методы:
+Напишите шаблонный класс \texttt{Modular}, который будет представлять собой целые числа с модульной арифметикой. У класса должно быть 2 шаблонных параметра: тип целого числа, который будет использоваться для хранения модульного числа, и сам модуль. Напишите следующие методы:
 \begin{enumerate}
 \item Конструктор от целого числа.
 \item Конструктор копирования.
-\item Операторор присваивания от такого же типа.
+\item Оператор присваивания от такого же типа.
 \item Перегруженные бинарные операторы сложения, вычитания, умножения с числами и с объектами такого же типа.
 \item Унарный оператор минус.
 \item Оператор \texttt{<{}<} с объектом \texttt{std::ostream} для вывода на экран.
@@ -194,7 +209,7 @@ b = b + 2;
 a = a - b;
 std::cout << a << std::endl; // Напечатает 5
 
-Modular<short, 3> с(a);
+Modular<short, 3> c(a);
 std::cout << c << std::endl; // Напечатает 2
 \end{lstlisting}
 
@@ -207,31 +222,71 @@ std::cout << c << std::endl; // Напечатает 2
 \item \texttt{allocate()} - будет выделять необходимое количество памяти под объект типа \texttt{T} в куче (используйте \texttt{std::malloc}).
 \item \texttt{construct(const T\& t)} - будет создавать объект типа \texttt{T}, используя конструктор копирования, в выделенной памяти. Используйте оператор \texttt{placement new}.
 \item \texttt{destruct()} - будет уничтожать объект в выделенной памяти.
-\item \texttt{dealocate()} - будет освобождать выделенную памяти.
+\item \texttt{dealocate()} - будет освобождать выделенную память.
 \item \texttt{get} - будет возвращать ссылку на объект.
 \end{itemize}
 Пример использования данного класса:
 \begin{lstlisting}
-Manager<std::string> a;
-a.allocate();
+#include <iostream>
+#include <string>
+using namespace std::string_literals;
+// Тут нужно реализовать класс Manager
 
-a.construct("Cats and dogs");
-a.get() += " and elephant";
-cout << a.get() << endl;  // Должен напечатать Cats and dogs and elephant
-a.destruct();
+int main()
+{
+	Manager<std::string> a;
+	a.allocate();
 
-a.construct("Sapere Aude");
-cout << a.get() << endl;  // Должен напечатать Sapere Aude
-a.destruct();
+	a.construct("Cats and dogs"s);
+	a.get() += " and elephant";
+	cout << a.get() << endl;  // Должен напечатать Cats and dogs and elephant
+	a.destruct();
 
-a.deallocate();
+	a.construct("Sapere Aude"s);
+	cout << a.get() << endl;  // Должен напечатать Sapere Aude
+	a.destruct();
+
+	a.deallocate();
+}
 \end{lstlisting}
 
+
+
+
+\subsection{Реализация упрощенного аналога \texttt{std::optional}}
+Напишите шаблонный класс \texttt{Optional<T>}, который мог бы либо хранить объект типа \texttt{T}, либо находиться в пустом состоянии. Класс должен поддерживать следующие методы:
+
+\begin{enumerate}
+\item Конструктор по умолчанию -- должен создавать пустой \texttt{Optional}.
+\item Конструктор от объекта типа \texttt{Т}.
+\item Конструктор копирования (от объекта типа \texttt{Optional<T>}).
+\item Конструктор от другого \texttt{Optional} (объекта типа \texttt{Optional<U>}, где \texttt{U} отличается от \texttt{T}). Работает при том условии, если объект типа \texttt{U} может быть конвертирован в объект типа \texttt{T}.
+\item Оператор присваивания.
+\item Оператор присваивания от другого \texttt{Optional} (объекта типа \texttt{Optional<U>}, где \texttt{U} отличается от \texttt{T}).
+\item Метод \texttt{has\_value}, возвращает \texttt{true}, если \texttt{Optional} хранит объект и \texttt{false} иначе.
+\item Унарный оператор \texttt{operator*}, возвращает ссылку на объект. Если \texttt{Optional} находится в пустом состоянии, то UB.
+\item Перегрузку унарного оператора \texttt{operator*}, которая возвращает константную ссылку на объект. Это метод для работы с константными \texttt{Optional}. Если \texttt{Optional} находится в пустом состоянии, то UB.
+
+\item Метод \texttt{value}, возвращает ссылку на объект. Если \texttt{Optional} находится в пустом состоянии, то метод должен бросать исключение \texttt{BadOptionalAccess}. Специально для этой подзадачи вам нужно написать этот класс исключения.
+\item Перегрузку метода \texttt{value}, которая возвращает константную ссылку на объект. Это метод для работы с константными \texttt{Optional}. Если \texttt{Optional} находится в пустом состоянии, то метод должен бросать исключение \texttt{BadOptionalAccess}.
+
+\item Оператор преобразования \texttt{explicit operator bool()}. Для того, чтобы можно было использовать \texttt{Optional} в условии \texttt{if}.
+\item Метод \texttt{reset}, корректно уничтожает содержимое и переводит \texttt{Optional} в нулевое состояние.
+\item Метод \texttt{value\_or}, который принимает значение по умолчанию по константной ссылке. Если в данном \texttt{Optional} хранится значение, то \texttt{value\_or} должен возвращать это значение. Если же данный \texttt{Optional} является пустым, то должна возвращаться копия значения по умолчанию.
+
+\item Деструктор.
+\end{enumerate}
+Для создания/удаления объекта внутри \texttt{Optional} при каждом изменении состояния используйте \texttt{placement new} / явный вызов деструктора.
+
+\noindent Нужно написать упрощённую реализацию без использования \texttt{move}-семантики/rvalue-ссылок, \texttt{type\_traits}, спецификаторов \texttt{noexcept} и \texttt{constexpr}.
+
+\noindent Протестируйте вашу реализацию на тестах из файла \href{https://github.com/v-biryukov/cs_mipt_course/tree/main/module2_classes_and_templates/seminar4_templates/homework/test_optional.cpp}{ \texttt{seminar4\_templates/homework/test\_optional.cpp}}.
 
 \newpage
 
 
-
+\newpage
+~
 \newpage
 \section*{Необязательные задачи (не входят в ДЗ, никак не учитываются)}
 \setcounter{subsection}{0}
@@ -248,33 +303,6 @@ a.deallocate();
 \end{tabular}
 \end{center}
 
-\subsection{Времена из строки}
-\begin{itemize}
-\item Напишите простой класс для работы со временем:
-\begin{lstlisting}
-class Time 
-{
-private:
-    int mHours, mMinutes, mSeconds;
-public:
-    Time(int hours, int minutes, int seconds);
-    Time(const std::string& s); // строка в формате "hh:mm:ss"
-    Time operator+(Time b) const;
-    int hours() const; int minutes() const; int seconds() const;
-    friend std::operator<<(std::ostream& out, Time t);
-};
-\end{lstlisting}
-\item Напишите функцию \texttt{std::vector<Time> getTimesFromString(const std::string\& s)}, которая будет принимать строку в формате \texttt{"hh:mm:ss ... hh:mm:ss"}, где за место букв должны стоять некоторые числа. Например, строка может иметь вид \texttt{"11:20:05 05:45:30 22:10:45"}. Функция должна возвращать вектор времен, соответствующий временам в строке.
-\item Напишите функцию \texttt{Time sumTimes(const std::vector<Time>\& v)}, которая будет суммировать все времена и возвращать эту сумму. Для суммирования времён используйте перегруженный оператор \texttt{+} класса \texttt{Time}.
-\end{itemize}
-Использовать функции можно следующим образом:
-\begin{lstlisting}
-std::vector<Time> v = getTimesFromString("11:20:05 05:45:30 22:10:45");
-v.push_back(Time("01:10:30"));
-Time s = sumTimes(v);
-std::cout << s << std::endl;
-\end{lstlisting}
-В результате исполнения этого участка кода на экран должно напечататься \texttt{16:26:50}.
 
 
 

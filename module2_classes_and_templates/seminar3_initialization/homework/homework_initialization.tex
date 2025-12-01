@@ -477,4 +477,34 @@ cout << miceCaughtB << endl; // Должно напечатать 12
 \end{lstlisting}
 
 
+
+\subsection{Времена из строки}
+\begin{itemize}
+\item Напишите простой класс для работы со временем:
+\begin{lstlisting}
+class Time 
+{
+private:
+    int mHours, mMinutes, mSeconds;
+public:
+    Time(int hours, int minutes, int seconds);
+    Time(const std::string& s); // строка в формате "hh:mm:ss"
+    Time operator+(Time b) const;
+    int hours() const; int minutes() const; int seconds() const;
+    friend std::operator<<(std::ostream& out, Time t);
+};
+\end{lstlisting}
+\item Напишите функцию \texttt{std::vector<Time> getTimesFromString(const std::string\& s)}, которая будет принимать строку в формате \texttt{"hh:mm:ss ... hh:mm:ss"}, где за место букв должны стоять некоторые числа. Например, строка может иметь вид \texttt{"11:20:05 05:45:30 22:10:45"}. Функция должна возвращать вектор времен, соответствующий временам в строке.
+\item Напишите функцию \texttt{Time sumTimes(const std::vector<Time>\& v)}, которая будет суммировать все времена и возвращать эту сумму. Для суммирования времён используйте перегруженный оператор \texttt{+} класса \texttt{Time}.
+\end{itemize}
+Использовать функции можно следующим образом:
+\begin{lstlisting}
+std::vector<Time> v = getTimesFromString("11:20:05 05:45:30 22:10:45");
+v.push_back(Time("01:10:30"));
+Time s = sumTimes(v);
+std::cout << s << std::endl;
+\end{lstlisting}
+В результате исполнения этого участка кода на экран должно напечататься \texttt{16:26:50}.
+
+
 \end{document}
