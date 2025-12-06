@@ -51,7 +51,7 @@
 
 
 \begin{document}
-\title{Семинар \#6: Итераторы и алгоритмы. \vspace{-5ex}}\date{}\maketitle
+\title{Семинар \#6: Алгоритмы и функциональные объекты. \vspace{-5ex}}\date{}\maketitle
 
 
 
@@ -317,19 +317,17 @@ int main()
 \subsection*{Итератор \texttt{std::back\_insert\_iterator}}
 \texttt{std::back\_insert\_iterator<Container>} -- это специальный итератор у которого операторы перегружены по другому. Для него:
 \begin{itemize}
-\item[--] \texttt{operator*} ничего не делает
-\item[--] \texttt{operator++} ничего не делает
-\item[--] \texttt{operator=} вызывает метод \texttt{push\_back} контейнера
+\item \texttt{operator*} -- ничего не делает
+\item \texttt{operator++} -- ничего не делает
+\item \texttt{operator=} -- вызывает метод \texttt{push\_back} контейнера
 \end{itemize}
-
 Благодаря таким перегрузкам поведение этого итератора сильно отличается от поведения обычных итераторов. К примеру, следующий код добавит в контейнер \texttt{a} ещё один элемент:
 \begin{lstlisting}
 std::vector<int> a { 1, 2, 3 };
 std::back_insert_iterator<std::vector<int>> it{a};
 *it = 4;
 \end{lstlisting}
-
-Так как тип этого итератора может иметь длинное название, то была введена функция под названием \texttt{std::back\_inserter}, которая принимает на вход контейнер и возвращает такой итератор. Пример в котором вектор \texttt{a} копируется в пустой вектор \texttt{b} (полная версия в \texttt{std\_copy\_back\_inserter.cpp}):
+Так как тип этого итератора может иметь длинное название, то была введена функция под названием\\ \texttt{std::back\_inserter}, которая принимает на вход контейнер и возвращает такой итератор. Пример в котором вектор \texttt{a} копируется в пустой вектор \texttt{b}:
 \begin{lstlisting}
 std::vector<int> a {10, 20, 30, 40, 50};
 std::vector<int> b;
@@ -339,35 +337,35 @@ std::copy(a.begin(), a.end(), std::back_inserter(b));
 std::cout << b;
 \end{lstlisting}
 
-\begin{itemize}
-\item Напишите функцию \texttt{append}, которая будет принимать 2 вектора. Первый вектор эта функция должна принимать по ссылке, а второй -- по константной ссылке. Функция должна копировать всё содержимое второго вектора в первый с помощью функции \texttt{std::copy}.
-\end{itemize}
-
 \subsection*{Итератор \texttt{std::ostream\_iterator}}
 \texttt{std::ostream\_iterator<T>} -- это специальный итератор у которого операторы перегружены по другому:
 \begin{itemize}
-\item[--] \texttt{operator*} ничего не делает
-\item[--] \texttt{operator++} ничего не делает
-\item[--] \texttt{operator=} выводит соответствующий элемент в выходной поток (например, \texttt{std::cout} или файл) с помощью оператора \texttt{<{}<} 
+\item \texttt{operator*} -- ничего не делает
+\item \texttt{operator++} -- ничего не делает
+\item \texttt{operator=} -- выводит соответствующий элемент в выходной поток (например, \texttt{std::cout} или файл) с помощью оператора \texttt{<{}<} 
 \end{itemize}
+\begin{lstlisting}
+std::ostream_iterator<int> it{ std::cout, ", " };
+it = 1;
+*it = 2;
+it++ = 3;
+\end{lstlisting}
 
+\subsection*{Итератор \texttt{std::istream\_iterator}}
+\texttt{std::istream\_iterator<T>} -- это специальный итератор у которого операторы перегружены по другому:
 \begin{itemize}
-\item Что сделает эта программа:
+\item \texttt{operator*} -- получить текущее значение из входного потока
+\item \texttt{operator++} -- перейти к следующему значению
+\item \texttt{operator=} -- ничего не делает
+
 \begin{lstlisting}
-int main() {
-    std::ostream_iterator<int> it{ std::cout, ", " };
-    it = 1;
-    *it = 2;
-    it++ = 3;
-}
+std::istream_iterator<int> it(std::cin);
+std::cout << *it << std::endl;
+std::cout << *it << std::endl;
+it++;
+std::cout << *it << std::endl;
 \end{lstlisting}
-\item Напишите программу, которая печатает числа от 1 до 100, разделённые символом \texttt{+}. Используйте \texttt{ostream\_iterator}.
-\item Напишите программу, которая печатает содержимое вектора на экран, используя \texttt{std::copy} и \texttt{ostream\_iterator}.
-\item Пусть есть такое множество строк:
-\begin{lstlisting}
-std::set<std::string> a{"Cat", "Dog", "Mouse", "Elephant"};
-\end{lstlisting}
-Напечатайте содержимое этого множество на экран, каждый элемент на новой строке.
+
 \end{itemize}
 
 
@@ -375,15 +373,56 @@ std::set<std::string> a{"Cat", "Dog", "Mouse", "Elephant"};
 \newpage
 \section*{Категории итераторов}
 
+
+\newpage
+\section*{Создание своих шаблонных функций для алгоритмов}
+
 \newpage
 \section*{Функциональные объекты}
 \subsection*{Указатели на функции}
 \subsection*{Функторы}
 \subsection*{Функторы в стандартной библиотеке}
-\subsection*{Лямбда-функции}
+\subsection*{Лямбда-функции: основы}
 \subsection*{\texttt{std::function}}
-\subsection*{Указатели на методы, функция \texttt{std::mem\_fn}}
+\subsection*{Указатели на поля и методы, функция \texttt{std::mem\_fn}}
+\begin{lstlisting}
+#include <iostream>
+#include <iterator>
+#include <string>
+#include <functional>
 
+struct Book
+{
+    std::string title;
+    int pages;
+    int price;
+    int year;
+    
+    void setPrice(int newPrice)
+    {
+        std::cout << "Hello from method" << std::endl;
+        price = newPrice;
+    }
+};
+
+int main()
+{
+    int Book::* p = &Book::year;
+    Book a = {"Hello", 10, 20, 30};
+    Book b = {"Goodbye", 100, 200, 300};
+    Book* qa = &a;
+    
+    std::cout << a.*p << std::endl;
+    std::cout << qa->*p << std::endl;
+    
+    
+    void (Book::* pf)(int) = &Book::setPrice;
+    (a.*pf)(123);
+    
+    auto f = std::mem_fn(&Book::setPrice);
+    f(&a, 123);
+}
+\end{lstlisting}
 
 \newpage
 \section*{Стандартные алгоритмы с функциональными объектами}
@@ -401,16 +440,23 @@ std::set<std::string> a{"Cat", "Dog", "Mouse", "Elephant"};
 \subsection*{Функция \texttt{stable\_partition}}
 
 
+\newpage
+\section*{Создание своих шаблонных функций с функциональными объектами}
 
 \newpage
-\section*{Замыкания}
+\section*{Лямбда функции}
+Захват переменных. Локальные и глобальные переменные. Захват по значению и по ссылке. Захват всего по значению / по ссылке. Висячие ссылки. Инициализация переменных внутри захвата. Захват \texttt{this}. 
+
+Лямбды как функторы. mutable-лямбды. \texttt{auto} и лямбды.
+
+Замена \texttt{bind}.
 
 
 
 \newpage
-.
+~
 \newpage
-.
+~
 \newpage
 
 

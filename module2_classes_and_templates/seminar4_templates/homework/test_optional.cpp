@@ -92,9 +92,6 @@ void testSelfAssignment()
 }
 
 
-
-
-
 void testValueConstructorString() 
 {
     OptType<std::string> o("Axolotl");
@@ -130,9 +127,6 @@ void testAssignmentString()
 }
 
 
-
-
-
 void testReset() 
 {
     OptType<int> o(100);
@@ -166,7 +160,6 @@ void testBoolCast()
         assert(false);
     }
 }
-
 
 void testThrowOnValue() 
 {

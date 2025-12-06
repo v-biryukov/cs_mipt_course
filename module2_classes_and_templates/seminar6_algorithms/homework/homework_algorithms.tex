@@ -188,4 +188,27 @@ auto it = bestNeighbours(v.begin(), v.end(), [](int a, int b){return std::abs(a 
 Протестируйте эту функцию на различных контейнерах (\texttt{std::vector}, \texttt{std::list}, \texttt{std::set}, \texttt{std::forward\_list}).
 
 
+\newpage
+~
+\newpage
+\begin{itemize}
+\item Что сделает эта программа:
+\begin{lstlisting}
+int main() {
+    std::ostream_iterator<int> it{ std::cout, ", " };
+    it = 1;
+    *it = 2;
+    it++ = 3;
+}
+\end{lstlisting}
+\item Напишите программу, которая печатает числа от 1 до 100, разделённые символом \texttt{+}. Используйте \texttt{ostream\_iterator}.
+\item Напишите программу, которая печатает содержимое вектора на экран, используя \texttt{std::copy} и \texttt{ostream\_iterator}.
+\item Пусть есть такое множество строк:
+\begin{lstlisting}
+std::set<std::string> a{"Cat", "Dog", "Mouse", "Elephant"};
+\end{lstlisting}
+Напечатайте содержимое этого множество на экран, каждый элемент на новой строке.
+\end{itemize}
+
+
 \end{document}
