@@ -7,6 +7,8 @@
 #include <vector>
 #include <fstream>
 
+namespace {
+
 class Image
 {
 private:
@@ -240,3 +242,5 @@ public:
         }
     }
 };
+
+}

@@ -1,69 +1,54 @@
 \documentclass{article}
-\usepackage[utf8x]{inputenc}
-\usepackage{ucs}
-\usepackage{amsmath} 
-\usepackage{amsfonts}
-\usepackage{upgreek}
 \usepackage[english,russian]{babel}
-\usepackage{graphicx}
-\usepackage{float}
 \usepackage{textcomp}
-\usepackage{hyperref}
 \usepackage{geometry}
   \geometry{left=2cm}
   \geometry{right=1.5cm}
-  \geometry{top=1cm}
-  \geometry{bottom=2cm}
+  \geometry{top=1.5cm}
+  \geometry{bottom=1.5cm}
 \usepackage{tikz}
-\usepackage{ccaption}
 \usepackage{multicol}
-
 \usepackage{listings}
-%\setlength{\columnsep}{1.5cm}
-%\setlength{\columnseprule}{0.2pt}
-
-
-\begin{document}
 \pagenumbering{gobble}
 
-\lstset{
-  language=C++,                % choose the language of the code
+\lstdefinestyle{csMiptCppStyle}{
+  language=C++,
   basicstyle=\linespread{1.1}\ttfamily,
   columns=fixed,
   fontadjust=true,
   basewidth=0.5em,
   keywordstyle=\color{blue}\bfseries,
   commentstyle=\color{gray},
+  texcl=true,
   stringstyle=\ttfamily\color{orange!50!black},
   showstringspaces=false,
-  %numbers=false,                   % where to put the line-numbers
   numbersep=5pt,
   numberstyle=\tiny\color{black},
   numberfirstline=true,
-  stepnumber=1,                   % the step between two line-numbers.        
-  numbersep=10pt,                  % how far the line-numbers are from the code
-  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
-  showstringspaces=false,         % underline spaces within strings
-  captionpos=b,                   % sets the caption-position to bottom
-  breaklines=true,                % sets automatic line breaking
-  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+  stepnumber=1,      
+  numbersep=10pt,
+  backgroundcolor=\color{white},
+  showstringspaces=false,
+  captionpos=b,
+  breaklines=true
+  breakatwhitespace=true,
   xleftmargin=.2in,
   extendedchars=\true,
   keepspaces = true,
+  tabsize=4,
+  upquote=true,
 }
-\lstset{literate=%
-   *{0}{{{\color{red!20!violet}0}}}1
-    {1}{{{\color{red!20!violet}1}}}1
-    {2}{{{\color{red!20!violet}2}}}1
-    {3}{{{\color{red!20!violet}3}}}1
-    {4}{{{\color{red!20!violet}4}}}1
-    {5}{{{\color{red!20!violet}5}}}1
-    {6}{{{\color{red!20!violet}6}}}1
-    {7}{{{\color{red!20!violet}7}}}1
-    {8}{{{\color{red!20!violet}8}}}1
-    {9}{{{\color{red!20!violet}9}}}1
+\lstdefinestyle{csMiptCppBorderStyle}{
+  style=csMiptCppStyle,
+  framexleftmargin=5mm, 
+  frame=shadowbox, 
+  rulesepcolor=\color{gray}
 }
 
+\lstset{style=csMiptCppStyle}
+\lstset{literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1}}
+
+\begin{document}
 \title{Семинар \#7: Move-семантика и умные указатели. \vspace{-5ex}}\date{}\maketitle
 
 \section*{Копирование и перемешение}
@@ -225,7 +210,7 @@ std::string b = a;
 
 
 \subsection*{Перемещение короткой строки}
-Перемещая короткую строку \texttt{a} мы создаём новую строку \texttt{b} тем же способом, что и при копировании. Однако после этого нам нужно ещё занулить начальную строку \texttt{a}, потому что мы хотим, чтобы поведение короткой строки при перемещении было согласовано с поведением длинной строки. Таким образом получается необычная ситуация, когда перемещение для короткой строки работает немного медленней, чем копирование.\\
+Перемещая короткую строку \texttt{a} мы создаём новую строку \texttt{b} тем же способом, что и при копировании. Однако после этого нам нужно ещё занулить начальную строку \texttt{a}, чтобы поведение короткой строки при перемещении было согласовано с поведением длинной строки. Таким образом получается необычная ситуация, когда перемещение для короткой строки работает немного медленней, чем копирование.\\
 
 \begin{minipage}{0.4\textwidth}\noindent
 \begin{lstlisting}
@@ -259,6 +244,8 @@ Type b = Y;
 
 \newpage
 \section*{В каких случаях происходит перемещение}
+Важно понимать, что перемещение может происходить не только при использовании \texttt{std::move}, но и в других случаях. В этой главе мы рассмотрим такие случаи.
+
 \subsection*{Определение понятия "выражение"}
 \textit{Выражение} (англ. \textit{expression}) -- это последовательность операторов и их операндов, которая определяет некоторое вычисление. Учтите, что существуют такие операторы, как оператор вызова функции (также известный как оператор круглые скобочки \texttt{()}), а также оператор индексирования (\texttt{[]}), оператор точка и стрелочка.\\
 Поэтому, например, следующая последовательность является выражением:
@@ -272,11 +259,11 @@ f(2 * a[i + 1]) + c.x / p->call()
 Но можно думать о категории выражения следующим образом:
 
 \begin{itemize}
-\item \textit{lvalue-выражения} или просто \textit{lvalue} -- это такие выражения, которые соответствуют какому-то объекту в памяти и у таких выражений можно получить адрес. Примеры таких выражений:
+\item \textit{lvalue-выражения} или просто \textit{lvalue} --- это такие выражения, которые соответствуют какому-то объекту в памяти и у таких выражений можно получить адрес. Примеры таких выражений:
 \begin{lstlisting}
 a	arr[i]	   *p     arr[1 + func(a / b + c)]
 \end{lstlisting}
-\item \textit{rvalue-выражения} или просто \textit{rvalue} -- все остальные выражения.
+\item \textit{rvalue-выражения} или просто \textit{rvalue} --- все остальные выражения. Часто (но не всегда) это выражения можно охарактеризовать как временные.
 Примеры таких выражений:
 \begin{lstlisting}
 10       a + 1     a * b       abs(a)     -a
@@ -290,7 +277,6 @@ a	arr[i]	   *p     arr[1 + func(a / b + c)]
 
 
 \subsection*{Когда происходит перемещение}
-Перемещение происходит в частности в следующих ситуациях:
 \begin{enumerate}
 \item При инициализации объекта rvalue-выражением:
 \begin{lstlisting}
@@ -306,7 +292,6 @@ int main()
 {
     std::string a{"Cat"};
     std::string b{"Mouse"};
-    
     std::string c = a;      // Строка a скопируется в объект c, так как a это lvalue.
     
     std::string d = a + b;  // Сначала создастся временная строка a + b.
@@ -351,11 +336,11 @@ func(rvalue-expression);
 \begin{lstlisting}
 #include <iostream>
 #include <string>
-
 void func(std::string x)
 {
     std::cout << x << std::endl;
 }
+
 int main()
 {
     std::string a{"Cat"};
@@ -405,7 +390,7 @@ s = a + b;
 \begin{lstlisting}
 void func(std::string s) {...};
 // ...
-func(a + b); // Тут используется перемещение
+func(a + b); // Тут используется перемещение временного объекта a + b
 \end{lstlisting}
 
 \subsection*{Ускорение некоторых операций с помощью перемещения}
@@ -446,7 +431,7 @@ void func(std::string x)
     cout << "string inside func: " << x << endl;    
 }
 
-void print_vector(const std::vector<int>& v)
+void printVector(const std::vector<int>& v)
 {
     cout << "( ";
     for (auto el : v)
@@ -457,7 +442,7 @@ void print_vector(const std::vector<int>& v)
 void func(std::vector<int> x)
 {
     cout << "vector inside func: "; 
-    print_vector(x);   
+    printVector(x);   
 }
 
 int main()
@@ -473,7 +458,7 @@ int main()
     std::vector<int> c{10, 20, 30};
     func(std::move(c)); 
     cout << "vector after move: ";
-    print_vector(c);
+    printVector(c);
 }
 \end{lstlisting}
 Данная программа напечатает:
@@ -496,27 +481,14 @@ vector after move: ( )
 \subsection*{Инициализация rvalue-ссылок}
 Если функция принимает аргумент по значению, то при передаче в неё lvalue передаваемый объект копируется, а при передаче rvalue объект перемещается. Если же функция принимает аргумент по ссылке, то никакого копирования и перемещения не происходит, а в функции просто создаётся ссылка, на передаваемый объект. 
 
-Для того, чтобы можно было различать категорию выражения при передаче по ссылке в язык были введены \texttt{rvalue}-ссылки. Тип rvalue-ссылки состоит из названия типа с двумя амперсандами на конце:
+Для того, чтобы можно было принимать временные объекты по ссылке и различать категорию принимаемого выражения при передаче по ссылке в язык были введены rvalue-ссылки. Тип rvalue-ссылки состоит из названия типа с двумя амперсандами на конце:
 \begin{lstlisting}
 int& l;   -  это lvalue - ссылка на int
 int&& r;  -  это rvalue - ссылка на int
 \end{lstlisting}
 rvalue-ссылки очень похожи на обычные ссылки (также известные как lvalue-ссылки). Одно из двух отличий rvalue-ссылок от lvalue-ссылок заключается в том, что первые инициализируются только \texttt{rvalue}-выражениями.
-\lstset{literate=%
-   *{0}{{{\color{red!20!violet}0}}}1
-    {1}{{{\color{black}1}}}1
-    {2}{{{\color{black}2}}}1
-    {3}{{{\color{black}3}}}1
-    {4}{{{\color{red!20!violet}4}}}1
-    {5}{{{\color{red!20!violet}5}}}1
-    {6}{{{\color{red!20!violet}6}}}1
-    {7}{{{\color{red!20!violet}7}}}1
-    {8}{{{\color{red!20!violet}8}}}1
-    {9}{{{\color{red!20!violet}9}}}1
-}
 \begin{lstlisting}
 int a = 50;
-
 int& l1 = a;        // OK, lvalue - ссылка инициализируется lvalue - выражением
 int& l2 = a + 1;    // Error, lvalue - ссылка не может инициализироваться rvalue - выражением
 
@@ -530,11 +502,10 @@ cout << r2 << endl; // Напечатает 56
 
 
 \subsection*{Перегрузка по категории выражения}
-С помощью \texttt{rvalue} ссылок и перегрузки функций можно различить категорию выражения, приходящую на вход функции. В примере вызовется соответствующий вариант перегрузки в зависимости от категории выражения.
+С помощью \texttt{rvalue} ссылок и перегрузки можно различить категорию выражения, приходящую на вход функции. В примере вызовется соответствующий вариант перегрузки в зависимости от категории выражения.
 \begin{lstlisting}
 #include <iostream>
 #include <string>
-
 void func(std::string& s)
 {
     std::cout << "lvalue" << std::endl;
@@ -544,15 +515,15 @@ void func(std::string&& s)
 {
     std::cout << "rvalue" << std::endl;
 }
+
 int main() 
 {
     std::string a = "Cat";
     std::string b = "Dog";
-
     func(a);               // Передадим по lvalue ссылке
     func(a + b);           // Передадим по rvalue ссылке
     func(std::move(a));    // Передадим по rvalue ссылке
-    std::cout << "a = " << a << std::endl;  // Напечатает Cat
+    std::cout << "a = " << a << std::endl;  // Напечатает Cat, перемещения не было
     std::cout << "b = " << b << std::endl;  // Напечатает Dog
 }
 \end{lstlisting}
@@ -583,6 +554,7 @@ int&& r1 = a;           // Error, так как a - это lvalue
 int&& r2 = b;           // Error, так как b - это константа и lvalue
 int&& r3 = a + 1;       // OK
 \end{lstlisting}
+В языке также существуют константные rvalue-ссылки, но они используются редко.
 
 
 \subsection*{Перегрузка между rvalue-ссылкой и константной lvalue-ссылкой}
@@ -617,8 +589,8 @@ int main()
 \subsection*{Возврат rvalue-ссылок из функций}
 Второе и последнее отличие rvalue-ссылок от обычных lvalue-ссылок проявляется при возврате ссылок из функции или при приведении к типу ссылки.
 \begin{itemize}
-\item При возврате из функции lvalue-ссылки -- выражение вызовы функции будет lvalue-выражением.
-\item При возврате из функции rvalue-ссылки -- выражение вызовы функции будет rvalue-выражением.
+\item При возврате из функции lvalue-ссылки --- выражение вызова функции будет lvalue-выражением.
+\item При возврате из функции rvalue-ссылки --- выражение вызова функции будет rvalue-выражением.
 \end{itemize}
 Это различие виндно на следующем примере:
 \begin{lstlisting}
@@ -661,7 +633,7 @@ int main()
     printCategory(static_cast<int&&>(l));   // Напечатает rvalue
 }
 \end{lstlisting}
-Используя это свойство можно написать простейшую реализацую функции \texttt{move}:
+Используя это свойство можно написать простейшую реализацию функции \texttt{move}:
 \begin{lstlisting}
 template <typename T>
 T&& mymove(T& x)
@@ -673,12 +645,13 @@ T&& mymove(T& x)
 
 \newpage
 \section*{Конструктор перемещения и оператор присваивания перемещения}
+\textbf{Конструктор перемещения} --- это конструктор, который принимает rvalue-ссылку на объект того же типа. В этом конструкторе прописывается, что будет происходить с объектом при перемещении. Если конструктор перемещения не реализован, то для перемещения по правилам перегрузки используется конструктор копирования.
+
 \subsection*{Конструктор перемещения для строки \texttt{String(String\&\& s) }}
+Реализуем простой класс строки с конструкторами копирования и перемещения:
 \begin{lstlisting}
 #include <cstring>
 #include <iostream>
-using std::cout, std::endl;
-
 class String 
 {
 private:
@@ -706,159 +679,173 @@ public:
         data[size] = '\0';
     }
     
-    String(String&& s) 
-    : data(s.data), size(s.size), capacity(s.capacity)
+    String(String&& s) : data(s.data), size(s.size), capacity(s.capacity)
     {
         std::cout << "Move Constructor\n";
-        
         s.data = nullptr;
         s.size = 0;
         s.capacity = 0;
     }
     ~String() {if (data) delete [] data;}  
-    
     friend std::ostream& operator<<(std::ostream& out, const String& s);
 };
 
 std::ostream& operator<<(std::ostream& out, const String& s)
 {
-    if (s.data)
-        out << s.data;
+    if (s.data) out << s.data; 
     return out;
 }
+\end{lstlisting}
 
+\begin{lstlisting}
 int main()
 {
     String a = "Cat";
-    String b = a;              // Наша строка копируется, используя  String(const String& s)
-    String c = std::move(a);   // Наша строка перемещается, используя  String(String&& s)
+    String b = a;              // Наша строка копируется, используя  String(const String\& s)
+    String c = std::move(a);   // Наша строка перемещается, используя  String(String\&\& s)
     
-    cout << "a: " << a << endl;
-    cout << "b: " << b << endl;
-    cout << "c: " << c << endl;
+    std::cout << "a: " << a << std::endl; // Напечатает пустую строку, так как a был занулён
+    std::cout << "b: " << b << std::endl; // Напечатает Cat
+    std::cout << "c: " << c << std::endl; // Напечатает Cat
 }
 \end{lstlisting}
 
 \subsection*{Оператор присваивания перемещения для строки \texttt{String\& operator=(String\&\& s)}}
+\textbf{Оператор присваивания перемещения} --- это перегруженный оператор присваивания, который принимает rvalue-ссылку на объект того же типа. В этом перегруженном операторе прописывается, что будет происходить с объектом при операции перемещающего присваивания. Если оператор присваивания перемещения не реализован, то для перемещающего присваивания по правилам перегрузки используется оператор присваивания копирования.
 \begin{lstlisting}
-#include <cstring>
-#include <iostream>
-using std::cout, std::endl;
-
-class String 
+// Оператор присваивания копирования
+String& operator=(const String& s)
 {
-private:
-    char* data;
-    size_t size;
-    size_t capacity;
-public:
-    String(const char* str) 
-    {
-        std::cout << "Constructor from C string\n";
-        size = std::strlen(str);
-        capacity = size;
-        data = new char[capacity + 1];
-        std::memcpy(data, str, size);
-        data[size] = '\0';
-    }
+	std::cout << "Copy Assignment\n"; 
+	if (this == &s)
+		return *this;
 
-    String(const String& s)
-    {
-        std::cout << "Copy Constructor\n";
-        size = s.size;
-        capacity = s.capacity;
-        data = new char[capacity + 1];
-        std::memcpy(data, s.data, size);
-        data[size] = '\0';
-    }
-    
-    String(String&& s) 
-        : data(s.data), size(s.size), capacity(s.capacity)
-    {
-        std::cout << "Move Constructor\n";
-        
-        s.data = nullptr;
-        s.size = 0;
-        s.capacity = 0;
-    }
-    
-    String& operator=(const String& s)
-    {
-        std::cout << "Copy Assignment\n";
-        
-        if (this == &s)
-            return *this;
+	size = s.size;
+	capacity = s.capacity;
 
-        size = s.size;
-        capacity = s.capacity;
+	delete [] data;
+	data = new char[capacity + 1];
+	std::memcpy(data, s.data, size + 1);
 
-        std::free(data);
-        data = new char[capacity + 1];
-        std::memcpy(data, s.data, size + 1);
-
-        return *this;
-    }
-    
-    String& operator=(String&& s)
-    {
-        std::cout << "Move Assignment\n";
-        
-        if (this == &s)
-            return *this;
-        
-        delete [] data;
-        data = s.data;
-        size = s.size;
-        capacity = s.capacity;
-
-        s.data = nullptr;
-        s.size = 0;
-        s.capacity = 0;
-
-        return *this;
-    }
-    
-    
-    ~String() {if (data) delete [] data;}  
-    
-    friend std::ostream& operator<<(std::ostream& out, const String& s);
-};
-
-std::ostream& operator<<(std::ostream& out, const String& s)
-{
-    if (s.data)
-        out << s.data;
-    return out;
+	return *this;
 }
+    
+// Оператор присваивания перемещения
+String& operator=(String&& s)
+{
+	std::cout << "Move Assignment\n";
+	if (this == &s)
+		return *this;
+        
+	delete [] data;
+	data = s.data;
+	size = s.size;
+	capacity = s.capacity;
+
+	s.data = nullptr;
+	s.size = 0;
+	s.capacity = 0;
+	return *this;
+}
+\end{lstlisting}
+
+\begin{lstlisting}
 
 int main()
 {
     String x = "Elephant";
     String y = "Dog";
-    
     y = std::move(x);
-    cout << "x: " << x << endl;
-    cout << "y: " << y << endl;
+    std::cout << "x: " << x << std::endl;  // Напечатает пустую строку
+    std::cout << "y: " << y << std::endl;  // Напечатает Elephant
 }
 \end{lstlisting}
 
 
-\iffalse
+\subsection*{Особые методы класса}
+Как уже было пройдено раннее, особые методы класса -- это методы класса, которые компилятор может сгенерировать автоматически. Всего существует шесть особых методов:
+\begin{enumerate}
+\item Конструктор по умолчанию
+\begin{lstlisting}
+Object()
+\end{lstlisting}
+\item Деструктор
+\begin{lstlisting}
+~Object()
+\end{lstlisting}
+\item Конструктор копирования
+\begin{lstlisting}
+Object(const Object& other)
+\end{lstlisting}
+\item Оператор присваивания копирования
+\begin{lstlisting}
+Object& operator=(const Object& other)
+\end{lstlisting}
+\item Конструктор перемещения
+\begin{lstlisting}
+Object(Object&& other)
+\end{lstlisting}
+\item Оператор присваивания перемещения
+\begin{lstlisting}
+Object& operator=(Object&& other)
+\end{lstlisting}
+\end{enumerate}
+
+Таким образом компилятор может автоматически сгенерировать конструктор перемещения или оператор присваивания перемещения при некоторых условиях:
+\begin{itemize}
+\item \textbf{Автоматическая генерация конструктора перемещения}\\
+Компилятор автоматически генерирует конструктор перемещения при условии того, что у класса нет ни одного из следующих объявленных программистом методов:
+\begin{itemize}
+\item Конструкторов копирования и перемещения
+\item Операторов присваивания копирования и перемещения
+\item Деструктора
+\end{itemize}
+Сгенерированный конструктор перемещения будет просто перемещать все поля класса.
+
+\item \textbf{Автоматическая генерация оператора присваивания перемещения}\\
+Компилятор автоматически генерирует оператора присваивания перемещения при тех же условиях. Сгенерированный оператора присваивания перемещения будет просто применять операцию перемещающего присваивания к каждому полю класса.
+\end{itemize}
+
+
 \newpage
-\section*{Глубокое и поверхностное копирование}
-Во многих языках программирования существуют понятия глубокого и поверхностного копирования (deep copy и shallow copy). Под глубоким копированием понимается рекурсивное копирование объекта и всех ресурсов, связанных с ним (например, памяти, выделенной в куче). Как правило, \texttt{operator=} в языке C++ перегружается таким образом, чтобы проводить глубокое копирование.
-\begin{center}
-\includegraphics[scale=0.9]{../images/deep.png}
-\end{center}
+\subsection*{Правило пяти}
+Правило пяти --- это эмпирическое правило, которое гласит: \textit{Если вы определяете любой из пяти следующих особых методов класса, связанных с управлением ресурсами, то скорее всего нужно определить все пять.}
+\begin{enumerate}
+\item Деструктор
+\item Конструктор копирования
+\item Оператор присваивания копирования
+\item Конструктор перемещения
+\item Оператор присваивания перемещения
+\end{enumerate}
 
-При поверхностном копировании происходит только побайтовое копирование полей объекта. В том числе копируются все указатели, которые продолжают указывать на ту же область памяти в куче. Так, например, работает присваивание структур в языке C.
 
-\begin{center}
-\includegraphics[scale=0.9]{../images/shallow.png}
-\end{center}
 
-Поверхностное копирование имеет множество недостатков, связанных с безопастностью работы программы. Более того, иногда нам нужна полная копия объекта и поверхностное копирование просто не подойдёт. Но есть и большое преимущество такого копирования -- оно значительно более эффективно.
-\fi
+\subsection*{Перегрузка по квалификаторам ссылок}
+Перегружать методы класса не только по параметрам, но и по тому, какой объект вызывает метод. То есть вызывается ли метод от lvalue выражения или от rvalue выражения.
+
+\begin{lstlisting}
+#include <iostream>
+struct Cat 
+{
+    void print() & 
+    { 
+        std::cout << "lvalue\n"; 
+    }
+    
+    void print() && 
+    { 
+        std::cout << "rvalue\n"; 
+    }
+};
+
+int main() 
+{
+    Cat a;
+    a.print();            // lvalue, вызовется версия с \&
+    Cat().print();        // rvalue, вызовется версия с \&\&
+    std::move(a).print(); // rvalue, вызовется версия с \&\&
+}
+\end{lstlisting}
 
 
 \end{document}
