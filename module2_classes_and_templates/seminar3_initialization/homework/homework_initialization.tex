@@ -352,11 +352,11 @@ char x[sizeof(std::string)];
 \end{enumerate}
 и методы:
 \begin{enumerate}
-\item Конструктор, который задаёт поля.
+\item Конструктор, который задаёт поля. Если значение переменной, на которую указывает ссылка, не находится в диапазоне от \texttt{minValue} до \texttt{maxValue}, то её нужно изменить также, как это делается в методе \texttt{set}.
 \item Метод \texttt{get}, который возвращает значение оборачиваемой переменной.
 \item Метод \texttt{set}, который задаёт значение оборачиваемой переменной, если значение находится в диапазоне от \texttt{minValue} до \texttt{maxValue}. Если же в \texttt{set} передаётся значение меньше,  чем \texttt{minValue}, то переменная должна установиться в значение \texttt{minValue}. Если в \texttt{set} передаётся значение больше, чем \texttt{maxValue}, то переменная должна установиться в значение \texttt{maxValue}.
-\item Метод \texttt{getCount} который возвращает количество вызовов метода \texttt{get} этого объекта.
-\item Метод \texttt{setCount} который возвращает количество вызовов метода \texttt{set} этого объекта.
+\item Метод \texttt{numberOfGets} который возвращает количество вызовов метода \texttt{get} этого объекта.
+\item Метод \texttt{numberOfSets} который возвращает количество вызовов метода \texttt{set} этого объекта.
 \end{enumerate}
 
 
@@ -376,8 +376,8 @@ int main()
 	w.set(500);
 	std::cout << w.get() << std::endl;			// Напечатает 300
 	
-	std::cout << w.getCount() << std::endl;	// Напечатает 3
-	std::cout << w.setCount() << std::endl;	// Напечатает 4
+	std::cout << w.numberOfGets() << std::endl;	// Напечатает 3
+	std::cout << w.numberOfSets() << std::endl;	// Напечатает 4
 }
 \end{lstlisting}
 

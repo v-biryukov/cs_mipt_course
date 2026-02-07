@@ -8,6 +8,108 @@ using namespace std::string_literals;
 // /////////////////////////////////////////////////////////////////
 // Тут вам нужно написать вашу реализацию шаблонного класса Optional
 
+class BadOptionalAccess : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "BadOptionalAccess: Optional does not contain a value";
+    }
+};
+
+template<typename T>
+class Optional {
+private:
+    union {
+        T valueX;
+    };
+    bool has_value_flag;
+
+public:
+    Optional() : has_value_flag(false) {}
+
+    Optional(const T& other_value) : has_value_flag(true) {
+        new (&valueX) T(other_value);
+    }
+
+    Optional(const Optional& other) : has_value_flag(other.has_value_flag) {
+        if (other.has_value_flag) {
+            new (&valueX) T(other.valueX);
+        }
+    }
+
+    template<typename U>
+    Optional(const Optional<U>& other) : has_value_flag(other.has_value()) {
+        if (other.has_value()) {
+            new (&valueX) T(*other);
+        }
+    }
+
+    ~Optional() {
+        reset();
+    }
+
+    Optional& operator=(const Optional& other) {
+        if (this != &other) {
+            reset();
+            has_value_flag = other.has_value_flag;
+            if (other.has_value_flag) {
+                new (&valueX) T(other.valueX);
+            }
+        }
+        return *this;
+    }
+
+    template<typename U>
+    Optional& operator=(const Optional<U>& other) {
+        reset();
+        has_value_flag = other.has_value();
+        if (other.has_value()) {
+            new (&valueX) T(*other);
+        }
+        return *this;
+    }
+
+    bool has_value() const {
+        return has_value_flag;
+    }
+
+    T& operator*() {
+        return valueX;
+    }
+
+    const T& operator*() const {
+        return valueX;
+    }
+
+    T& value() {
+        if (!has_value_flag) {
+            throw BadOptionalAccess();
+        }
+        return valueX;
+    }
+
+    const T& value() const {
+        if (!has_value_flag) {
+            throw BadOptionalAccess();
+        }
+        return valueX;
+    }
+
+    explicit operator bool() const {
+        return has_value_flag;
+    }
+
+    void reset() {
+        if (has_value_flag) {
+            valueX.~T();
+            has_value_flag = false;
+        }
+    }
+
+    T value_or(const T& default_value) const {
+        return has_value_flag ? valueX : default_value;
+    }
+};
+
 // /////////////////////////////////////////////////////////////////
 
 

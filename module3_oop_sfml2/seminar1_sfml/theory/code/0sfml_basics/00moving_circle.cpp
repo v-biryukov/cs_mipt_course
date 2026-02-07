@@ -2,7 +2,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 800), "Moving Circle", sf::Style::Default);
+    sf::RenderWindow window(sf::VideoMode({800, 800}), "Moving Circle", sf::Style::Default);
     window.setFramerateLimit(60);
     
     sf::CircleShape circle(30);
@@ -10,10 +10,10 @@ int main()
 
     while (window.isOpen())
     {
-        sf::Event event;
-        while (window.pollEvent(event)) 
+        std::optional<sf::Event> event;
+        while (event = window.pollEvent()) 
         {
-            if (event.type == sf::Event::Closed)
+            if (event->is<sf::Event::Closed>())
                 window.close();
         }
         circle.move(sf::Vector2f{1, 1});

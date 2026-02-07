@@ -85,6 +85,24 @@ public:
         size = capacity;
     }
 
+    bool operator==(const Number& other) const 
+    {
+        if (size != other.size)
+            return false;
+
+        for (std::size_t i = 0; i < size; ++i) 
+        {
+            if (data[i] != other.data[i])
+                return false;
+        }
+        return true;
+    }
+
+    bool operator!=(const Number& other) const 
+    {
+        return ! (*this == other);
+    }
+
 
     ~Number() 
     {
