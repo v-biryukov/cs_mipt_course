@@ -1,0 +1,265 @@
+\documentclass{article}
+\usepackage[english,russian]{babel}
+\usepackage{textcomp}
+\usepackage{geometry}
+  \geometry{left=2cm}
+  \geometry{right=1.5cm}
+  \geometry{top=1.5cm}
+  \geometry{bottom=2cm}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\usepackage{multicol}
+
+\begin{document}
+\pagenumbering{gobble}
+
+\lstset{
+  language=C++,
+  basicstyle=\linespread{1.1}\ttfamily,
+  columns=fixed,
+  fontadjust=true,
+  basewidth=0.5em,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{gray},
+  texcl=true,
+  stringstyle=\ttfamily\color{orange!50!black},
+  showstringspaces=false,
+  %numbers=false,
+  numbersep=5pt,
+  numberstyle=\tiny\color{black},
+  numberfirstline=true,
+  stepnumber=1,      
+  numbersep=10pt,
+  backgroundcolor=\color{white},
+  showstringspaces=false,
+  captionpos=b,
+  breaklines=true
+  breakatwhitespace=true,
+  xleftmargin=.2in,
+  extendedchars=\true,
+  keepspaces = true,
+  tabsize=4,
+  upquote=true,
+}
+\lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1}}
+
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\makeatletter
+\def\@seccntformat#1{\@ifundefined{#1@cntformat}%
+   {\csname the#1\endcsname\quad}%    default
+   {\csname #1@cntformat\endcsname}}% enable individual control
+\newcommand\section@cntformat{}     % section level 
+\newcommand\subsection@cntformat{Задача \thesubsection.\space} % subsection level
+\newcommand\subsubsection@cntformat{\thesubsubsection.\space} % subsubsection level
+\makeatother
+
+\title{Семинар \#2: Наследование. GUI. Домашнее задание.\vspace{-5ex}}\date{}\maketitle
+
+\section{Наследование}
+
+
+\subsection{Фигуры}
+В файле \texttt{shape.cpp} написаны простейшие классы \texttt{Circle}, \texttt{Rectangle} и \texttt{Triangle}, описывающие геометрические фигуры: круг, прямоугольник и треугольник. При написании этих классов наследование не было использовано, в следствии чего некоторые поля и методы одинаковы у всех классов (поле \texttt{mPosition} и методы \texttt{getPosition} и \texttt{setPosition}).
+
+\begin{itemize}
+\item Создайте класс \texttt{Shape}, который бы описывал абстрактную фигуру и содержал бы поля и методы, общие для всех фигур. Измените код классов \texttt{Circle}, \texttt{Rectangle} и \texttt{Triangle} так, чтобы они наследовались от класса \texttt{Shape}. Общие для всех фигур поля и методы должны содержаться только в классе \texttt{Shape}, но не в классах-наследниках.
+
+\item Добавьте метод \texttt{void move(Vector2f change)} в класс \texttt{Shape}. Этот метод должен изменять поле \texttt{mPosition} на значение \texttt{change}. Так как остальные классы наследуются от \texttt{Shape}, то этот метод можно будет вызвать у всех объектов дочерних классов. Протестируйте этот метод, изменив положения объектов дочерних классов.
+\end{itemize}
+
+
+\subsection{Приведение типов при наследовании}
+Пусть есть два следующих класса:
+\begin{lstlisting}
+struct Alice
+{
+	int x;
+	void func() const {std::cout << "Alice " << x << std::endl;}
+};
+
+struct Bob : public Alice
+{
+	int y;
+	void func() const {std::cout << "Bob " << x << " " << y << std::endl;}
+};
+\end{lstlisting}
+
+Определите, скомпилируется ли следующий код, использующий эти классы, и, если скомпилируется, то что будет напечатано в следующих программах:
+\begin{enumerate}
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a \{10\};
+Bob b \{20, 30\};
+a = b;
+a.func();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a \{10\};
+Bob b \{20, 30\};
+b = a;
+b.func();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Bob b \{20, 30\};
+Alice* p = &b;
+p->func();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a \{10\};
+Bob* p = &a;
+p->func();
+\end{Verbatim}
+\end{enumerate}
+
+
+Пусть есть следующие классы:
+\begin{lstlisting}
+struct Alice
+{
+	int x;
+	void func() const {std::cout << "Alice " << x << std::endl;}
+};
+
+struct Bob : public Alice
+{
+	int y;
+	void func() const {std::cout << "Bob " << x << " " << y << std::endl;}
+};
+
+struct Casper : public Bob
+{
+	int z;
+	void func() const {std::cout << "Casper " << x << " " << y << " " << z << std::endl;}
+};
+\end{lstlisting}
+
+Определите, скомпилируется ли следующий код, использующий эти классы, и, если скомпилируется, то что будет напечатано в следующих программах:
+\begin{enumerate}
+\setcounter{enumi}{4}
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a \{10\};
+Bob b \{20, 30\};
+Casper c \{40, 50, 60\};
+a = c;
+a.func();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a \{10\};
+Bob b \{20, 30\};
+Casper c \{40, 50, 60\};
+Alice* p = &c;
+p->func();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a \{10\};
+Bob b \{20, 30\};
+Casper c \{40, 50, 60\};
+Bob* p = &a;
+p->func();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a \{10\};
+Bob b \{20, 30\};
+Casper c \{40, 50, 60\};
+Bob* p = &c;
+p->func();
+\end{Verbatim}
+
+\end{enumerate}
+
+
+Для того, чтобы сдать эту задачу нужно создать файл в формате \texttt{.txt} и, используя любой текстовый редактор, записать в него ответы в следующем формате (ответы ниже неверны):
+\begin{verbatim}
+1) Error
+2) Alice 10
+3) Bob 20 30
+...
+\end{verbatim} 
+После этого, файл нужно поместить в ваш репозиторий на github.
+
+
+
+\subsection{Изменение цвета}
+В файле \texttt{draggable.cpp} написан класс \texttt{Draggable}, который описывает передвигаемый курсором мыши прямоугольник. Ваша задача -- написать класс \texttt{DraggableWithColorChange} -- наследник класса \texttt{Draggable}. Новый класс должен также описывать передвигаемый прямоугольник, но, во время передвижения прямоугольника, его цвет должен меняться на другой. Конструктор нового класса будет иметь вид:
+\begin{lstlisting}
+DraggableWithColorChange(Vector2 position, Vector2 size, Color baseColor, Color dragColor)
+\end{lstlisting}
+Где \texttt{baseColor} -- это основной цвет прямоугольника, а \texttt{dragColor} -- цвет прямоугольника при перетаскивании. Протестируйте этот класс в функции \texttt{main}.
+
+
+
+
+\subsection{Окна}
+В файле \texttt{windows.cpp} написан класс \texttt{BaseWindow}, описывающий простейшее окно. Это окно состоит из двух прямоугольников. Первый прямоугольник опредяляет границы отрисовки окна, а второй опредяляет границы области, за которую прямоугольник можно перетаскивать.
+
+\begin{itemize}
+
+\item Создай класс \texttt{MessageWindow}, наследник \texttt{BaseWindow}.
+У объектов этого класса, помимо функционала \texttt{BaseWindow} должен быть текст, в котором отображается некоторая строка. 
+
+\item Создайте классы \texttt{ErrorWindow} и \texttt{DoneWindow}, наследники класса \texttt{MessageWindow}. Эти два окна должны отличаться от окна \texttt{MessageWindow} только тем, что окно типа Error должно всегда рисоваться оттенком красного цвета, а окно типа Done - оттенком зелёного цвета.
+
+\item Создай класс \texttt{QuestionWindow}, наследник \texttt{BaseWindow}.
+У объектов этого класса, помимо функционала \texttt{BaseWindow} должен быть текст, в котором отображается некоторая строка. А также две кнопки внизу: Ok и Cancel. При нажатии на кнопку Ok в консоль должно выводиться строка \texttt{Ok}, а при нажатии на кнопку Cancel -- строка \texttt{Cancel}. Используйте класс \texttt{Button} из файла \texttt{button.hpp} для создания кнопок.
+
+\end{itemize}
+
+
+
+
+\section{Создание классов графического интерфейса}
+\setcounter{subsection}{4}
+
+\subsection{Тумблер}
+Создайте класс \texttt{Toggle}, который бы релизовывал элемент интерфейса тумблер (переключатель).
+\begin{center}
+\includegraphics[scale=0.25]{../images/toggle_button.jpeg}
+\end{center}
+После того, как создадите класс, напишите программу, в которой бы создавалось 10 тумблеров. Все тумблеры должны работать. Программа должна корректно работать при изменении размеров окна.
+
+
+\subsection{Три слайдера}
+Напишите программу, которая создаёт круг и три слайдера. Цвет круга должен меняться при изменении положения ползунков слайдеров. Каждый слайдер должен отвечать за свою компоненту цвета круга (красную, зелёную или синию). Используйте класс \texttt{Slider} из \texttt{classroom\_tasks/code/5gui/2slider}.
+\begin{center}
+\includegraphics[scale=0.95]{../images/slider_chose_color.png}
+\end{center}
+
+\subsection{Выпадающий список}
+Создайте класс \texttt{DropList}, который бы релизовывал элемент интерфейса выпадающий список без полосы прокрутки.
+\begin{center}
+\includegraphics[scale=1]{../images/drop_down_list.png}
+\end{center}
+После создания класса напишите программу, которая реализует выпадающий список с тремя вариантами: \texttt{Круг}, \texttt{Квадрат} и \texttt{Треугольник}. В зависимости от выбранного в списке варианта, на экране должна отображаться соответствующая фигура: круг, квадрат или треугольник.
+
+
+\subsection{Select Move Delete}
+В папке \texttt{select\_move\_delete/} содержится заготовка исходного кода для этого задания. В этой программе есть несколько объектов(кругов), которые можно выделять. Выделение происходит по нажатию левой клавиши мыши. Зажав клавишу \texttt{Ctrl} можно выделить несколько объектов. Также в программе реализован прямоугольник выделения (но он пока не выбирает объекты). Левой кнопкой мыши с зажатой клавишей левый \texttt{Alt} можно создать круг случайного размера. Добавьте следующие возможности в программу:
+\begin{itemize}
+\item Задание случайного цвета. При нажатии клавиши пробел цвет всех выделенных шаров должен меняться на случайный. Для этого понадобится добавить поле \texttt{color} в класс \texttt{Ball}.
+
+\item Выделение объектов с помощью прямоугольника выделения. Прямоугольник выделения должен рисоваться только если нажатие мыши произошло вне кругов. Все объекты, полностью находящиеся внутри прямоугольника выделения, на момент отпускания левой кнопки мыши должны выделяться. Объекты должны выделяться во время изменения прямоугольника, а не только при отпускании кнопки мыши.
+
+\item Перемещение всех выделенных объектов при зажатии левой клавиши мыши и её движении. Перемещаться должны все выделенные объекты параллельно (также как перемещаются несколько выделенных значков на рабочем столе). Прямоугольник выделения при этом рисоваться не должен.
+
+\item При нажатии клавиши \texttt{Delete}, все выделенные объекты должны удаляться. Чтобы удалить элемент из \texttt{std::list} используйте итераторы и метод \texttt{erase}. При удалении элемента \texttt{std::list} нужно внимательно следить за тем, чтобы не испортить итераторы.
+
+\item Контекстное меню должно открываться при нажатии правой кнопки мыши. Добавьте следующие варианты в меню:
+\begin{itemize}
+\item \texttt{Delete} - при нажатии на выделенные объект правой кнопкой мыши и выборе этого варианта все выделенные объекты должны удаляться.
+\item \texttt{Create} - при нажатии на любое место и выборе этого варианта должнен создаваться новый случайный круг.
+\item \texttt{Random Color} -- все выделенные объекты должны окрашиваться в случайный цвет.
+\item \texttt{Increase} -- все выделенные объекты должны увеличиваться на 25 процентов.
+\item \texttt{Decrease} -- все выделенные объекты должны уменьшаться на 25 процентов.
+\end{itemize}
+
+\item \textbf{Copy Paste Cut} Добавьте возможность копирования, вставки и вырезания объектов. Вызов этих операций должен происходить в контекстном меню или с помощью комбинаций клавиш \texttt{Ctrl-C}, \texttt{Ctrl-V} и \texttt{Ctrl-X}.
+\end{itemize}
+
+\end{document}
