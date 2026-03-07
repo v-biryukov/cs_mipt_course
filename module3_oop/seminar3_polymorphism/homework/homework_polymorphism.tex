@@ -1,0 +1,338 @@
+\documentclass{article}
+\usepackage[english,russian]{babel}
+\usepackage{textcomp}
+\usepackage{geometry}
+  \geometry{left=2cm}
+  \geometry{right=1.5cm}
+  \geometry{top=1.5cm}
+  \geometry{bottom=2cm}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\pagenumbering{gobble}
+\usepackage{multicol}
+
+\lstset{
+  language=C++,
+  basicstyle=\linespread{1.1}\ttfamily,
+  columns=fixed,
+  fontadjust=true,
+  basewidth=0.5em,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{gray},
+  texcl=true,
+  stringstyle=\ttfamily\color{orange!50!black},
+  showstringspaces=false,
+  %numbers=false,
+  numbersep=5pt,
+  numberstyle=\tiny\color{black},
+  numberfirstline=true,
+  stepnumber=1,      
+  numbersep=10pt,
+  backgroundcolor=\color{white},
+  showstringspaces=false,
+  captionpos=b,
+  breaklines=true
+  breakatwhitespace=true,
+  xleftmargin=.2in,
+  extendedchars=\true,
+  keepspaces = true,
+  tabsize=4,
+  upquote=true,
+}
+\lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1}}
+
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\makeatletter
+\def\@seccntformat#1{\@ifundefined{#1@cntformat}%
+   {\csname the#1\endcsname\quad}%    default
+   {\csname #1@cntformat\endcsname}}% enable individual control
+\newcommand\section@cntformat{}     % section level 
+\newcommand\subsection@cntformat{Задача \thesubsection.\space} % subsection level
+\newcommand\subsubsection@cntformat{\thesubsubsection.\space} % subsubsection level
+\makeatother
+
+\begin{document}
+\title{Семинар \#3: Динамический полиморфизм. Домашнее задание. \vspace{-5ex}}\date{}\maketitle
+
+\subsection{Вызов методов}
+Пусть есть следующие классы \texttt{Alice} и \texttt{Bob}. Метод \texttt{speak} класса \texttt{Bob} скрывает метод \texttt{speak} класса \texttt{Alice}:
+\begin{lstlisting}
+struct Alice 
+{
+    void speak() {std::cout << "Alice" << std::endl;}
+};
+
+struct Bob : public Alice 
+{
+    void speak() {std::cout << "Bob" << std::endl;}
+};
+\end{lstlisting}
+
+\noindent Что будет напечатано (или произойдёт ошибка), если эти классы будут использованы следующим образом:
+
+\begin{multicols}{2}
+\begin{enumerate}
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a;
+Bob b = a;
+b.speak();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Bob b;
+Alice a = b;
+a.speak();
+\end{Verbatim}
+\end{enumerate}
+\end{multicols}
+
+\begin{multicols}{2}
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a;
+Bob* pb = &a;
+pb->speak();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Bob b;
+Alice* pa = &b;
+pa->speak();
+\end{Verbatim}
+\end{enumerate}
+\end{multicols}
+
+\noindent Пусть есть следующие классы \texttt{Alice} и \texttt{Bob}. Метод \texttt{speak} класса \texttt{Bob} переопределяет метод \texttt{speak} класса \texttt{Alice}:
+\begin{lstlisting}
+struct Alice 
+{
+    virtual void speak() {std::cout << "Alice" << std::endl;}
+};
+
+struct Bob : public Alice 
+{
+    void speak() {std::cout << "Bob" << std::endl;}
+};
+\end{lstlisting}
+
+\noindent Что будет напечатано (или произойдёт ошибка), если эти классы будут использованы следующим образом:
+
+\begin{multicols}{2}
+\begin{enumerate}
+\setcounter{enumi}{4}
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a;
+Bob b = a;
+b.speak();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Bob b;
+Alice a = b;
+a.speak();
+\end{Verbatim}
+\end{enumerate}
+\end{multicols}
+
+\begin{multicols}{2}
+\begin{enumerate}
+\setcounter{enumi}{6}
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice a;
+Bob* pb = &a;
+pb->speak();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Bob b;
+Alice* pa = &b;
+pa->speak();
+\end{Verbatim}
+\end{enumerate}
+\end{multicols}
+
+
+\begin{enumerate}
+\setcounter{enumi}{8}
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Alice* pa = \textcolor{blue}{new} Bob;
+pa->speak();
+\textcolor{blue}{delete} pa;
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+std::unique_ptr<Alice> pa = std::make_unique<Bob>();
+pa->speak();
+\end{Verbatim}
+\end{enumerate}
+
+
+
+
+\noindent Пусть есть следующие классы \texttt{Alice}, \texttt{Bob} и \texttt{Casper}:
+\begin{lstlisting}
+struct Alice 
+{
+    virtual void speak() {std::cout << "Alice" << std::endl;}
+};
+
+struct Bob : public Alice 
+{
+    void speak() {std::cout << "Bob" << std::endl;}
+};
+
+struct Casper : public Bob 
+{
+    void speak() {std::cout << "Casper" << std::endl;}
+};
+\end{lstlisting}
+\noindent Что будет напечатано (или произойдёт ошибка), если эти классы будут использованы следующим образом:
+
+\begin{enumerate}
+\setcounter{enumi}{10}
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Casper c;
+Alice* pa = &c;
+pa->speak();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Casper c;
+Bob* pb = &c;
+pb->speak();
+\end{Verbatim}
+\end{enumerate}
+
+\noindent Пусть есть следующие классы \texttt{Alice}, \texttt{Bob} и \texttt{Casper}:
+\begin{lstlisting}
+struct Alice 
+{
+    virtual void speak() {std::cout << "Alice" << std::endl;}
+};
+
+struct Bob
+{
+    void speak() {std::cout << "Bob" << std::endl;}
+};
+
+struct Casper : public Alice, public Bob 
+{
+    void speak() {std::cout << "Casper" << std::endl;}
+};
+\end{lstlisting}
+\noindent Что будет напечатано (или произойдёт ошибка), если эти классы будут использованы следующим образом:
+
+\begin{enumerate}
+\setcounter{enumi}{12}
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Casper c;
+Alice* pa = &c;
+pa->speak();
+\end{Verbatim}
+
+\item \begin{Verbatim}[commandchars=\\\{\}]
+Casper c;
+Bob* pb = &c;
+pb->speak();
+\end{Verbatim}
+\end{enumerate}
+
+\noindent Для того, чтобы сдать эту задачу нужно создать файл в формате \texttt{.txt} и, используя любой текстовый редактор, записать в него ответы в следующем формате (ответы ниже неверны):
+\begin{verbatim}
+1) Alice
+2) Bob
+3) Error
+\end{verbatim} 
+После этого, файл нужно поместить в ваш репозиторий на github.
+
+\subsection{Личности} 
+В \texttt{individuals.cpp} написан интерфейс \texttt{Individual} и классы \texttt{Alice}, \texttt{Bob} и \texttt{Casper}, реализующие этот интерфейс.
+\subsubsection*{Подзадачи}
+\begin{enumerate}
+\item \textbf{Вектор личностей}\\ 
+Напишите функцию \texttt{createIndividuals}, которая будет создавать вектор из различных личностей и возвращать его. Более точно, вектор должен иметь тип \texttt{std::vector<Individual*>}. Функция должна создавать в куче 3 объекта типа \texttt{Alice}, 2 объекта типа \texttt{Bob} и 4 объекта типа \texttt{Casper} и помещать указатели на эти объекты в вектор. После этого функция должна возвращать этот вектор.
+
+
+\item \textbf{Вызов виртуальных методов}\\
+Напишите функцию \texttt{letThemSpeak}, которая принимает на вход вектор типа \texttt{std::vector<Individual*>} (по ссылке) и вызывает метод \texttt{speak} у каждого объекта в векторе. Протестируйте функции \texttt{createIndividuals} и \texttt{letThemSpeak}.
+
+
+\item \textbf{Удаление личностей}\\ 
+Напишите функцию \texttt{deleteIndividuals}, которая принимает на вход вектор типа \texttt{std::vector<Individual*>} и освобождает память, выделенную функцией \texttt{createIndividuals}. Нужно использовать оператор \texttt{delete} на каждый указатель. 
+
+
+\item \textbf{Идентификация}\\
+Напишите функцию \texttt{int identification(Individual* p)}, которая должна возвращать:
+\begin{itemize}
+\item 0 -- если указатель \texttt{p} указывает на объект типа \texttt{Alice}.
+\item 1 -- если указатель \texttt{p} указывает на объект типа \texttt{Bob}.
+\item 2 -- если указатель \texttt{p} указывает на объект типа \texttt{Casper}.
+\end{itemize}
+Решите эту подзадачу тремя способами:
+
+\begin{enumerate}
+\item Дописав ещё один виртуальный метод во все классы. Этот метод должен возвращать нужное число.
+\item Не изменяя классы. Используя оператор приведения \texttt{dynamic\_cast}.
+\item Не изменяя классы. Используя оператор \texttt{typeid}.
+\end{enumerate}
+
+
+\item \textbf{Личности и умные указатели}\\
+Напишите новые версии функций \texttt{createIndividuals} и \texttt{letThemSpeak}, которые будут использовать умные указатели \texttt{std::unique\_ptr<Individual>} вместо обычных указателей \texttt{Individual*}. Сделайте эту подзадачу в отдельном файле.
+
+\end{enumerate}
+
+\subsection{Виджеты}
+В папке \texttt{widgets} содержится программа, написанная с использованием библиотеки SFML, которая помещает в окне несколько элементов интерфейса трёх видов: кнопки (класс \texttt{Button}), слайдеры (класс \texttt{Slider}) и перетаскиваемые таблички (класс \texttt{Draggable}). Однако, на данный момент классы виджетов никак друг с другом не связаны. Поэтому, для работы с ними пришлось создать 3 разных вектора (\texttt{buttons}, \texttt{sliders} и \texttt{draggables}), что не совсем удобно. Более того, если бы в программе добавится ещё один виджет, то придётся добавлять ещё один вектор и дописывать дополнительные циклы во многих местах в программе.
+
+Для того, чтобы решить описанные выше проблемы, объедините классы \texttt{Button}, \texttt{Slider} и \texttt{Draggable} в единую иерархию наследования. Напишите новый интерфейс \texttt{Widget}. Все классы виджетов должны наследоваться от этого интерфейса. После этого объедините все вектора в один вектор, содержащий элементы типа \textit{указатель на виджет}. Решите эту задачу в двух вариантах:
+
+\begin{enumerate}
+\item С использованием обычных указателей.
+\item С использованием умных указателей (\texttt{std::unique\_ptr} или \texttt{std::shared\_ptr} на ваш выбор).
+\end{enumerate}
+
+\newpage
+\subsection{Дерево навыков}
+В папке \texttt{skilltree} находится реализация простого дерева навыков для компьютерной игры.
+\begin{itemize}
+\item \texttt{Node} -- абстрактный класс, который описывает узел дерева навыков. Узел может быть в трёх состояниях
+\begin{itemize}
+\item \texttt{Blocked} -- заблокированный узел. При нажатии на такой узел ничего не должно происходить.
+\item \texttt{Unblocked} -- разблокированный узел. При нажатии на такой узел он активируется. При активации узла, все его дети разблокируются.
+\item \texttt{Activated} -- активированный узел.
+\end{itemize}
+\item \texttt{HitNode} -- абстрактный класс, наследник класса \texttt{Node}, который описывает круглый переключаемый узел дерева навыков. При нажатии на этот узел, если он разблокирован, узел активируется. При повторном нажатии на этот узел, он деактивируется и все его потомки становятся заблокированными.
+
+\item \texttt{ShieldSkillNode}, \texttt{HandSkillNode} и другие -- конкретные классы переключаемых узлов.
+\end{itemize}
+
+
+
+\subsubsection*{Подзадачи}
+
+\begin{enumerate}
+\item \textbf{Новый навык} -- добавьте новый навык -- огненный шар (файл изображения \texttt{icon\_fireball.png}). Добавьте этот навык в дерево навыков.
+
+\item \textbf{Накопительный навык} -- создайте новый узел \texttt{AccumulativeNode}, наследник класса \texttt{Node}. В отличии от узла \texttt{HitNode} в этот узел можно вкладывать несколько очков навыка.  При нажатии на этот навык, если он разблокирован, он становится активированным, а все его дети разблокируются. При повторном нажатии на этот левой кнопкой мыши у этого узла увеличивается уровень активации до некоторого максимального значения. При нажатии правой кнопкой мыши уровень ативации должен уменьшаться на 1. Если уровень достигнет нуля, то узел перестаёт быть активированным, а все его потомки становятся заблокированными.
+
+\begin{center}
+\includegraphics[scale=0.3]{../images/freeze.png}
+\end{center}
+
+Визуально этот узел должен быть квадратным (учтите это при определении столкновения при нажатии кнопки мыши). Внизу этого узла должен быть написан уровень активации в виде \texttt{a / b}, где \texttt{a} -- текущий уровень активации, а \texttt{b} -- максимальный уровень активации.
+
+\item \textbf{Наследники накопительного навыка} -- создайте 2 класса наследника \texttt{AccumulativeNode}. Изображения для этих навыков можно найти в папке \texttt{icons} (\texttt{icon\_rect\_sword.png} и \texttt{icon\_rect\_chain.png}). Добавьте эти узлы в дерево навыков.
+
+
+\item \textbf{Абстрактное дерево навыков} -- создайте абстрактный класс дерева навыков \texttt{SkillTree}. Этот класс должен описывать всё дерево навыков, а не один узел. Соответственно, объекты этого класса должны содержать указатель на корень дерева. Также они должны хранить количество свободных очков навыка. При активации какого-либо навыка количество свободных очков навыка должно уменьшаться на 1. При деактивации навыка, все свободные очки должны возвращаться. Если свободных очков нет, то получить новый навык нельзя. Количество свободных очков навыка должно также отображаться на экране.
+
+\item \textbf{Конкретное дерево навыков} -- создайте класс \texttt{MageSkillTree}, наследник абстрактного класса \texttt{SkillTree}. Этот класс должен создавать дерево навыков для персонажа-мага. Дерево должно содержать как узлы типа \texttt{HitNode} так и узлы типа \texttt{AccumulativeNode}.
+\end{enumerate}
+
+При решении этой задачи используйте умные указатель \texttt{std::shared\_ptr}.
+
+\end{document}
