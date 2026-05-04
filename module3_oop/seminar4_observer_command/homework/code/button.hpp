@@ -20,7 +20,7 @@ public:
     Button(Rectangle rect, const std::string& textData)
         : mRect(rect), mText(textData)
     {
-        mFontSize = calculateOptimalFontSize();
+        mFontSize = 20;
     }
 
     void setFontSize(int fontSize)
@@ -65,24 +65,17 @@ public:
         return false;
     }
 
-private:
-
-    int calculateOptimalFontSize()
+    bool handle()
     {
-        float widthFraction = 0.6f;
-        float heightFraction = 0.4f;
-
-        int baseSize = mFontSize;
-        int textWidth = MeasureText(mText.c_str(), baseSize);
-
-        float widthRatio = mRect.width / textWidth * widthFraction;
-        float heightRatio = mRect.height / baseSize * heightFraction;
-
-        float minRatio = std::min(widthRatio, heightRatio);
-
-        return (int)(baseSize * minRatio);
+        Vector2 mouse = GetMousePosition();
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mouse, mRect))
+        {
+            return true;
+        }
+        return false;
     }
 
+private:
     Color getCurrentColor() const
     {
         Vector2 mouse = GetMousePosition();

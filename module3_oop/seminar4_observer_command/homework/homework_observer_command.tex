@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage[english,russian]{babel}
+\usepackage{textcomp}
+\usepackage{geometry}
+  \geometry{left=2cm}
+  \geometry{right=1.5cm}
+  \geometry{top=1.5cm}
+  \geometry{bottom=2cm}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\usepackage{multicol}
+
+\begin{document}
+\pagenumbering{gobble}
+
+\lstset{
+  language=C++,
+  basicstyle=\linespread{1.1}\ttfamily,
+  columns=fixed,
+  fontadjust=true,
+  basewidth=0.5em,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{gray},
+  texcl=true,
+  stringstyle=\ttfamily\color{orange!50!black},
+  showstringspaces=false,
+  %numbers=false,
+  numbersep=5pt,
+  numberstyle=\tiny\color{black},
+  numberfirstline=true,
+  stepnumber=1,      
+  numbersep=10pt,
+  backgroundcolor=\color{white},
+  showstringspaces=false,
+  captionpos=b,
+  breaklines=true
+  breakatwhitespace=true,
+  xleftmargin=.2in,
+  extendedchars=\true,
+  keepspaces = true,
+  tabsize=4,
+  upquote=true,
+}
+\lstset{ literate={~}{{\raisebox{0.5ex}{\texttildelow}}}{1}}
+
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\makeatletter
+\def\@seccntformat#1{\@ifundefined{#1@cntformat}%
+   {\csname the#1\endcsname\quad}%    default
+   {\csname #1@cntformat\endcsname}}% enable individual control
+\newcommand\section@cntformat{}     % section level 
+\newcommand\subsection@cntformat{Задача \thesubsection.\space} % subsection level
+\newcommand\subsubsection@cntformat{\thesubsubsection.\space} % subsubsection level
+\makeatother
+
+\title{Семинар \#5: Наблюдатель и Команда. Домашнее задание.\vspace{-5ex}}\date{}\maketitle
+
+
+\subsection{Ещё один наблюдатель}
+Начальный код для задачи в файле \texttt{observer.cpp}. Добавьте ещё один объект, который будет наблюдателем слайдера. При изменении положения слайдера, должно меняться вертикальное положение нового объекта-наблюдателя.
+
+
+\subsection{Два субъекта}
+Начальный код для задачи в файле \texttt{observer.cpp}. Сделайте эту задачу в отдельном файле.
+Измените код так, чтобы в программе было 2 субъекта-слайдера. При изменении положения одного слайдера все объекты должны вращаться. При изменении положения второго слайдера, все объекты должны менять цвет. Постарайтесь решить задачу таким образом, чтобы было меньше повторений кода.
+
+
+\subsection{Случайные цвета}
+Начальный код для этой и последующих задач в файле \texttt{command.cpp}. Создайте новую команду, которая бы меняла цвета всех объектов на случайные. Присоедините эту команду к одной из кнопок.
+
+\subsection{Очистка}
+Создайте новую команду, которая будет удалять все фигуры. Присоедините эту команду к одной из кнопок.
+        
+\subsection{Мультикоманда}
+Создайте новую команду \texttt{MultiCommand}, которая должна будет объединять в себе несколько команд. Класс \texttt{MultiCommand} должен быть реализацией интерфейса \texttt{Command}. Мультикоманда должна конструироваться из вектора команд. При исполнении мультикоманды должны исполняться подряд все входящие в неё команды. Создайте мультикоманду, которая будет одновременно меняет цвета и позиции всех фигур, используя уже написанные команды.
+
+
+\subsection{Отмена команд}
+Добавьте новую кнопку, которая будет отменять последнюю исполненную команду.
+При нескольких последовательный нажатиях на эту кнопку, должны отмениться несколько последних команд.
+Для решения этой задачи измените интерфейс команды на следующий:
+\begin{lstlisting}
+class Command
+{
+public:
+    virtual void execute() = 0;
+    virtual void unexecute() = 0;
+    virtual ~Command() {}
+};
+\end{lstlisting}
+Где виртуальный метод \texttt{unexecute} должен отменять действия, которые прошли в методе \texttt{execute}. Нужно будет реализовать метод \texttt{unexecute} для каждой команды. Также, придётся хранить вектор всех совершённых команд, чтобы можно было их отменить.
+
+
+\subsection{Команда и умные указатели}
+Перепишите код в \texttt{command.cpp} так, чтобы он использовал умные указатели \texttt{std::unique\_ptr} для указания на объекты в куче вместо обычных указателей.
+
+\end{document}

@@ -1,94 +1,67 @@
 #pragma once
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <iostream>
-
+#include "raylib.h"
+#include <algorithm>
 
 class Slider
 {
 protected:
-    sf::RectangleShape mTrackShape {};
-    sf::RectangleShape mThumbShape {};
+    Rectangle mTrack {};  // Полоска
+    Rectangle mThumb {};  // Ползунок
 
-    // Когда слайдер находится в нажатом состоянии, 
-    // то isPressed = true (Пользователь зажал thumb и держит)
     bool mIsPressed {false};
 
-    // Также храним ссылку на окно SFML, на которое будем отрисовывать слайдер
-    // Эту ссылку можно было не хранить, а просто передавать во все функции,
-    // где окно понадобится, но тогда код был бы более громоздким
-    sf::RenderWindow& mRenderWindow;
-
 public:
-    Slider(sf::RenderWindow& window, sf::Vector2f centerPosition, sf::Vector2f trackSize, sf::Vector2f thumbSize) 
-            : mRenderWindow(window)
+    Slider(Vector2 centerPosition, Vector2 trackSize, Vector2 thumbSize)
     {
-        mTrackShape.setSize(trackSize);
-        mTrackShape.setOrigin(trackSize / 2.0f);
-        mTrackShape.setPosition(centerPosition);
-        mTrackShape.setFillColor({200, 200, 220});
-
-        mThumbShape.setSize(thumbSize);
-        mThumbShape.setOrigin(thumbSize / 2.0f);
-        mThumbShape.setPosition(centerPosition);
-        mThumbShape.setFillColor({150, 150, 240});
-    }
-
-    void draw()
-    {
-        mRenderWindow.draw(mTrackShape);
-        mRenderWindow.draw(mThumbShape);
-    }
-
-    void setRestrictedThumbPosition(sf::Vector2f position)
-    {
-        float min = mTrackShape.getPosition().x - mTrackShape.getSize().x / 2.0f;
-        float max = mTrackShape.getPosition().x + mTrackShape.getSize().x / 2.0f;
-        mThumbShape.setPosition({std::clamp(position.x, min, max), mThumbShape.getPosition().y});
-    }
-
-    bool onMousePressed(const sf::Event& event)
-    {
-        if (event.mouseButton.button == sf::Mouse::Left) 
+        mTrack = 
         {
-            sf::Vector2f mousePosition = mRenderWindow.mapPixelToCoords({event.mouseButton.x, event.mouseButton.y});
-            if (mThumbShape.getGlobalBounds().contains(mousePosition) || mTrackShape.getGlobalBounds().contains(mousePosition)) 
+            centerPosition.x - trackSize.x / 2.0f,
+            centerPosition.y - trackSize.y / 2.0f,
+            trackSize.x,
+            trackSize.y
+        };
+
+        mThumb = 
+        {
+            centerPosition.x - thumbSize.x / 2.0f,
+            centerPosition.y - thumbSize.y / 2.0f,
+            thumbSize.x,
+            thumbSize.y
+        };
+    }
+
+    void draw() const
+    {
+        DrawRectangleRec(mTrack, Color{200, 200, 220, 255});
+        DrawRectangleRec(mThumb, Color{150, 150, 240, 255});
+    }
+
+    bool update()
+    {
+        Vector2 mouse = GetMousePosition();
+        bool clickedThisFrame = false;
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            if (CheckCollisionPointRec(mouse, mThumb) || CheckCollisionPointRec(mouse, mTrack))
             {
                 mIsPressed = true;
-                setRestrictedThumbPosition({mousePosition.x, mThumbShape.getPosition().y});
+                setRestrictedThumbPosition(mouse.x);
+                clickedThisFrame = true;
             }
         }
-        return mIsPressed;
-    }
 
-    void onMouseMove(const sf::Event& event)
-    {
-        if (!mIsPressed)
-            return;
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && mIsPressed)
+        {
+            setRestrictedThumbPosition(mouse.x);
+        }
 
-        sf::Vector2f mousePosition = mRenderWindow.mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
-        setRestrictedThumbPosition(mousePosition);
-    }
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
+        {
+            mIsPressed = false;
+        }
 
-    void onMouseReleased()
-    { 
-        mIsPressed = false;
-    }
-
-    // Нужно вызвать лишь этот метод в цикле обработки событий.
-    // Возвращает true, если за время последнего кадра произошло нажатие на ползунок.
-    bool handleEvent(const sf::Event& event) 
-    {
-        bool result = false;
-
-        if (event.type == sf::Event::MouseMoved)
-            onMouseMove(event);
-        else if (event.type == sf::Event::MouseButtonPressed)
-            result = onMousePressed(event);
-        else if (event.type == sf::Event::MouseButtonReleased)
-            onMouseReleased();
-
-        return result;
+        return clickedThisFrame;
     }
 
     bool isPressed() const
@@ -98,10 +71,20 @@ public:
 
     float getValue() const
     {
-        float start = mTrackShape.getPosition().x - mTrackShape.getSize().x / 2.0f;
-        float finish = mTrackShape.getPosition().x + mTrackShape.getSize().x / 2.0f;
-        float position = mThumbShape.getPosition().x;
-        return 100.0f * (position - start) / (finish - start);
+        float start  = mTrack.x;
+        float finish = mTrack.x + mTrack.width;
+        float pos    = mThumb.x + mThumb.width / 2.0f;
+
+        return 100.0f * (pos - start) / (finish - start);
     }
 
+private:
+    void setRestrictedThumbPosition(float mouseX)
+    {
+        float min = mTrack.x;
+        float max = mTrack.x + mTrack.width;
+
+        float clampedX = std::clamp(mouseX, min, max);
+        mThumb.x = clampedX - mThumb.width / 2.0f;
+    }
 };

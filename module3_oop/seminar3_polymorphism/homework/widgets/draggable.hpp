@@ -1,77 +1,69 @@
 #pragma once
-#include <iostream>
-#include <cmath>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-
+#include "raylib.h"
 
 class Draggable
 {
 protected:
-    sf::RectangleShape mShape   {};
-    bool mIsDragged             {false};
-    sf::Vector2f mOffset        {0.0f, 0.0f};
-    sf::RenderWindow& mRenderWindow;
+    Rectangle mRect {};
+    Color mColor {};
+
+    bool mIsDragged {false};
+    Vector2 mOffset {0.0f, 0.0f};
 
 public:
-    Draggable(sf::RenderWindow& window, sf::Vector2f position, sf::Vector2f size, sf::Color color)
-    : mRenderWindow(window)
+    Draggable(Vector2 position, Vector2 size, Color color)
     {
-        mShape.setPosition(position);
-        mShape.setSize(size);
-        mShape.setFillColor(color);
+        mRect = { position.x, position.y, size.x, size.y };
+        mColor = color;
     }
 
-    bool onMousePressed(sf::Vector2f mousePosition)
+    void update()
     {
-        if (mShape.getGlobalBounds().contains(mousePosition))
+        Vector2 mouse = GetMousePosition();
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            mIsDragged = true;
-            mOffset = mousePosition - mShape.getPosition();
+            if (CheckCollisionPointRec(mouse, mRect))
+            {
+                mIsDragged = true;
+                mOffset = {mouse.x - mRect.x, mouse.y - mRect.y};
+            }
         }
-        return mIsDragged;
-    }
 
-    void onMouseReleased()
-    {
-        mIsDragged = false;
-    }
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
+        {
+            mIsDragged = false;
+        }
 
-    void onMouseMoved(sf::Vector2f mousePosition)
-    {
         if (mIsDragged)
-            mShape.setPosition(mousePosition - mOffset);
+        {
+            mRect.x = mouse.x - mOffset.x;
+            mRect.y = mouse.y - mOffset.y;
+        }
     }
-
-    bool handleEvent(const sf::Event& event)
-    {
-        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-        {
-            sf::Vector2f mousePosition = mRenderWindow.mapPixelToCoords({event.mouseButton.x, event.mouseButton.y});
-            return onMousePressed(mousePosition);
-        }
-
-        if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
-        {
-            sf::Vector2f mousePosition = mRenderWindow.mapPixelToCoords({event.mouseButton.x, event.mouseButton.y});
-            onMouseReleased();
-        }
-
-        if (event.type == sf::Event::MouseMoved)
-        {
-            sf::Vector2f mousePosition = mRenderWindow.mapPixelToCoords({event.mouseMove.x, event.mouseMove.y});
-            onMouseMoved(mousePosition);
-        }
-
-        return false;
-    }
-
-    void setColor(sf::Color c)          {mShape.setFillColor(c);}
-    void setSize(sf::Vector2f sz)       {mShape.setSize(sz);}
-    void setPosition(sf::Vector2f p)    {mShape.setPosition(p);}
 
     void draw() const
     {
-        mRenderWindow.draw(mShape);
+        DrawRectangleRec(mRect, mColor);
     }
+
+
+    void setColor(Color c) 
+    {
+        mColor = c; 
+    }
+
+    void setSize(Vector2 sz)      
+    { 
+        mRect.width = sz.x; 
+        mRect.height = sz.y; 
+    }
+
+    void setPosition(Vector2 p)   
+    { 
+        mRect.x = p.x; 
+        mRect.y = p.y; 
+    }
+
+    Rectangle getRect() const { return mRect; }
 };

@@ -1,64 +1,64 @@
-#include <iostream>
+#include "raylib.h"
 #include <vector>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
+#include <iostream>
 
 #include "button.hpp"
 #include "slider.hpp"
 #include "draggable.hpp"
 
-
-
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 800), "Widgets");
-    window.setFramerateLimit(60);
-
-    sf::Font font;
-    if (!font.loadFromFile("sourceCodePro.ttf")) 
-    {
-        std::cout << "Error: Font file not found." << std::endl;
-        std::exit(1);
-    }
+    InitWindow(800, 800, "Widgets");
+    SetTargetFPS(60);
 
     std::vector<Button> buttons;
-    buttons.push_back(Button{window, {350, 300, 200, 80}, font, "Cat"});
-    buttons.push_back(Button{window, {200, 450, 100, 80}, font, "Dog"});
-    buttons.push_back(Button{window, {600, 600, 150, 70}, font, "Mouse"});
+    buttons.emplace_back(Rectangle{350, 300, 200, 80}, "Cat");
+    buttons.emplace_back(Rectangle{200, 450, 100, 80}, "Dog");
+    buttons.emplace_back(Rectangle{600, 600, 150, 70}, "Mouse");
 
     std::vector<Slider> sliders;
-    sliders.push_back(Slider{window, {500, 500}, {200, 10}, {20, 40}});
-    sliders.push_back(Slider{window, {300, 100}, {250, 20}, {30, 60}});
+    sliders.emplace_back(Vector2{500, 500}, Vector2{200, 10}, Vector2{20, 40});
+    sliders.emplace_back(Vector2{300, 100}, Vector2{250, 20}, Vector2{30, 60});
 
     std::vector<Draggable> draggables;
-    draggables.push_back(Draggable{window, {550, 100}, {200, 120}, {20, 120, 50}});
-    draggables.push_back(Draggable{window, {50, 550}, {200, 200}, {170, 20, 50}});
-    draggables.push_back(Draggable{window, {50, 200}, {100, 100}, {100, 20, 150}});
+    draggables.emplace_back(Vector2{550, 100}, Vector2{200, 120}, Color{20, 120, 50, 255});
+    draggables.emplace_back(Vector2{50, 550}, Vector2{200, 200}, Color{170, 20, 50, 255});
+    draggables.emplace_back(Vector2{50, 200}, Vector2{100, 100}, Color{100, 20, 150, 255});
 
-    while (window.isOpen()) 
+    while (!WindowShouldClose())
     {
-        sf::Event event;
-        while (window.pollEvent(event)) 
+        for (auto& b : buttons)
         {
-            if (event.type == sf::Event::Closed)
-                window.close();
-
-            for (auto& x : buttons)
-                x.handleEvent(event);
-            for (auto& x : sliders)
-                x.handleEvent(event);
-            for (auto& x : draggables)
-                x.handleEvent(event);
+            if (b.update())
+            {
+                std::cout << "Button clicked\n";
+            }
         }
 
-        window.clear(sf::Color::Black);
-        for (auto& x : buttons)
-            x.draw();
-        for (auto& x : sliders)
-            x.draw();
-        for (auto& x : draggables)
-            x.draw();
+        for (auto& s : sliders)
+        {
+            s.update();
+        }
 
-        window.display();
+        for (auto& d : draggables)
+        {
+            d.update();
+        }
+
+        BeginDrawing();
+        ClearBackground(BLACK);
+
+        for (auto& b : buttons)
+            b.draw();
+
+        for (auto& s : sliders)
+            s.draw();
+
+        for (auto& d : draggables)
+            d.draw();
+
+        EndDrawing();
     }
+
+    CloseWindow();
 }
