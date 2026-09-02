@@ -2,10 +2,13 @@
 #include <thread>
 #include <chrono>
 #include <vector>
+#include <algorithm>
+#include <numeric>
 
 
 template <typename Unit = std::chrono::microseconds, typename Clock = std::chrono::high_resolution_clock>
-class Timer {
+class Timer 
+{
     typename Clock::time_point mTick{Clock::now()};
 
 public:
@@ -28,9 +31,7 @@ public:
     }
 };
 
-// Как зависит скорость работы от величины step?
-
-const int n = 10;
+const int n = 8;
 const int iterations = 10'000'000;
 const int step = 1;
 
@@ -49,7 +50,8 @@ int main()
     }
 
     t.print();
-
+    std::cout << std::accumulate(elems.begin(), elems.end(), 0) << std::endl;
+    std::fill(elems.begin(), elems.end(), 0);
 
 
     t.tick();
@@ -72,4 +74,5 @@ int main()
         threads[i].join();
 
     t.print();
+    std::cout << std::accumulate(elems.begin(), elems.end(), 0) << std::endl;
 }

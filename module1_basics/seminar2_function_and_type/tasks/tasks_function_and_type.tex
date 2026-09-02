@@ -1,0 +1,827 @@
+\documentclass[10pt]{article}
+\usepackage[english,russian]{babel}
+\usepackage{textcomp}
+\usepackage[left=2cm, right=2cm, top=1.5cm, bottom=1.5cm]{geometry}
+\usepackage{tikz}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{colortbl}
+\usepackage{pmboxdraw}
+\usepackage{fancyvrb}
+\usepackage{graphicx}
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}
+\pagenumbering{gobble}
+
+\lstdefinestyle{CStyle}{
+  language=C,
+  basicstyle=\linespread{1.1}\ttfamily,
+  basewidth=0.5em,
+  texcl=true,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{gray},
+  stringstyle=\ttfamily\color{orange!50!black},
+  showstringspaces=false,
+  backgroundcolor=\color{white},
+  breaklines=true,
+  breakatwhitespace=true,
+  xleftmargin=5mm,
+  keepspaces = true,
+  extendedchars=\true,
+  tabsize=4,
+  upquote=true,
+  emph={size_t, NULL},
+  emphstyle={\color{blue}\bfseries},
+}
+\lstdefinestyle{boxStyle}{
+  style=CStyle,
+  framexleftmargin=5mm, 
+  frame=shadowbox, 
+  rulesepcolor=\color{gray}
+}
+\lstset{style=CStyle}
+
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\makeatletter
+\def\@seccntformat#1{\@ifundefined{#1@cntformat}%
+   {\csname the#1\endcsname\quad}
+   {\csname #1@cntformat\endcsname}}
+\newcommand\section@cntformat{}
+\newcommand\subsection@cntformat{Задача \thesubsection.\space}
+\newcommand\subsubsection@cntformat{\thesubsubsection.\space}
+\makeatother
+
+
+\begin{document}
+
+\title{Семинар \#2: Функции и типы. Домашнее задание. \vspace{-5ex}}\date{}\maketitle
+\noindent Для сдачи ДЗ вам нужно создать репозиторий на GitHub (если он ещё не создан) под названием \texttt{cpp-mipt-homework}. Структура репозитория должна иметь вид:
+\begin{center}
+\begin{BVerbatim}
+├── ...
+├── seminar2_function_and_type/
+│   ├── 01.c
+│   ├── 02.c
+│   └── ...
+└── ...
+\end{BVerbatim}
+\end{center}
+Для каждой задачи, если не сказано иное, нужно создать один файл решения с расширением \texttt{.c}.
+\subsection{Куб}
+Напишите функцию \texttt{cube}, которая будет принимать на вход одно целое число и возвращать куб этого числа. Вызовите эту функцию в функции \texttt{main} следующим образом:
+\begin{lstlisting}
+#include <stdio.h>
+
+// Тут вам нужно написать
+// функцию cube
+
+int main()
+{
+    printf("%i\n", cube(5));
+}
+\end{lstlisting}
+
+После того как вы напишите функцию \texttt{cube}, скомпилируйте данную программу и запустите она должна напечатать на экран число \texttt{125}.
+
+
+\subsection{Четность}
+Напишите функцию \texttt{is\_even}, которая будет принимать на вход одно целое число и возвращать \texttt{1}, если это число чётное и \texttt{0}, если число нечётное. Вызовите эту функцию в функции \texttt{main} следующим образом:
+\begin{lstlisting}
+#include <stdio.h>
+
+// Тут вам нужно написать
+// функцию is\_even
+
+int main()
+{
+    printf("%i\n", is_even(90));
+    printf("%i\n", is_even(91));
+}
+\end{lstlisting}
+После того как вы напишите функцию \texttt{is\_even}, скомпилируйте данную программу и запустите она должна напечатать на экран:
+\begin{verbatim}
+1
+0
+\end{verbatim}
+
+\subsection{Печать чётных чисел}
+Напишите функцию \texttt{print\_even}, которая будет принимать на вход два целых числа \texttt{a} и \texttt{b} и печатать на экран все чётные числа, которые находятся на отрезке \texttt{[a, b]}.
+
+\begin{center}
+\begin{tabular}{ l | l }
+ вход функции \texttt{print\_even} & печать на экран \\ \hline
+ \texttt{2 15} & \texttt{2 4 6 8 10 12 14}  \\
+ \texttt{1 15} & \texttt{2 4 6 8 10 12 14}  \\  
+ \texttt{-7 3} & \texttt{-6 -4 -2 0 2}  \\
+\end{tabular}
+\end{center}
+
+\subsection{Сумма цифр числа}
+\begin{itemize}
+\item Напишите функцию \texttt{sum\_of\_digits}, которая будет принимать на вход целое число и возвращать сумму всех цифр числа (в десятичной записи). Предполагайте, что на вход функции всегда будут приходить неотрицательные числа. Реализуйте эту функцию с помощью цикла.
+
+\begin{center}
+\begin{tabular}{ l | l }
+ вход функции \texttt{sum\_of\_digits} & выход функции \texttt{sum\_of\_digits} \\ \hline
+ \texttt{123} & \texttt{6}  \\
+ \texttt{55955} & \texttt{29}  \\  
+ \texttt{4} & \texttt{4}  \\
+ \texttt{0} & \texttt{0}  \\
+\end{tabular}
+\end{center}
+
+\item Напишите функцию \texttt{sum\_of\_digits\_rec}, которая будет принимать на вход целое число и возвращать сумму всех цифр числа (в десятичной записи). Предполагайте, что на вход функции всегда будут приходить неотрицательные числа. Реализуйте эту функцию с помощью рекурсии. Пользоваться уже написаной с помощью цикла функцией \texttt{sum\_of\_digits} в этой функции нельзя.
+ \end{itemize}
+ 
+ 
+\subsection{Бинарное представление числа}
+Напишите функцию \texttt{print\_binary}, которая будет принимать на вход целое число и печатать на экран бинарное представление этого числа. Предполагайте, что на вход функции всегда будут приходить неотрицательные числа.
+Реализуйте эту функцию с помощью рекурсии.
+ 
+\begin{center}
+\begin{tabular}{ l | l }
+ вход функции \texttt{print\_binary} & печать на экран \\ \hline
+ \texttt{6} & \texttt{110}  \\
+ \texttt{128} & \texttt{10000000}  \\  
+ \texttt{4823564} & \texttt{10010011001101000001100}  \\
+ \texttt{0} & \texttt{0}  \\
+\end{tabular}
+\end{center} 
+ 
+ 
+\subsection{Числа трибоначчи}
+Числа трибоначчи - это последовательность чисел, задаваемые следующим образом:
+\begin{verbatim}
+trib(0) = 0; 
+trib(1) = 0; 
+trib(2) = 1;
+trib(n) = trib(n - 3) + trib(n - 2) + trib(n - 1);
+\end{verbatim}
+Напишите функцию, \texttt{trib}, которая будет принимать на вход целое число \texttt{n} и будет возвращать \texttt{n}-е число трибоначчи. Убедитесь, что функция работает быстро при вычислении 38-го числа трибоначчи.
+
+\begin{center}
+\begin{tabular}{ l | l }
+ вход функции \texttt{trib} & выход функции \texttt{trib} \\ \hline
+ \texttt{1} & \texttt{0}  \\
+ \texttt{5} & \texttt{4}  \\
+ \texttt{20} & \texttt{35890}  \\
+ \texttt{35} & \texttt{334745777}  \\
+ \texttt{38} & \texttt{2082876103}  \\
+\end{tabular}
+\end{center} 
+ 
+ 
+\subsection{Количество чётных}
+Напишите функцию \texttt{count\_even}, которая будет принимать на вход массив целых чисел и количество элементов этого массива. Эта функция должна возвращать количество чётных чисел в этом массиве. Протестируйте эту функцию в функции \texttt{main}.
+\begin{center}
+\begin{tabular}{ l | l }
+ вход функции \texttt{count\_even} & выход функции \texttt{count\_even} \\ \hline
+ \texttt{array: 1 2 3 4 5} & \texttt{2} \\
+ \texttt{size: 5} & \\ \hline
+ \texttt{array: 10 20 30 40} & \texttt{4} \\
+ \texttt{size: 4} & \\ \hline
+ \texttt{array: 10 1} & \texttt{1} \\
+ \texttt{size: 2} & \\
+\end{tabular}
+\end{center} 
+ 
+
+
+
+
+\subsection{Обратный массив}
+Напишите функцию \texttt{reverse}, которая будет принимать на вход массив целых чисел и количество элементов этого массива. Эта функция должна переворачивать массив задом наперёд. Протестируйте эту функцию в функции \texttt{main}.
+\begin{center}
+\begin{tabular}{ l | l }
+ вход функции \texttt{reverse} & массив после выполнения \texttt{reverse} \\ \hline
+ \texttt{array: 10 20 30 40 50} & \texttt{50 40 30 20 10} \\
+ \texttt{size: 5} & \\ \hline
+ \texttt{array: 60 20 80 10} & \texttt{10 80 20 60} \\
+ \texttt{size: 4} & \\
+\end{tabular}
+\end{center} 
+
+
+
+
+\subsection{Необычная рекурсия}
+Алиса и Боб играют в игру. Сначала Алиса получает некоторое нечётное число. Алиса умножает это число на 3 и прибавляет к результату умножения единицу. Получившиеся число Алиса печатает на экран и передаёт Бобу. Боб получает чётное число и делит это число на 2 пока число не станет нечётным. После каждого деления на 2, Боб печатает число на экран. Как только Боб получит нечётное число, отличное от 1, он передаёт её Алисе. Но если Боб получит число 1, то программа заканчивает выполнение.
+
+Например, если мы передадим на вход программе число 13, то она должна напечатать следующее:
+
+\begin{verbatim}
+Alice:  40
+Bob:    20
+Bob:    10
+Bob:    5
+Alice:  16
+Bob:    8
+Bob:    4
+Bob:    2
+Bob:    1
+\end{verbatim}
+
+Эту программу очень просто написать с помощью обычного цикла. Но ваша задача заключается в том, чтобы написать её с помощью рекурсии, причём поведение Алисы и Боба должны описываться двумя разными функциями. Напишите следующие функции:
+
+\begin{itemize}
+\item \texttt{void alice(int n)}
+\item \texttt{void bob(int n)}
+\end{itemize}
+
+Эти функции должны изменять приходящее на вход число, печатать его на экран и передавать новое число другой функции. То есть функция \texttt{alice} должна вызывать функцию \texttt{bob}, а функция \texttt{bob} должна вызывать функцию \texttt{alice} (но только если новое нечётное число будет отлично от единицы).
+
+
+\subsection{Присвоение матриц}
+Написать функцию \texttt{void assign(float A[MAX][MAX], float B[MAX][MAX], int n)}, которая присваивает элементам матрицы A соответствующие элементы матрицы \texttt{B} (\texttt{A = B}). Где \texttt{MAX} это \texttt{\#define}-константа.
+
+
+\subsection{Умножение матриц}
+Написать функцию \texttt{void multiply(float A[MAX][MAX], float B[MAX][MAX], float C[MAX][MAX], int n)}, которая перемножает матрицы \texttt{A} и \texttt{B} размера $n$ на $n$ (строка на столбец), а результат записывает в матрицу \texttt{C}. Формула: $C_{ij} = \sum\limits_k A_{ik} \cdot B_{kj}$. \\
+Проверьте ваш код на следующих тестах:
+
+\begin{center}
+$\begin{pmatrix}
+7 & 7 & 2 \\
+1 & 8 & 3 \\
+2 & 1 & 6 \\
+\end{pmatrix} \cdot 
+\begin{pmatrix}
+5 & 2 & 9 \\
+-4 & 2 & 11 \\
+7 & 1 & -5 \\
+\end{pmatrix}=
+\begin{pmatrix}
+21 & 30 & 130 \\
+-6 & 21 & 82 \\
+48 & 12 & -1 \\
+\end{pmatrix}
+$
+\end{center}
+
+\begin{center}
+
+$
+\begin{pmatrix}
+5 & 2 & 9 \\
+-4 & 2 & 11 \\
+7 & 1 & -5 \\
+\end{pmatrix}  \cdot 
+\begin{pmatrix}
+7 & 7 & 2 \\
+1 & 8 & 3 \\
+2 & 1 & 6 \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+55 & 60 & 70 \\
+-4 & -1 & 64 \\
+40 & 52 & -13 \\
+\end{pmatrix}
+$
+\end{center}
+
+\begin{center}
+
+$
+\begin{pmatrix}
+7 & 7 & 2 \\
+1 & 8 & 3 \\
+2 & 1 & 6 \\
+\end{pmatrix}  \cdot 
+\begin{pmatrix}
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+2 & 7 & 7 \\
+3 & 8 & 1 \\
+6 & 1 & 2 \\
+\end{pmatrix}
+$
+\end{center}
+В файлах \texttt{matA.txt} и \texttt{matB.txt} лежат матрицы 10 на 10. Считайте эти матрицы с помощью метода перенаправления потока из файла \texttt{combinedAB.txt}, перемножьте (A на B) и запишите результат в другой файл. В результате должно получиться:
+\begin{center}
+$
+\begin{pmatrix}
+259 & -15 & 237 & 257 &  231 &  67  & 237  & -64  & 152  & 363 \\
+555 & 233 & 539 & 188 &  356 &  325 &  423 &  -47 &  123 &  387 \\
+497 & 512 & 572 & 95  & 619  & 155  & 414  & 207  & 203  & 217 \\
+455 & 280 & 675 & 354 &  664 &  346 &  483 &  177 &  168 &  404 \\
+264 & 182 & 272 & 290 &  474 &  -33 &  234 &  99  & 379  & 156 \\
+272 & 180 & 469 & 286 &  326 &  282 &  325 &  215 &  195 &  231 \\
+421 & 363 & 475 & 506 &  359 &  481 &  468 &  101 &  325 &  328 \\
+384 & 218 & 567 & 395 &  475 &  488 &  361 &  168 &  291 &  298 \\
+387 & 297 & 480 & 170 &  318 &  423 &  483 &  10  & -17  & 406 \\
+193 & 241 & 486 & 38  & 403  & 146  & 286  & 326  & 212  & 172 \\
+\end{pmatrix}
+$
+\end{center}
+
+
+\subsection{Матрица в степени}
+Написать функцию \texttt{void power(int A[MAX][MAX], int C[MAX][MAX], int n, int k)}, которая вычисляет $A^k$, т.е. возводит матрицу $A$ размера $n$ на $n$ в $k$-ю степень, а результат записывает в матрицу C. Используйте функции \texttt{multiply} и \texttt{assign}. Псевдокод простейшей реализации такой функции:
+\begin{lstlisting}
+float B[MAX][MAX]
+
+B = A   // конечно нельзя приравнивать массивы, но можно 
+C = A   // использовать вашу функцию assign
+
+for ( k - 1 раз )
+{
+	C = A * B
+	B = C
+}
+\end{lstlisting}
+Проверьте ваш код на следующих тестах:
+\begin{center}
+
+$
+\begin{pmatrix}
+7 & 7 & 2 \\
+1 & 8 & 3 \\
+2 & 1 & 6 \\
+\end{pmatrix}^4 = 
+\begin{pmatrix}
+7116 & 15654 & 9549 \\
+4002 & 8955 & 6135 \\
+3369 & 6165 & 4350 \\
+\end{pmatrix}
+$
+\end{center}
+
+
+
+\begin{center}
+$
+\begin{pmatrix}
+0 & 1 & 0 \\
+1 & 0 & 1 \\
+1 & 0 & 0 \\
+\end{pmatrix}^{70} = 
+\begin{pmatrix}
+145547525 & 109870576 & 82938844 \\
+192809420 & 145547525 & 109870576 \\
+109870576 & 82938844 & 62608681 \\
+\end{pmatrix}
+$
+\end{center}
+
+\begin{center}
+$
+\begin{pmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+\end{pmatrix}^{1000} = 
+\begin{pmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+\end{pmatrix}
+$
+\end{center}
+
+Подумайте, как можно возвести матрицу в $k$-ю степень более эффективно. Рассмотрите случай, когда \texttt{k} явлется степенью двойки и когда не является.
+
+
+
+
+\section*{Типы данных}
+\subsection*{Основные типы и их стандартные размеры на 64-х битных системах}
+\begin{center}
+\begin{tabular}{ c c c c }
+ тип & размер (байт) & диапазон значений ($2^{\# bits}$) & спецификатор \\ \hline
+ \texttt{char} & 1 & от -128 до 127 & \texttt{\%hhi} \\ 
+ \texttt{short} & 2 & от -32768 до 32767 & \texttt{\%hi}  \\  
+ \texttt{int} & 4 & примерно от -2-х миллиардов до 2-х миллиардов & \texttt{\%i}  \\  
+ \texttt{long} & 4 & примерно от -2-х миллиардов до 2-х миллиардов & \texttt{\%li}  \\  
+ \texttt{long long} & 8 & примерно от $-10^{19}$ до $10^{19}$ & \texttt{\%lli}  \\  
+ \texttt{unsigned char} & 1 & от 0 до 255 & \texttt{\%hhu} \\ 
+ \texttt{unsigned short} & 2 & от 0 до 65535 & \texttt{\%hu}  \\  
+ \texttt{unsigned int} & 4 & от 0 до $2^{32} \approx 4*10^{9}$ & \texttt{\%u}  \\  
+ \texttt{unsigned long} & 4 & от 0 до $2^{32} \approx 4*10^{9}$ & \texttt{\%lu}  \\  
+ \texttt{unsigned long long} & 8 & от 0 до $2^{64} \approx 2*10^{19}$  & \texttt{\%llu}  \\  
+ \texttt{size\_t} & 8 & от 0 до $2^{64} \approx 2*10^{19}$ & \texttt{\%zu} \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ c c c c c }
+ тип & размер (байт) & значимые цифры & диапазон экспоненты & спецификатор \\ \hline
+ \texttt{float}             & 4          & 6  & от -38 до 38    & \texttt{\%f} \\ 
+ \texttt{double}            & 8          & 15 & от -308 до 308  & \texttt{\%lf}  \\  
+ \texttt{long double}       & от 8 до 16 & $\ge 15$  & не хуже чем у double  & \texttt{\%Lf}  \\ \hline
+ печать только 3-х чисел после запятой & -          & -  & -              & \texttt{\%.3f} \\
+ печать без нулей на конце & -          & -  & -              & \texttt{\%g} \\
+ печать в научной записи   & -          & -  & -              & \texttt{\%e} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ c c c c c }
+ тип & размер (байт)  & спецификатор \\ \hline
+ указатель             & 8           & \texttt{\%p} \\ 
+\end{tabular}
+\end{center}
+
+\subsection{Факториал}
+Для вычисления факториала была написана следующая простая программа. 
+\begin{lstlisting}
+#include <stdio.h>
+int fact(int n) 
+{
+    int result = 1;
+    for (int i = 1; i <= n; ++i)
+        result *= i;
+    return result;
+}
+
+int main() 
+{
+    int k;
+    scanf("%i", &k);
+    printf("%i\n", fact(k));
+}
+\end{lstlisting}
+Однако, выяснилось, что эта программа правильно работает только для \texttt{k} от \texttt{0} до \texttt{12}. При больших \texttt{k} программа выдаёт неверный ответ. Почему это происходит?
+Немного измените программу, чтобы она работала для \texttt{k} до \texttt{20} включительно.
+
+\begin{center}
+\begin{tabular}{ l l }
+ вход & выход \\ \hline
+ \texttt{5} & \texttt{120}  \\ 
+ \texttt{13} & \texttt{6227020800} \\
+ \texttt{17} & \texttt{355687428096000} \\
+ \texttt{20} & \texttt{2432902008176640000} \\
+\end{tabular}
+\end{center}
+
+
+\subsection{Размещения}
+В комбинаторике размещением (из n по k) $A_n^k$ называется упорядоченный набор из k различных элементов из некоторого множества различных n элементов. Размещения вычисляются следующим образом: $A_n^k = \frac{n!}{(n-k)!}$. Напишите программу, которая будет вычислять размещения при условии, что  $A_n^k < 2^{64}$. Проверьте вашу функцию на следующих значениях:
+\begin{center}
+\begin{tabular}{ c c }
+ вход & выход \\ \hline
+ \texttt{5 2} & \texttt{20}  \\ 
+ \texttt{20 10} & \texttt{670442572800}  \\ 
+ \texttt{30 12} & \texttt{41430393164160000} \\ 
+ \texttt{60 11} & \texttt{13679492361575040000} \\   
+\end{tabular}
+\end{center}
+
+
+\subsection{Часть года}
+Напишите функцию \texttt{float yearfrac(int year, int day)}, которая принимает номер года \texttt{year} и номер дня с начала года \texttt{day} и возвращает прошедшую долю года. В этой задаче считайте, что високосный год, это год, чей номер делится на 4 (хотя это не совсем так).
+\begin{center}
+\begin{tabular}{ c c }
+ \texttt{year day} & \texttt{yearfrac(year, day)} \\ \hline
+ \texttt{2019 300} & \texttt{0.82192}  \\
+ \texttt{2019 100} & \texttt{0.27397}  \\ 
+ \texttt{2020 100} & \texttt{0.27322}  \\ 
+\end{tabular}
+\end{center}
+
+\subsection{Вычисление $\pi$} 
+Известно, что число $\pi$ можно вычислить с помощью следующего ряда:
+$$
+\frac{\pi}{4} = 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} - ... = \sum_{i=1}^{\infty} \frac{(-1)^{i + 1}}{2i-1}
+$$
+
+Используйте эту формулу, чтобы вычислить приблизительно число $\pi$. На вход должно подаваться целое число \texttt{n} - число членов суммируемой последовательности, а вам нужно вычислить приближённое значение:
+$$
+\pi \approx 4 \cdot \sum_{i=1}^{n} \frac{(-1)^{i + 1}}{2i-1}
+$$
+
+
+\subsection{Два круга}
+Напишите программу, которая проверяет пересекаются ли 2 круга. Программа должна принимать на вход координаты центров кругов и их радиусы в следующем порядке:
+\begin{verbatim}
+x1 y1 r1
+x2 y2 r2
+\end{verbatim}
+и печатать следующее:
+\begin{itemize}
+\item \texttt{Do not intersect} -- если окружности не пересекаются (нет ни одной общей точки).
+\item \texttt{Touch} -- если круги касаются друг друга (с точностью $\epsilon = 10^{-5}$).
+\item \texttt{Intersect} -- если круги пересекаются
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{ c c }
+ вход & выход \\ \hline
+ \texttt{0 0 1} & \texttt{Touch}  \\ 
+ \texttt{0 2 1} &   \\  \hline
+ \texttt{0 0 1} & \texttt{Intersect}  \\ 
+ \texttt{1 1 1} &   \\  \hline
+ \texttt{0 0 3} & \texttt{Do not intersect}  \\ 
+ \texttt{5 5 4} &   \\  \hline
+ \texttt{0 0 4} & \texttt{Intersect}  \\ 
+ \texttt{5 5 4} &   \\  \hline
+ \texttt{-2 1 4} & \texttt{Touch}  \\ 
+ \texttt{2 4 1} &   \\
+\end{tabular}
+\end{center}
+
+
+\subsection{Гамма-функция} 
+Гамма-функция -- это обобщение понятия факториала на вещественные числа. Определяется следующим образом:
+$$
+\Gamma \left( x \right) = \int\limits_0^\infty {t^{x - 1} e^{ - t} dt}
+$$
+Легко вывести, что $\Gamma(n) = (n - 1)!$ для натуральных $n$. Написать функцию, \texttt{double gamma(double x)}, которая будет вычислять значение гамма-функции в точке $x$, при $x > 1$. Для вычисления интеграла использовать метод трапеций с шагом \texttt{step = 1e-2}. Суммирование продолжать до тех пор пока площадь трапеции превышает \texttt{eps = 1e-10} (то есть $10 ^{-10}$). \texttt{step} и \texttt{eps} задать как константы. Понадобятся функции \texttt{pow} и \texttt{exp} из библиотеки \texttt{math.h}.
+
+\begin{center}
+\begin{tabular}{ c c }
+ вход & выход \\ \hline
+ \texttt{2} & \texttt{1.0}  \\ 
+ \texttt{6} & \texttt{120.0}  \\
+ \texttt{20} & \texttt{1.21645e+17}  \\
+ \texttt{1.5} &        \texttt{0.88623} \\
+ \texttt{2.5} &        \texttt{1.32934}\\
+ \texttt{4.14159} & \texttt{7.188082}\\
+\end{tabular}
+\end{center}
+
+
+
+
+\subsection{Размеры типов}
+Напишите программу, которая будет печатать размеры следующих типов:
+\begin{multicols}{4}
+\begin{itemize}
+\item \texttt{char}
+\item \texttt{short}
+\item \texttt{int}
+\item \texttt{long long}
+\item \texttt{size\_t}
+\item \texttt{int8\_t}
+\item \texttt{int32\_t}
+\item \texttt{uint32\_t}
+\item \texttt{float}
+\item \texttt{double}
+\item \texttt{int[100]}
+\item \texttt{char[100]}
+\end{itemize}
+\end{multicols}
+
+
+
+\subsection{Камень, ножницы, бумага}
+Представьте, что вы разрабатываете игру "Камень, Ножницы, Бумага"{}. Ваша задача -- создать логику игры, используя перечисления и инструкцию \texttt{switch}.
+\begin{itemize}
+\item Создайте новый тип перечисления \texttt{enum shape} для различных знаков в игре со следующими значениями:
+\begin{itemize}
+\item \texttt{ROCK}
+\item \texttt{PAPER}
+\item \texttt{SCISSORS}
+\end{itemize}
+
+\item Создайте новый тип перечисления \texttt{enum result} (результат игры) со следующими значениями:
+\begin{itemize}
+\item \texttt{LOSS}
+\item \texttt{DRAW}
+\item \texttt{WIN}
+\end{itemize}
+
+\item Напишите функцию \texttt{print\_shape}, которая бы принимала на вход объект типа \texttt{enum shape} и печатала на экран название передаваемого знака (\texttt{"Rock"{}}, \texttt{"Paper"{}} или \texttt{"Scissors"{}}).
+\item Напишите функцию \texttt{print\_result}, которая бы принимала на вход объект типа \texttt{enum result} и печатала на экран название передаваемого результата (\texttt{"Loss"{}}, \texttt{"Draw"{}} или \texttt{"Win"{}}).
+\item Напишите функцию:
+\begin{lstlisting}
+enum result get_result(enum shape a, enum shape b)
+\end{lstlisting}
+которая бы возвращала результат игры с точки зрения первого игрока (игрока \texttt{a}).
+
+\item Напишите функцию:
+\begin{lstlisting}
+enum shape get_strength(enum shape s)
+\end{lstlisting}
+которая бы принимала на вход знак и возвращала тот знак, который "бъётся"{} данным знаком. Например, если на вход этой функции придёт \texttt{PAPER}, то она должна вернуть \texttt{ROCK}.
+
+\end{itemize}
+
+
+
+
+
+
+
+\newpage
+~
+\newpage
+\section{Необязательные задачи}
+
+\subsection{Треугольник из звёздочек}
+Напищите функцию \texttt{triangle}, которая будет принимать на вход одно целое положительно число \texttt{n} и будет печатать на экран прямоугольный треугольник из звёздочек (символов \texttt{*}). В функции \texttt{main} считайте с экраная число и вызовите функцию \texttt{triangle}, передав ей считанное число.
+
+\begin{center}
+\begin{tabular}{ l | l }
+ вход & выход \\ \hline
+ \texttt{5} & \texttt{*}  \\  
+            & \texttt{**} \\ 
+            & \texttt{***} \\ 
+            & \texttt{****} \\
+            & \texttt{*****} \\ \hline
+ \texttt{3} & \texttt{*}  \\  
+            & \texttt{**} \\  
+            & \texttt{***} \\ \hline
+ \texttt{1} & \texttt{*}  \\
+\end{tabular}
+\end{center}
+
+\subsection{Оставить последнюю цифру}
+Напишите функцию \texttt{last\_digits}, которая будет принимать на вход массив целых чисел и количество элементов этого массива. Эта функция должна заменять каждый элемент массива на его последнюю цифру (в десятичной записи числа). Протестируйте эту функцию в функции \texttt{main}.
+
+\begin{center}
+\begin{tabular}{ l | l }
+ вход функции \texttt{last\_digits} & массив после выполнения \texttt{last\_digits} \\ \hline
+ \texttt{array: 12 61 426 17 115} & \texttt{2 1 6 7 5} \\
+ \texttt{size: 5} & \\ \hline
+ \texttt{array: 5 10} & \texttt{5 0} \\
+ \texttt{size: 2} & \\
+\end{tabular}
+\end{center} 
+
+\subsection{Факториалы}
+Напишите функцию \texttt{factorials}, которая будет принимать на вход массив целых чисел и количество элементов этого массива. Эта функция должна заменять каждый элемент этого массива на его факториал. Напишите вспомогательную функцию \texttt{fact}, которая будет принимать одно целое число и возвращать факториал этого числа. Протестируйте эту функцию в функции \texttt{main}.
+\begin{center}
+\begin{tabular}{ l | l }
+ вход функции \texttt{factorials} & массив после выполнения \texttt{factorials} \\ \hline
+ \texttt{array: 3 4 5 6 7} & \texttt{6 24 120 720 5040} \\
+ \texttt{size: 5} & \\ \hline
+ \texttt{array: 10 11 12} & \texttt{3628800 39916800 479001600} \\
+ \texttt{size: 3} & \\
+\end{tabular}
+\end{center} 
+
+\subsection{Сортировка}
+Напишите функцию \texttt{sort}, которая будет принимать на вход массив целых чисел и количество элементов этого массива. Эта функция должна сортировать все элементы массива по убыванию. Протестируйте эту функцию в функции \texttt{main}.
+\begin{center}
+\begin{tabular}{ l | l }
+ вход функции \texttt{sort} & массив после выполнения \texttt{sort} \\ \hline
+ \texttt{array: 70 20 80 30 50 40 10 60} & \texttt{80 70 60 50 40 30 20 10} \\
+ \texttt{size: 8} & \\ \hline
+ \texttt{array: 60 20 80 10} & \texttt{80 60 20 10} \\
+ \texttt{size: 4} & \\
+\end{tabular}
+\end{center} 
+
+
+\subsection{Транспонирование}
+Написать функцию \texttt{void transpose(float A[MAX][MAX], int n)}, которая будет принимать на вход матрицу \texttt{A} размера $n$ на $n$ и транспонировать её. Также напишите вспомогательную функцию \texttt{print(float A[MAX][MAX], int n)} для печати матрицы на экран. Считайте матрицу из файла \texttt{files/matA.txt} с помощью перенаправления потока, транспонируйте её, а результат запишите в новый файл \texttt{result.txt}.\\
+
+
+
+\subsection{Метод Гаусса}
+Написать программу, которая бы решала линейную систему уравнений $Ax = b$ методом Гаусса. \\
+Главная функция этой программы должна иметь вид: \\ \texttt{void solve\_linear\_system(int n, float A[MAX][MAX], float b[], float x[]).} \\
+Программа должна считывать матрицу $A$ размера $n$ на $n$ и столбец $b$ из файла и записывать результат решения $x$ в новый файл. Предполагайте, что детерминант матрицы не равен нулю. Примерный вид вашей программы:
+\begin{lstlisting}
+#include <stdio.h>
+#define MAX 200
+
+// Возможно понадобится вспомогательная функция для перестановки строк матрицы A
+void swap_rows(float A[MAX][MAX], int n, int k, int m)
+{
+    // Ваш код
+}
+
+void solve_linear_system(float A[MAX][MAX], int n, float b[], float x[])
+{
+    // Ваш код
+}
+
+int main()
+{
+    int n;
+    float A[MAX][MAX];
+    float b[MAX];
+    float x[MAX];
+    
+    // Считываем n, A и b
+    solve_linear_system(n, A, b, x);
+    // Печатаем x
+}
+\end{lstlisting}
+Проверьте вашу программу на следующих тестах (считывайте из файла методом перенаправления потока): \\
+\begin{enumerate}
+\item Следующая система:
+$$
+\begin{cases} 
+x_1 + x_2 - x_3 = 9 \\ 
+x_2 + 3x_3 = 3 \\ 
+-x_1 - 2x_3 = 2 
+\end{cases}
+$$
+Вход для программы должен выглядеть следующим образом:
+\begin{lstlisting}
+ 3
+ 1 1 -1
+ 0 1  3
+-1 0 -2
+9
+3
+2
+\end{lstlisting}
+Решение этой системы: $x = \left(\frac{2}{3}, 7, -\frac{4}{3}\right) \approx (0.67, 7.00, -1.33)$
+\item Системы из файлов \texttt{system1.txt}, \texttt{system2.txt}, \texttt{system3.txt}. Решения в файлах с именам \texttt{x1.txt}, \texttt{x2.txt}, \texttt{x3.txt} соответственно. Считывайте из файлов методом перенаправления потока.
+\end{enumerate}
+
+
+
+\subsection{Объём $n$-мерного шара}
+Формула для $n$-мерного объёма $n$-мерного шара имеет вид:
+\begin{equation*}
+V_n(R) = 
+\left\{
+\begin{alignedat}{2}
+ &\frac{2 (\frac{n-1}{2})! \cdot (4 \pi)^{\frac{n-1}{2}}}{n!} R^n, &\quad\quad \textup{если } n - \textup{нечётное}\\
+ &\frac{\pi^{\frac{n}{2}}}{\frac{n}{2}!} R^n,   & \textup{если } n - \textup{чётное}
+\end{alignedat}
+\right.
+\end{equation*}
+Напишите программу, которая по заданному $n$ будет вычислять отношение объёма $n$-мерного куба к объёму вписанному в него $n$-мерного шара, то есть 
+$\frac{(2R)^n}{V_n(R)}$. Вам может понадобиться функция \texttt{pow} из библиотеки \texttt{math.h}.
+
+\begin{center}
+\begin{tabular}{ l l }
+ вход & выход \\ \hline
+ \texttt{1} & \texttt{1}  \\ 
+ \texttt{2} & \texttt{1.27324} \\
+ \texttt{3} & \texttt{1.909859} \\
+ \texttt{6} & \texttt{12.384589} \\
+ \texttt{10} & \texttt{401.542796} \\
+ \texttt{15} & \texttt{85905.301384} \\
+\end{tabular}
+\end{center}
+
+
+\subsection{Угол}
+На вход программе поступают компоненты двух векторов. Нужно найти угол между ними в градусах.
+\begin{center}
+\begin{tabular}{ c c }
+ вход & выход \\ \hline
+ \texttt{1 0} & \texttt{90}  \\ 
+ \texttt{0 1} &   \\  \hline
+ \texttt{1 0} & \texttt{45}  \\ 
+ \texttt{1 1} &   \\  \hline
+ \texttt{-1 0} & \texttt{135}  \\ 
+ \texttt{1 1} &   \\  \hline
+ \texttt{-2 8} & \texttt{74.2913}  \\ 
+ \texttt{7 4} &   \\
+\end{tabular}
+\end{center}
+
+Угол $\alpha$ между векторами можно найти из формул для скалярного произведения:
+\begin{equation*}
+\vec{v} \cdot \vec{u} = \lvert \vec{v} \rvert  \lvert \vec{u} \rvert \cos(\alpha)
+\end{equation*}
+
+\begin{equation*}
+\vec{v} \cdot \vec{u} = v_x u_x + v_y u_y
+\end{equation*}
+
+Вам могут понадобиться следующие функции:
+\begin{lstlisting}
+double distance(double x1, double y1, double x2, double y2) {
+    return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
+double length(double x, double y) {
+    return distance(x, y, 0, 0);
+}
+double scalar_product(double x1, double y1, double x2, double y2) {
+    return x1 * x2 + y1 * y2;
+}
+const double pi = 3.14159265359;
+double to_degrees(double rad) {
+    return rad * 180 / pi;
+}
+\end{lstlisting}
+
+
+
+\subsection{Бинарный поиск на вещественных числах} 
+Пусть у нас есть монотонно возрастающая функция $f(x)$, а наша задача заключается в том, чтобы найти решение уравнения $f(x) = 0$ на отрезке $(l, h)$. Причём $f(l) < 0$, а $f(h) > 0$. \\
+
+Для решения этой задачи можно применить метод бинарного поиска. Для этого находим значение функции в центре отрезка, то есть в точке $m = \frac{l + h}{2}$. Если в этой точке функция положительна или равна нулю, то изменяем значение $h = m$. Если же в этой точке функция отрицательна, то изменяем значение $l = m$. Таким образом отрезок, на котором находится решение был уменьшен в 2 раза. Повторяем эту процедуру до тех пор пока длина отрезка не станет меньше чем $\epsilon = 10^{-10}$.\\
+Напишите программу, которая будет решать эту задачу. Функция $f(x)$ и значения $l$ и $h$ должны задаваться в тексте программы.
+
+\renewcommand{\arraystretch}{1.3}
+\begin{center}
+\begin{tabular}{ c | c }
+ $f(x)$\texttt{, l, h} & выход \\ \hline
+ $f(x) = x^2 - 2$  & \texttt{1.41421}  \\ 
+ \texttt{l = 0, h = 2} &   \\ \hline
+ $f(x) = x^2 - 7$  & \texttt{2.64575}  \\ 
+ \texttt{l = 0, h = 7} &   \\ \hline
+ $f(x) = x^5 + 2x^4 + 5x^2 +4x - 500$  & \texttt{3.05614}  \\ 
+ \texttt{l = 0, h = 10} &   \\\hline
+ $f(x) = e^x \ln(x) - 7$  & \texttt{2.1896095}  \\ 
+ \texttt{l = 1, h = 5} &   \\
+\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+\end{document}
